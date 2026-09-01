@@ -15,6 +15,7 @@ import {
   Linkedin,
   Mail,
 } from "lucide-react";
+import LiquidText from "@/components/LiquidText";
 
 type Mode = "designer" | "developer";
 
@@ -256,9 +257,9 @@ export default function Home() {
             </motion.p>
           </AnimatePresence>
           <motion.h1 layout transition={transition}>
-            ADARSH
+            <LiquidText>ADARSH</LiquidText>
             <br />
-            PRAKASAN
+            <LiquidText>PRAKASAN</LiquidText>
           </motion.h1>
           <div className="identity">
             <span className="designer-text">Designer</span>
