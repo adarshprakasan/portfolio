@@ -12,14 +12,26 @@ const content = {
     description: "Visual storyteller crafting identities, interfaces and memorable digital experiences.",
     switchDescription: "Visual storyteller",
     skills: ["Branding", "UI/UX", "Illustration", "3D & Motion", "Photography"],
-    work: { headline: "A visual language with purpose.", category: "Brand Identity / UIUX", title: "Beyond Design", description: "Brand systems, digital interfaces and visual storytelling." },
+    work: {
+      headline: "A visual language with purpose.",
+      projects: [
+        { number: "01", category: "Brand Identity / UIUX", title: "Beyond Design", description: "Brand systems, digital interfaces and visual storytelling.", accent: "lilac" },
+        { number: "02", category: "Editorial / Digital", title: "After Hours", description: "A cinematic visual world for a culture-led digital publication.", accent: "coral" },
+      ],
+    },
   },
   developer: {
     eyebrow: "BUILDING DIGITAL PRODUCTS.",
     description: "Frontend & full-stack developer turning thoughtful design into fast, scalable digital products.",
     switchDescription: "Problem solver",
     skills: ["Next.js", "TypeScript", "React", "Node.js", "APIs", "Performance"],
-    work: { headline: "Products built to solve real problems.", category: "Full Stack / MERN", title: "HospEasy", description: "Hospital appointment and token management platform." },
+    work: {
+      headline: "Products built to solve real problems.",
+      projects: [
+        { number: "01", category: "Full Stack / MERN", title: "HospEasy", description: "Hospital appointment and token management platform.", accent: "blue" },
+        { number: "02", category: "Frontend / SaaS", title: "Flowstate", description: "A focused workspace for turning product ideas into progress.", accent: "cyan" },
+      ],
+    },
   },
 } as const;
 
@@ -125,8 +137,23 @@ export default function Home() {
       </section>
 
       <section id="work" className="preview-section">
-        <AnimatePresence mode="wait"><motion.div key={`work-heading-${mode}`} variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><p className="section-label">SELECTED WORK</p><h2>{active.work.headline}</h2></motion.div></AnimatePresence>
-        <AnimatePresence mode="wait"><motion.article key={`project-${mode}`} className="project-preview" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><div className="project-meta"><span>01</span><span>{active.work.category}</span></div><h3>{active.work.title}</h3><p>{active.work.description}</p><button type="button">View project <ArrowUpRight size={16} /></button></motion.article></AnimatePresence>
+        <AnimatePresence mode="wait">
+          <motion.div key={`work-heading-${mode}`} className="work-heading" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}>
+            <p className="section-label">SELECTED WORK</p><h2>{active.work.headline}</h2>
+          </motion.div>
+        </AnimatePresence>
+        <AnimatePresence mode="wait">
+          <motion.div key={`projects-${mode}`} className="projects-grid" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}>
+            {active.work.projects.map((project, index) => (
+              <motion.article key={`${mode}-project-${project.number}`} className={`project-card project-${project.accent}`} initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ ...transition, delay: index * 0.1 }}>
+                <div className="project-art" aria-hidden="true"><span>{project.number}</span><i /><b>{project.title}</b></div>
+                <div className="project-meta"><span>{project.number}</span><span>{project.category}</span></div>
+                <h3>{project.title}</h3><p>{project.description}</p>
+                <button type="button">View project <ArrowUpRight size={16} /></button>
+              </motion.article>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </section>
 
       <footer id="contact" className="footer"><div><span className="section-label">AVAILABLE FOR</span><h2>Let&apos;s build something<br />worth remembering.</h2></div><div className="footer-links"><a href="mailto:hello@adarsh.dev"><Mail size={17} /> Email</a><a href="#"><Github size={17} /> GitHub</a><a href="#"><Linkedin size={17} /> LinkedIn</a><a href="#"><Instagram size={17} /> Instagram</a></div></footer>
