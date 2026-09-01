@@ -361,6 +361,8 @@ button {
   gap: 4px;
   font-size: 10px;
   letter-spacing: 0.15em;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .mode-switch button span {
   font-size: 10px;
@@ -538,13 +540,13 @@ button {
   .mode-switch {
     width: 100%;
     height: 76px;
+    padding: 5px;
   }
   .switch-knob {
-    width: calc(50% - 4px);
-    height: 68px;
-  }
-  .mode-switch .switch-knob {
-    transform: none !important;
+    width: calc(50% - 5px);
+    height: 66px;
+    top: 5px;
+    left: 5px;
   }
   .visual-card {
     height: 290px;
@@ -729,9 +731,8 @@ button {
   .switch-knob {
     width: calc(50% - 5px);
     height: 66px;
-  }
-  .mode-switch .switch-knob {
-    transform: none !important;
+    top: 5px;
+    left: 5px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -43,7 +43,7 @@ const content = {
       {
         dates: "2024 — NOW",
         role: "Independent Designer",
-        place: "Example Studio",
+        place: "Freelance",
         summary:
           "Building distinct identities and digital experiences for ideas in motion.",
       },
