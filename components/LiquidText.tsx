@@ -25,6 +25,8 @@ export default function LiquidText({
     let animationFrame = 0;
     let width = 0;
     let height = 0;
+    let padX = 0;
+    let padY = 0;
     let gridW = 0;
     let gridH = 0;
 
@@ -46,13 +48,24 @@ export default function LiquidText({
       if (rect.width === 0 || rect.height === 0) return;
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.ceil(rect.width * dpr);
-      height = Math.ceil(rect.height * dpr);
+      const computedStyle = window.getComputedStyle(container);
+      const fontSize = parseFloat(computedStyle.fontSize) * dpr;
+      const fontFamily = computedStyle.fontFamily;
+      const fontWeight = computedStyle.fontWeight || "800";
+      const letterSpacing = computedStyle.letterSpacing;
+      const color = computedStyle.color || "#ffffff";
+
+      // Add extra padding so ascenders/descenders & ripples don't get cropped
+      padX = Math.ceil(fontSize * 0.2);
+      padY = Math.ceil(fontSize * 0.35);
+
+      width = Math.ceil(rect.width * dpr) + padX * 2;
+      height = Math.ceil(rect.height * dpr) + padY * 2;
 
       canvas.width = width;
       canvas.height = height;
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `${rect.height}px`;
+      canvas.style.width = `${(rect.width * dpr + padX * 2) / dpr}px`;
+      canvas.style.height = `${(rect.height * dpr + padY * 2) / dpr}px`;
 
       offscreen.width = width;
       offscreen.height = height;
@@ -62,14 +75,6 @@ export default function LiquidText({
 
       buffer1 = new Float32Array(gridW * gridH);
       buffer2 = new Float32Array(gridW * gridH);
-
-      // Get computed styles from container/parent
-      const computedStyle = window.getComputedStyle(container);
-      const fontSize = parseFloat(computedStyle.fontSize) * dpr;
-      const fontFamily = computedStyle.fontFamily;
-      const fontWeight = computedStyle.fontWeight || "800";
-      const letterSpacing = computedStyle.letterSpacing;
-      const color = computedStyle.color || "#ffffff";
 
       offCtx.clearRect(0, 0, width, height);
       offCtx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
@@ -84,11 +89,11 @@ export default function LiquidText({
       offCtx.fillText(children, width / 2, height / 2);
     };
 
-    const addRipple = (x: number, y: number, radius = 6, strength = 250) => {
+    const addRipple = (x: number, y: number, radius = 4, strength = 80) => {
       if (!buffer1) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const gx = Math.floor((x * dpr) / step);
-      const gy = Math.floor((y * dpr) / step);
+      const gx = Math.floor((x * dpr + padX) / step);
+      const gy = Math.floor((y * dpr + padY) / step);
 
       for (let j = -radius; j <= radius; j++) {
         for (let i = -radius; i <= radius; i++) {
@@ -111,13 +116,13 @@ export default function LiquidText({
 
       if (lastX !== -1 && lastY !== -1) {
         const dist = Math.hypot(x - lastX, y - lastY);
-        if (dist > 2) {
-          addRipple(x, y, 6, 180);
+        if (dist > 5) {
+          addRipple(x, y, 4, 65);
           lastX = x;
           lastY = y;
         }
       } else {
-        addRipple(x, y, 7, 220);
+        addRipple(x, y, 5, 85);
         lastX = x;
         lastY = y;
       }
@@ -130,10 +135,10 @@ export default function LiquidText({
 
     const handleClick = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      addRipple(e.clientX - rect.left, e.clientY - rect.top, 12, 500);
+      addRipple(e.clientX - rect.left, e.clientY - rect.top, 8, 220);
     };
 
-    const damping = 0.96;
+    const damping = 0.94;
 
     const render = () => {
       if (width > 0 && height > 0 && buffer1 && buffer2 && offCtx) {
@@ -146,7 +151,7 @@ export default function LiquidText({
                 buffer1[idx + 1] +
                 buffer1[idx - gridW] +
                 buffer1[idx + gridW]) /
-              2 -
+                2 -
               buffer2[idx];
             buffer2[idx] = val * damping;
           }
@@ -179,11 +184,11 @@ export default function LiquidText({
 
             if (displacementX !== 0 || displacementY !== 0) {
               const srcX = Math.min(
-                Math.max(Math.round(x + displacementX * 0.15), 0),
+                Math.max(Math.round(x + displacementX * 0.065), 0),
                 width - 1
               );
               const srcY = Math.min(
-                Math.max(Math.round(y + displacementY * 0.15), 0),
+                Math.max(Math.round(y + displacementY * 0.065), 0),
                 height - 1
               );
 
@@ -191,8 +196,8 @@ export default function LiquidText({
               const trgIdx = (y * width + x) * 4;
 
               const specular = Math.min(
-                Math.max((displacementX + displacementY) * 0.4, -20),
-                60
+                Math.max((displacementX + displacementY) * 0.2, -10),
+                35
               );
 
               tPixels[trgIdx] = Math.min(
