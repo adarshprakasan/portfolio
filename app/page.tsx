@@ -12,6 +12,11 @@ const content = {
     description: "Visual storyteller crafting identities, interfaces and memorable digital experiences.",
     switchDescription: "Visual storyteller",
     skills: ["Branding", "UI/UX", "Illustration", "3D & Motion", "Photography"],
+    toolset: [
+      { label: "Identity", tools: ["Brand strategy", "Art direction", "Visual systems"] },
+      { label: "Experience", tools: ["UX research", "Interface design", "Prototyping"] },
+      { label: "Expression", tools: ["Illustration", "3D & motion", "Photography"] },
+    ],
     work: {
       headline: "A visual language with purpose.",
       projects: [
@@ -25,6 +30,11 @@ const content = {
     description: "Frontend & full-stack developer turning thoughtful design into fast, scalable digital products.",
     switchDescription: "Problem solver",
     skills: ["Next.js", "TypeScript", "React", "Node.js", "APIs", "Performance"],
+    toolset: [
+      { label: "Frontend", tools: ["Next.js", "React", "TypeScript"] },
+      { label: "Backend", tools: ["Node.js", "REST APIs", "MongoDB"] },
+      { label: "Quality", tools: ["Accessibility", "Performance", "Responsive UI"] },
+    ],
     work: {
       headline: "Products built to solve real problems.",
       projects: [
@@ -151,6 +161,24 @@ export default function Home() {
                 <h3>{project.title}</h3><p>{project.description}</p>
                 <button type="button">View project <ArrowUpRight size={16} /></button>
               </motion.article>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </section>
+
+      <section id="skills" className="skills-section">
+        <div className="skills-heading">
+          <p className="section-label">SKILLS &amp; TOOLS</p>
+          <h2>Two disciplines.<br />One standard.</h2>
+          <p>Every skill is in service of making the final experience more clear, useful, and memorable.</p>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div key={`toolset-${mode}`} className="toolset" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}>
+            {active.toolset.map((group, index) => (
+              <article key={`${mode}-tool-group-${group.label}`} className="tool-group">
+                <div className="tool-group-label"><span>{String(index + 1).padStart(2, "0")}</span><h3>{group.label}</h3></div>
+                <ul>{group.tools.map((tool) => <li key={`${mode}-${group.label}-${tool}`}>{tool}</li>)}</ul>
+              </article>
             ))}
           </motion.div>
         </AnimatePresence>
