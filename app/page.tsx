@@ -1,231 +1,116 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ArrowUpRight,
-  ChevronDown,
-  Github,
-  Instagram,
-  Linkedin,
-  Mail,
-} from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion, type Transition, type Variants } from "motion/react";
+import { ArrowUpRight, ChevronDown, Github, Instagram, Linkedin, Mail } from "lucide-react";
 
-const designerSkills = [
-  "Branding",
-  "UI/UX",
-  "Illustration",
-  "3D & Motion",
-  "Photography",
-];
-const developerSkills = [
-  "Next.js",
-  "TypeScript",
-  "React",
-  "Node.js",
-  "Tailwind CSS",
-  "MongoDB",
-];
+type Mode = "designer" | "developer";
+
+const content = {
+  designer: {
+    eyebrow: "DESIGNING EXPERIENCES.",
+    description: "Visual storyteller crafting identities, interfaces and memorable digital experiences.",
+    switchDescription: "Visual storyteller",
+    skills: ["Branding", "UI/UX", "Illustration", "3D & Motion", "Photography"],
+    work: { headline: "A visual language with purpose.", category: "Brand Identity / UIUX", title: "Beyond Design", description: "Brand systems, digital interfaces and visual storytelling." },
+  },
+  developer: {
+    eyebrow: "BUILDING DIGITAL PRODUCTS.",
+    description: "Frontend & full-stack developer turning thoughtful design into fast, scalable digital products.",
+    switchDescription: "Problem solver",
+    skills: ["Next.js", "TypeScript", "React", "Node.js", "APIs", "Performance"],
+    work: { headline: "Products built to solve real problems.", category: "Full Stack / MERN", title: "HospEasy", description: "Hospital appointment and token management platform." },
+  },
+} as const;
+
+const transition: Transition = { duration: 0.38, ease: [0.22, 1, 0.36, 1] };
+const reveal: Variants = {
+  initial: { opacity: 0, y: 14, filter: "blur(5px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+  exit: { opacity: 0, y: -10, filter: "blur(4px)" },
+};
 
 export default function Home() {
-  const [mode, setMode] = useState<"designer" | "developer">("designer");
+  const [mode, setMode] = useState<Mode>("designer");
   const designer = mode === "designer";
+  const active = content[mode];
 
   return (
-    <main className={`site ${designer ? "mode-designer" : "mode-developer"}`}>
+    <main className={`site mode-${mode}`}>
       <div className="ambient ambient-left" />
       <div className="ambient ambient-right" />
+      <div className="atmosphere-ring" />
       <div className="grid-floor" />
 
       <nav className="nav">
         <div className="monogram">AP</div>
         <div className="nav-links">
-          {["Home", "About", "Work", "Experience", "Skills"].map(
-            (item, index) => (
-              <a
-                key={item}
-                className={index === 0 ? "active" : ""}
-                href={`#${item.toLowerCase()}`}
-              >
-                {item}
-              </a>
-            ),
-          )}
+          {["Home", "About", "Work", "Experience", "Skills"].map((item, index) => (
+            <a key={`nav-${item}`} className={index === 0 ? "active" : ""} href={`#${item.toLowerCase()}`}>{item}</a>
+          ))}
         </div>
-        <a className="connect" href="#contact">
-          Let&apos;s connect <ArrowUpRight size={15} />
-        </a>
+        <a className="connect" href="#contact">Let&apos;s connect <ArrowUpRight size={15} /></a>
       </nav>
 
       <section id="home" className="hero">
-        <div className="side-rail left-rail">
-          {(designer
-            ? designerSkills
-            : ["Frontend", "Full Stack", "APIs", "Architecture", "Performance"]
-          ).map((item, i) => (
-            <motion.div
-              key={`${mode}-skill-${i}`}
-              className="rail-item"
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06 }}
-            >
-              <span className="rail-dot">{String(i + 1).padStart(2, "0")}</span>
-              <span>{item}</span>
+        <div className="side-rail left-rail" aria-label={`${mode} skills`}>
+          <AnimatePresence mode="wait">
+            <motion.div key={`rail-${mode}`} className="rail-list" initial="initial" animate="animate" exit="exit" variants={reveal} transition={transition}>
+              {active.skills.map((skill, index) => (
+                <motion.div key={`${mode}-skill-${index}`} className="rail-item" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ ...transition, delay: index * 0.055 }}>
+                  <span className="rail-dot">{String(index + 1).padStart(2, "0")}</span><span>{skill}</span>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          </AnimatePresence>
         </div>
 
         <div className="hero-copy">
-          <motion.p
-            className="eyebrow"
-            key={`eyebrow-${mode}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            {designer ? "DESIGNING EXPERIENCES." : "BUILDING DIGITAL PRODUCTS."}
-          </motion.p>
-          <motion.h1 layout>
-            ADARSH
-            <br />
-            PRAKASAN
-          </motion.h1>
-          <motion.div
-            className="identity"
-            key={`identity-${mode}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <span className="designer-text">Designer</span>
-            <span className="cross">×</span>
-            <span className="developer-text">Developer</span>
-          </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.p key={`eyebrow-${mode}`} className="eyebrow" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}>{active.eyebrow}</motion.p>
+          </AnimatePresence>
+          <motion.h1 layout transition={transition}>ADARSH<br />PRAKASAN</motion.h1>
+          <div className="identity"><span className="designer-text">Designer</span><span className="cross">×</span><span className="developer-text">Developer</span></div>
 
           <section className="switch-wrap" aria-label="Profile mode switch">
-            <div className="mode-switch">
-              <button
-                className={designer ? "selected designer-selected" : ""}
-                onClick={() => setMode("designer")}
-              >
-                <strong>DESIGNER</strong>
-                <span>Visual storyteller</span>
-              </button>
-              <button
-                className={!designer ? "selected developer-selected" : ""}
-                onClick={() => setMode("developer")}
-              >
-                <strong>DEVELOPER</strong>
-                <span>Problem solver</span>
-              </button>
-              <motion.div
-                className="switch-knob"
-                animate={{ x: designer ? 0 : 164 }}
-                transition={{ type: "spring", stiffness: 240, damping: 22 }}
-              />
+            <div className="mode-switch" role="tablist" aria-label="Choose portfolio view">
+              <motion.div className="switch-knob" animate={{ x: designer ? "0%" : "100%" }} transition={{ type: "spring", stiffness: 310, damping: 28, mass: 0.75 }} aria-hidden="true" />
+              {(["designer", "developer"] as const).map((option) => {
+                const selected = mode === option;
+                return <button key={`mode-${option}`} type="button" role="tab" aria-selected={selected} aria-controls="mode-preview" className={selected ? `selected ${option}-selected` : ""} onClick={() => setMode(option)}><strong>{option.toUpperCase()}</strong><span>{content[option].switchDescription}</span></button>;
+              })}
             </div>
             <p className="switch-hint">Switch between worlds</p>
           </section>
 
-          <p className="subcopy">
-            {designer
-              ? "Visual storyteller crafting identities, interfaces and memorable digital experiences."
-              : "Frontend & full-stack developer turning thoughtful design into fast, scalable digital products."}
-          </p>
+          <AnimatePresence mode="wait">
+            <motion.p key={`description-${mode}`} className="subcopy" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}>{active.description}</motion.p>
+          </AnimatePresence>
         </div>
 
-        <div className="visual-card">
-          <motion.div
-            className="orb"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          />
-          {designer ? (
-            <>
-              <div className="poster">
-                <span>
-                  BEYOND
-                  <br />
-                  DESIGN.
-                </span>
-                <small>
-                  We don&apos;t just make it look good.
-                  <br />
-                  We make it meaningful.
-                </small>
-              </div>
-              <div className="brush" />
-              <div className="a-mark">A</div>
-            </>
-          ) : (
-            <div className="code-window">
-              <div className="window-bar">
-                <i />
-                <i />
-                <i />
-              </div>
-              <pre>{`const Adarsh = {\n  role: "Designer × Developer",\n  focus: ["UX", "React", "Next.js"],\n  mindset: "Build beautifully."\n};`}</pre>
-            </div>
-          )}
+        <div className="visual-card" id="mode-preview" role="tabpanel">
+          <motion.div className="orb" animate={{ rotate: designer ? 360 : -360, scale: designer ? 1 : 1.12 }} transition={{ rotate: { duration: 18, repeat: Infinity, ease: "linear" }, scale: transition }} />
+          <AnimatePresence mode="wait">
+            {designer ? (
+              <motion.div key="designer-visual" className="visual-scene designer-scene" initial={{ opacity: 0, scale: 0.92, rotate: -3 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} exit={{ opacity: 0, scale: 1.05, rotate: 3 }} transition={transition}>
+                <div className="poster"><span>BEYOND<br />DESIGN.</span><small>We don&apos;t just make it look good.<br />We make it meaningful.</small></div><div className="brush" /><div className="a-mark">A</div>
+              </motion.div>
+            ) : (
+              <motion.div key="developer-visual" className="visual-scene developer-scene" initial={{ opacity: 0, scale: 0.94, x: 20 }} animate={{ opacity: 1, scale: 1, x: 0 }} exit={{ opacity: 0, scale: 0.96, x: -20 }} transition={transition}>
+                <div className="code-window"><div className="window-bar"><i /><i /><i /><span>adarsh.tsx</span></div><pre>{`const Adarsh = {\n  role: "Designer × Developer",\n  focus: ["UX", "React", "Next.js"],\n  mindset: "Build beautifully."\n};`}</pre></div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
       <section id="work" className="preview-section">
-        <div>
-          <p className="section-label">SELECTED WORK</p>
-          <h2>
-            {designer
-              ? "A visual language with purpose."
-              : "Products built to solve real problems."}
-          </h2>
-        </div>
-        <div className="project-preview">
-          <div className="project-meta">
-            <span>01</span>
-            <span>
-              {designer ? "Brand Identity / UIUX" : "Full Stack / MERN"}
-            </span>
-          </div>
-          <h3>{designer ? "Beyond Design" : "HospEasy"}</h3>
-          <p>
-            {designer
-              ? "Brand systems, digital interfaces and visual storytelling."
-              : "Hospital appointment and token management platform."}
-          </p>
-          <button>
-            View project <ArrowUpRight size={16} />
-          </button>
-        </div>
+        <AnimatePresence mode="wait"><motion.div key={`work-heading-${mode}`} variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><p className="section-label">SELECTED WORK</p><h2>{active.work.headline}</h2></motion.div></AnimatePresence>
+        <AnimatePresence mode="wait"><motion.article key={`project-${mode}`} className="project-preview" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><div className="project-meta"><span>01</span><span>{active.work.category}</span></div><h3>{active.work.title}</h3><p>{active.work.description}</p><button type="button">View project <ArrowUpRight size={16} /></button></motion.article></AnimatePresence>
       </section>
 
-      <footer id="contact" className="footer">
-        <div>
-          <span className="section-label">AVAILABLE FOR</span>
-          <h2>
-            Let&apos;s build something
-            <br />
-            worth remembering.
-          </h2>
-        </div>
-        <div className="footer-links">
-          <a href="mailto:hello@adarsh.dev">
-            <Mail size={17} /> Email
-          </a>
-          <a href="#">
-            <Github size={17} /> GitHub
-          </a>
-          <a href="#">
-            <Linkedin size={17} /> LinkedIn
-          </a>
-          <a href="#">
-            <Instagram size={17} /> Instagram
-          </a>
-        </div>
-      </footer>
-
-      <div className="scroll">
-        <span>SCROLL TO EXPLORE</span>
-        <ChevronDown size={16} />
-      </div>
+      <footer id="contact" className="footer"><div><span className="section-label">AVAILABLE FOR</span><h2>Let&apos;s build something<br />worth remembering.</h2></div><div className="footer-links"><a href="mailto:hello@adarsh.dev"><Mail size={17} /> Email</a><a href="#"><Github size={17} /> GitHub</a><a href="#"><Linkedin size={17} /> LinkedIn</a><a href="#"><Instagram size={17} /> Instagram</a></div></footer>
+      <div className="scroll"><span>SCROLL TO EXPLORE</span><ChevronDown size={16} /></div>
     </main>
   );
 }
