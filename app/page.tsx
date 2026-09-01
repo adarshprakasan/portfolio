@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
+  useMotionValue,
   type Transition,
   type Variants,
 } from "motion/react";
@@ -154,6 +155,19 @@ const content = {
 } as const;
 
 const transition: Transition = { duration: 0.38, ease: [0.22, 1, 0.36, 1] };
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function lerp(start: number, end: number, progress: number) {
+  return start + (end - start) * progress;
+}
+
+function easeToCorner(progress: number) {
+  return 1 - (1 - progress) ** 3;
+}
+
 const reveal: Variants = {
   initial: { opacity: 0, y: 14, filter: "blur(5px)" },
   animate: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -164,6 +178,12 @@ export default function Home() {
   const [mode, setMode] = useState<Mode>("designer");
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [switchPlaced, setSwitchPlaced] = useState(false);
+  const switchSlotRef = useRef<HTMLDivElement>(null);
+  const switchX = useMotionValue(0);
+  const switchY = useMotionValue(0);
+  const switchWidth = useMotionValue(368);
+  const switchHeight = useMotionValue(84);
   const designer = mode === "designer";
   const active = content[mode];
 
@@ -197,6 +217,68 @@ export default function Home() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useLayoutEffect(() => {
+    const slot = switchSlotRef.current;
+    if (!slot) return;
+
+    let frame = 0;
+
+    const updateSwitch = () => {
+      frame = 0;
+      const rect = slot.getBoundingClientRect();
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const range = Math.min(460, Math.max(280, window.innerHeight * 0.42));
+      const raw = reducedMotion
+        ? window.scrollY > 8
+          ? 1
+          : 0
+        : clamp(window.scrollY / range, 0, 1);
+      const progress = easeToCorner(raw);
+
+      const compactWidth = Math.min(
+        228,
+        Math.max(168, window.innerWidth - (window.innerWidth <= 520 ? 30 : 56)),
+      );
+      const compactHeight = window.innerWidth <= 520 ? 44 : 48;
+      const width = lerp(rect.width, compactWidth, progress);
+      const height = lerp(rect.height, compactHeight, progress);
+      const gutter = window.innerWidth <= 520 ? 15 : 28;
+      const navWidth = Math.min(1420, window.innerWidth - gutter * 2);
+      const navLeft = (window.innerWidth - navWidth) / 2;
+      const endX = navLeft + navWidth - width;
+      const endY = Math.max(10, (90 - height) / 2);
+
+      switchX.set(lerp(rect.left, endX, progress));
+      switchY.set(lerp(rect.top, endY, progress));
+      switchWidth.set(width);
+      switchHeight.set(height);
+      const site = slot.closest(".site");
+      if (site instanceof HTMLElement) {
+        site.style.setProperty("--switch-dock", String(progress));
+      }
+    };
+
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateSwitch);
+    };
+
+    updateSwitch();
+    setSwitchPlaced(true);
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    const observer = new ResizeObserver(requestUpdate);
+    observer.observe(slot);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      observer.disconnect();
+    };
+  }, [switchHeight, switchWidth, switchX, switchY]);
 
   return (
     <main className={`site mode-${mode}`}>
@@ -280,7 +362,21 @@ export default function Home() {
             <span className="developer-text">Developer</span>
           </div>
 
-          <section className="switch-wrap" aria-label="Profile mode switch">
+          <div className="switch-slot" ref={switchSlotRef}>
+            <motion.section
+              className={`switch-wrap${switchPlaced ? " is-floating" : ""}`}
+              aria-label="Profile mode switch"
+              style={
+                switchPlaced
+                  ? {
+                      x: switchX,
+                      y: switchY,
+                      width: switchWidth,
+                      height: switchHeight,
+                    }
+                  : undefined
+              }
+            >
             <div
               className="mode-switch"
               role="tablist"
@@ -316,7 +412,8 @@ export default function Home() {
               })}
             </div>
             {/* <p className="switch-hint">Switch between worlds</p> */}
-          </section>
+            </motion.section>
+          </div>
 
           <AnimatePresence mode="wait">
             <motion.p

@@ -39,8 +39,9 @@ button {
 }
 
 .site {
+  --switch-dock: 0;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
   isolation: isolate;
   background:
@@ -161,6 +162,12 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 10px;
+  opacity: calc(1 - var(--switch-dock, 0));
+  transform: translate3d(calc(var(--switch-dock, 0) * 14px), 0, 0);
+  max-width: calc((1 - var(--switch-dock, 0)) * 240px);
+  overflow: hidden;
+  white-space: nowrap;
+  padding-inline: calc(18px * (1 - var(--switch-dock, 0)));
 }
 
 .hero {
@@ -372,9 +379,17 @@ button {
   white-space: pre-wrap;
 }
 
+.switch-slot {
+  width: 368px;
+  height: 84px;
+  margin-top: 25px;
+  position: relative;
+  flex-shrink: 0;
+}
+
 .switch-wrap {
-  width: min(1420px, calc(100% - 56px));
-  margin: 0 auto;
+  width: 368px;
+  height: 84px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -382,9 +397,19 @@ button {
   z-index: 3;
 }
 
+.switch-wrap.is-floating {
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: 0;
+  z-index: 60;
+  transform-origin: 0 0;
+  will-change: transform, width, height;
+}
+
 .mode-switch {
-  width: 360px;
-  height: 82px;
+  width: 100%;
+  height: 100%;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   background: rgba(8, 9, 15, 0.7);
@@ -416,6 +441,10 @@ button {
   font-size: 10px;
   letter-spacing: 0;
   color: #858590;
+  opacity: calc(1 - var(--switch-dock, 0));
+  max-height: calc(1.2em * (1 - var(--switch-dock, 0)));
+  overflow: hidden;
+  transform: translateY(calc(var(--switch-dock, 0) * -3px));
 }
 
 .mode-switch .selected strong {
@@ -424,10 +453,10 @@ button {
 
 .switch-knob {
   position: absolute;
-  width: 178px;
-  height: 72px;
-  top: 4px;
-  left: 2px;
+  width: calc(50% - 5px);
+  height: calc(100% - 10px);
+  top: 5px;
+  left: 4px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: radial-gradient(circle at 25% 30%,
@@ -597,7 +626,6 @@ button {
 
   .nav,
   .hero,
-  .switch-wrap,
   .preview-section,
   .footer {
     width: calc(100% - 30px);
@@ -614,8 +642,14 @@ button {
 
   .mode-switch {
     width: 100%;
-    height: 76px;
+    height: 100%;
     padding: 5px;
+  }
+
+  .switch-slot,
+  .switch-wrap {
+    width: 100%;
+    height: 76px;
   }
 
   .switch-knob {
@@ -750,12 +784,12 @@ button {
 }
 
 .switch-wrap {
-  margin-top: 25px;
+  margin-top: 0;
 }
 
 .mode-switch {
-  width: 368px;
-  height: 84px;
+  width: 100%;
+  height: 100%;
   padding: 5px;
   border-color: rgba(255, 255, 255, 0.15);
   background: linear-gradient(135deg,
@@ -782,6 +816,7 @@ button {
   border-radius: 999px;
   color: #777783;
   transition: color 0.25s ease;
+  gap: calc(4px * (1 - var(--switch-dock, 0)));
 }
 
 .mode-switch button:focus-visible {
@@ -796,7 +831,7 @@ button {
 .switch-knob {
   z-index: 1;
   width: calc(50% - 5px);
-  height: 74px;
+  height: calc(100% - 10px);
   left: 4px;
   background: radial-gradient(circle at 25% 25%,
       rgba(238, 164, 255, 0.5),
@@ -822,7 +857,7 @@ button {
 @media (max-width: 520px) {
   .switch-knob {
     width: calc(50% - 5px);
-    height: 66px;
+    height: calc(100% - 10px);
     top: 5px;
     left: 5px;
   }
