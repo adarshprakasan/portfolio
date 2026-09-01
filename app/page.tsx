@@ -280,7 +280,7 @@ export default function Home() {
                 );
               })}
             </div>
-            <p className="switch-hint">Switch between worlds</p>
+            {/* <p className="switch-hint">Switch between worlds</p> */}
           </section>
 
           <AnimatePresence mode="wait">
@@ -548,16 +548,16 @@ export default function Home() {
           </h2>
         </div>
         <div className="footer-links">
-          <a href="mailto:hello@adarsh.dev">
+          <a href="mailto:adarshp2911@gmail.com">
             <Mail size={17} /> Email
           </a>
-          <a href="#">
+          <a href="https://github.com/adarshprakasan">
             <Github size={17} /> GitHub
           </a>
-          <a href="#">
+          <a href="https://www.linkedin.com/in/adarshprakasan/">
             <Linkedin size={17} /> LinkedIn
           </a>
-          <a href="#">
+          <a href="https://www.instagram.com/adarsh.prakasan/">
             <Instagram size={17} /> Instagram
           </a>
         </div>
