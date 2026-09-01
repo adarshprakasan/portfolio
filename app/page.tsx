@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -160,8 +160,29 @@ const reveal: Variants = {
 
 export default function Home() {
   const [mode, setMode] = useState<Mode>("designer");
+  const [isAtBottom, setIsAtBottom] = useState(false);
   const designer = mode === "designer";
   const active = content[mode];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Hide indicator when within 100px of the page bottom
+      if (windowHeight + scrollY >= documentHeight - 100) {
+        setIsAtBottom(true);
+      } else {
+        setIsAtBottom(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <main className={`site mode-${mode}`}>
@@ -562,10 +583,20 @@ export default function Home() {
           </a>
         </div>
       </footer>
-      <div className="scroll">
-        <span>SCROLL TO EXPLORE</span>
-        <ChevronDown size={16} />
-      </div>
+      <AnimatePresence>
+        {!isAtBottom && (
+          <motion.div
+            className="scroll"
+            initial={{ opacity: 0, x: "-50%", y: 10 }}
+            animate={{ opacity: 1, x: "-50%", y: 0 }}
+            exit={{ opacity: 0, x: "-50%", y: 10 }}
+            transition={{ duration: 0.25 }}
+          >
+            <span>SCROLL TO EXPLORE</span>
+            <ChevronDown size={16} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
