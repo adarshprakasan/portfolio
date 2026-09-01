@@ -1,5 +1,25 @@
 @import "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap";
 /* [project]/app/globals.css [app-client] (css) */
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+    }
+  }
+}
+
 @layer theme {
   :root, :host {
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
@@ -263,6 +283,10 @@
 @layer components;
 
 @layer utilities {
+  .filter {
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -868,6 +892,320 @@ button {
   .project-preview h3 {
     font-size: 38px;
   }
+}
+
+.site {
+  transition: background .8s;
+}
+
+.ambient {
+  transition: transform .8s cubic-bezier(.22, 1, .36, 1), opacity .8s, background .8s;
+}
+
+.atmosphere-ring {
+  z-index: -2;
+  aspect-ratio: 1;
+  opacity: .45;
+  pointer-events: none;
+  border: 1px solid #bd81ff1f;
+  border-radius: 50%;
+  width: min(78vw, 1100px);
+  transition: all .8s cubic-bezier(.22, 1, .36, 1);
+  position: absolute;
+  top: 13vh;
+  left: 50%;
+  transform: translateX(-50%)scale(.7);
+}
+
+.mode-developer {
+  background: radial-gradient(circle at 62% 30%, #3766d229, #0000 38%), #07080d;
+}
+
+.mode-developer .ambient-left {
+  opacity: .07;
+  background: #7d56ff;
+  transform: scale(.75)translate(-12%, 12%);
+}
+
+.mode-developer .ambient-right {
+  opacity: .28;
+  background: #3478ff;
+  transform: scale(1.12)translate(-4%, -2%);
+}
+
+.mode-developer .atmosphere-ring {
+  opacity: .65;
+  border-color: #5c97ff2e;
+  transform: translateX(-50%)scale(.9);
+}
+
+.mode-designer .atmosphere-ring {
+  border-color: #e290ff29;
+}
+
+.rail-list {
+  flex-direction: column;
+  gap: 20px;
+  display: flex;
+}
+
+.subcopy {
+  min-height: 48px;
+}
+
+.visual-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.mode-developer .orb {
+  filter: drop-shadow(0 0 34px #4c89ff57);
+  background: radial-gradient(circle at 30% 25%, #fff, #6d9cff 9%, #142c58 42%, #0000 67%);
+}
+
+.mode-developer .code-window {
+  border-color: #7aa8ff33;
+  box-shadow: 0 25px 70px #00000073, 0 0 36px #417dff14;
+}
+
+.window-bar span {
+  color: #64749a;
+  margin-left: 6px;
+  font: 9px DM Mono, monospace;
+}
+
+.code-window pre {
+  margin: 0;
+}
+
+.switch-wrap {
+  margin-top: 25px;
+}
+
+.mode-switch {
+  background: linear-gradient(135deg, #ffffff14, #08090fd9);
+  border-color: #ffffff26;
+  width: 368px;
+  height: 84px;
+  padding: 5px;
+  box-shadow: inset 0 1px #ffffff14, 0 16px 36px #00000042, 0 0 50px #a064ff14;
+}
+
+.mode-switch:before {
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, #ffffff0d, #0000 38%);
+  position: absolute;
+  inset: 2px;
+}
+
+.mode-switch button {
+  color: #777783;
+  border-radius: 999px;
+  transition: color .25s;
+}
+
+.mode-switch button:focus-visible {
+  outline-offset: 3px;
+  outline: 2px solid #fff;
+}
+
+.mode-switch .selected span {
+  color: #d7d3df;
+}
+
+.switch-knob {
+  z-index: 1;
+  background: radial-gradient(circle at 25% 25%, #eea4ff80, #4f237294 37%, #14141ef5);
+  width: calc(50% - 5px);
+  height: 74px;
+  left: 4px;
+  box-shadow: inset 0 1px 1px #ffffff3d, 0 5px 14px #00000059, 0 0 30px #b964ff4d;
+}
+
+.mode-developer .switch-knob {
+  background: radial-gradient(circle at 25% 25%, #90c3ff7a, #1c3e7e99 37%, #111624f5);
+  box-shadow: inset 0 1px 1px #ffffff3d, 0 5px 14px #00000059, 0 0 30px #5082ff57;
+}
+
+@media (max-width: 520px) {
+  .switch-knob {
+    width: calc(50% - 5px);
+    height: 66px;
+  }
+
+  .mode-switch .switch-knob {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, :before, :after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+.about-section {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  width: min(1100px, 100% - 56px);
+  margin: 130px auto 0;
+  padding: 110px 0;
+  display: grid;
+}
+
+.about-intro h2 {
+  letter-spacing: -.07em;
+  margin: 22px 0 28px;
+  font-size: clamp(38px, 4.8vw, 70px);
+  line-height: .96;
+}
+
+.about-intro > p:last-child {
+  max-width: 460px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.about-details {
+  flex-direction: column;
+  display: flex;
+}
+
+.principle {
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: 48px 1fr;
+  gap: 22px;
+  margin-bottom: 28px;
+  padding: 0 0 30px;
+  display: grid;
+}
+
+.principle:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.principle > span {
+  color: #a9a3b1;
+  padding-top: 5px;
+  font: 10px DM Mono, monospace;
+}
+
+.principle h3 {
+  letter-spacing: -.04em;
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.principle p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.mode-developer .principle > span {
+  color: #8badff;
+}
+
+.mode-designer .principle > span {
+  color: #d692ff;
+}
+
+@media (max-width: 1000px) {
+  .about-section {
+    grid-template-columns: 1fr;
+    gap: 65px;
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .about-section {
+    gap: 50px;
+    width: calc(100% - 30px);
+    margin-top: 100px;
+    padding: 70px 0;
+  }
+
+  .principle {
+    grid-template-columns: 35px 1fr;
+    gap: 15px;
+  }
+}
+
+@property --tw-blur {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-invert {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false
 }
 
 /*# sourceMappingURL=app_globals_0yg4wg8.css.map*/

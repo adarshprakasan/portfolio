@@ -104,6 +104,26 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="about" className="about-section">
+        <div className="about-intro">
+          <p className="section-label">THE HYBRID ADVANTAGE</p>
+          <h2>Designed with feeling.<br />Built with intention.</h2>
+          <p>I bring a designer&apos;s eye and a developer&apos;s discipline to the same table—so the idea stays intact from the first sketch to the final interaction.</p>
+        </div>
+        <div className="about-details">
+          {[
+            ["01", "See the whole picture", "Strategy, visual identity, product thinking, and the details that make an experience feel considered."],
+            ["02", "Make it real", "Production-ready interfaces that are responsive, accessible, and built to perform."],
+            ["03", "Keep it human", "Technology is the medium. Clarity, character, and a useful experience are the point."],
+          ].map(([number, title, description]) => (
+            <article key={`principle-${number}`} className="principle">
+              <span>{number}</span>
+              <div><h3>{title}</h3><p>{description}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section id="work" className="preview-section">
         <AnimatePresence mode="wait"><motion.div key={`work-heading-${mode}`} variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><p className="section-label">SELECTED WORK</p><h2>{active.work.headline}</h2></motion.div></AnimatePresence>
         <AnimatePresence mode="wait"><motion.article key={`project-${mode}`} className="project-preview" variants={reveal} initial="initial" animate="animate" exit="exit" transition={transition}><div className="project-meta"><span>01</span><span>{active.work.category}</span></div><h3>{active.work.title}</h3><p>{active.work.description}</p><button type="button">View project <ArrowUpRight size={16} /></button></motion.article></AnimatePresence>
