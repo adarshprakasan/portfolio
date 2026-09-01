@@ -100,6 +100,32 @@ export default function Home() {
             <span className="cross">×</span>
             <span className="developer-text">Developer</span>
           </motion.div>
+
+          <section className="switch-wrap" aria-label="Profile mode switch">
+            <div className="mode-switch">
+              <button
+                className={designer ? "selected designer-selected" : ""}
+                onClick={() => setMode("designer")}
+              >
+                <strong>DESIGNER</strong>
+                <span>Visual storyteller</span>
+              </button>
+              <button
+                className={!designer ? "selected developer-selected" : ""}
+                onClick={() => setMode("developer")}
+              >
+                <strong>DEVELOPER</strong>
+                <span>Problem solver</span>
+              </button>
+              <motion.div
+                className="switch-knob"
+                animate={{ x: designer ? 0 : 164 }}
+                transition={{ type: "spring", stiffness: 240, damping: 22 }}
+              />
+            </div>
+            <p className="switch-hint">Switch between worlds</p>
+          </section>
+
           <p className="subcopy">
             {designer
               ? "Visual storyteller crafting identities, interfaces and memorable digital experiences."
@@ -141,31 +167,6 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
-
-      <section className="switch-wrap" aria-label="Profile mode switch">
-        <div className="mode-switch">
-          <button
-            className={designer ? "selected designer-selected" : ""}
-            onClick={() => setMode("designer")}
-          >
-            <strong>DESIGNER</strong>
-            <span>Visual storyteller</span>
-          </button>
-          <button
-            className={!designer ? "selected developer-selected" : ""}
-            onClick={() => setMode("developer")}
-          >
-            <strong>DEVELOPER</strong>
-            <span>Problem solver</span>
-          </button>
-          <motion.div
-            className="switch-knob"
-            animate={{ x: designer ? 0 : 164 }}
-            transition={{ type: "spring", stiffness: 240, damping: 22 }}
-          />
-        </div>
-        <p className="switch-hint">Switch between worlds</p>
       </section>
 
       <section id="work" className="preview-section">
