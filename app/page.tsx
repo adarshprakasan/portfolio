@@ -8,6 +8,7 @@ import {
   type Variants,
 } from "motion/react";
 import {
+  ArrowUp,
   ArrowUpRight,
   ChevronDown,
   Github,
@@ -162,8 +163,13 @@ const reveal: Variants = {
 export default function Home() {
   const [mode, setMode] = useState<Mode>("designer");
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const designer = mode === "designer";
   const active = content[mode];
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -176,6 +182,13 @@ export default function Home() {
         setIsAtBottom(true);
       } else {
         setIsAtBottom(false);
+      }
+
+      // Show scroll to top button after scrolling down 300px
+      if (scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
       }
     };
 
@@ -596,6 +609,20 @@ export default function Home() {
             <span>SCROLL TO EXPLORE</span>
             <ChevronDown size={16} />
           </motion.div>
+        )}
+        {showScrollTop && (
+          <motion.button
+            type="button"
+            className="scroll-top-btn"
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            initial={{ opacity: 0, scale: 0.7, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.7, y: 12 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ArrowUp size={20} />
+          </motion.button>
         )}
       </AnimatePresence>
     </main>
