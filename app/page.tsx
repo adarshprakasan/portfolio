@@ -225,7 +225,6 @@ export default function Home() {
     let frame = 0;
 
     const updateSwitch = () => {
-      frame = 0;
       const rect = slot.getBoundingClientRect();
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -262,7 +261,15 @@ export default function Home() {
     };
 
     const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateSwitch);
+      if (!frame) {
+        frame = window.requestAnimationFrame(() => {
+          try {
+            updateSwitch();
+          } finally {
+            frame = 0;
+          }
+        });
+      }
     };
 
     updateSwitch();
