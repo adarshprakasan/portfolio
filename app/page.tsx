@@ -1,9 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   AnimatePresence,
   motion,
+  useSpring,
   useMotionValue,
   type Transition,
   type Variants,
@@ -68,13 +75,22 @@ const content = {
     ],
     work: {
       headline: "A visual language with purpose.",
-      categories: ["All", "UI/UX", "Graphic Design", "Logo", "3D Works", "Video Editing", "Magazines"] as const,
+      categories: [
+        "All",
+        "UI/UX",
+        "Graphic Design",
+        "Logo",
+        "3D Works",
+        "Video Editing",
+        "Magazines",
+      ] as const,
       projects: [
         {
           number: "01",
           category: "UI/UX",
           title: "Strata Dashboard",
-          description: "A modular analytics dashboard built for clarity and speed, with a dark-mode-first design system.",
+          description:
+            "A modular analytics dashboard built for clarity and speed, with a dark-mode-first design system.",
           accent: "lilac",
           designCategory: "UI/UX" as const,
         },
@@ -82,7 +98,8 @@ const content = {
           number: "02",
           category: "UI/UX",
           title: "Bloom App",
-          description: "Mental wellness app UI — calm, breathable layouts that make daily journaling feel effortless.",
+          description:
+            "Mental wellness app UI — calm, breathable layouts that make daily journaling feel effortless.",
           accent: "coral",
           designCategory: "UI/UX" as const,
         },
@@ -90,7 +107,8 @@ const content = {
           number: "03",
           category: "Graphic Design",
           title: "Neon Pulse",
-          description: "Event poster series for a music festival — bold type, chromatic aberration, raw energy.",
+          description:
+            "Event poster series for a music festival — bold type, chromatic aberration, raw energy.",
           accent: "coral",
           designCategory: "Graphic Design" as const,
         },
@@ -98,7 +116,8 @@ const content = {
           number: "04",
           category: "Logo",
           title: "Aura Studio",
-          description: "Wordmark and symbol system for a creative studio — geometric, memorable, and endlessly scalable.",
+          description:
+            "Wordmark and symbol system for a creative studio — geometric, memorable, and endlessly scalable.",
           accent: "lilac",
           designCategory: "Logo" as const,
         },
@@ -106,7 +125,8 @@ const content = {
           number: "05",
           category: "3D Works",
           title: "Void Objects",
-          description: "Abstract 3D sculpture series rendered in Cinema 4D — materiality, light, and negative space.",
+          description:
+            "Abstract 3D sculpture series rendered in Cinema 4D — materiality, light, and negative space.",
           accent: "blue",
           designCategory: "3D Works" as const,
         },
@@ -114,7 +134,8 @@ const content = {
           number: "06",
           category: "Video Editing",
           title: "Frame Study",
-          description: "Short-form video edits exploring rhythm and visual storytelling through montage and motion.",
+          description:
+            "Short-form video edits exploring rhythm and visual storytelling through montage and motion.",
           accent: "cyan",
           designCategory: "Video Editing" as const,
         },
@@ -122,7 +143,8 @@ const content = {
           number: "07",
           category: "Magazines",
           title: "After Hours",
-          description: "A cinematic editorial magazine — dark, moody layouts for a culture-led digital publication.",
+          description:
+            "A cinematic editorial magazine — dark, moody layouts for a culture-led digital publication.",
           accent: "coral",
           designCategory: "Magazines" as const,
         },
@@ -206,10 +228,6 @@ function lerp(start: number, end: number, progress: number) {
   return start + (end - start) * progress;
 }
 
-function easeToCorner(progress: number) {
-  return 1 - (1 - progress) ** 3;
-}
-
 const reveal: Variants = {
   initial: { opacity: 0, y: 14, filter: "blur(5px)" },
   animate: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -239,14 +257,35 @@ export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [switchPlaced, setSwitchPlaced] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [originRect, setOriginRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const [originRect, setOriginRect] = useState<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  } | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [activeSection, setActiveSection] = useState("home");
   const switchSlotRef = useRef<HTMLDivElement>(null);
-  const switchX = useMotionValue(0);
-  const switchY = useMotionValue(0);
-  const switchWidth = useMotionValue(368);
-  const switchHeight = useMotionValue(84);
+  const switchX = useSpring(useMotionValue(0), {
+    stiffness: 320,
+    damping: 32,
+    mass: 0.55,
+  });
+  const switchY = useSpring(useMotionValue(0), {
+    stiffness: 320,
+    damping: 32,
+    mass: 0.55,
+  });
+  const switchWidth = useSpring(useMotionValue(368), {
+    stiffness: 280,
+    damping: 30,
+    mass: 0.5,
+  });
+  const switchHeight = useSpring(useMotionValue(84), {
+    stiffness: 280,
+    damping: 30,
+    mass: 0.5,
+  });
   const designer = mode === "designer";
   const active = content[mode];
 
@@ -348,34 +387,37 @@ export default function Home() {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      const range = Math.min(460, Math.max(280, window.innerHeight * 0.42));
-      const raw = reducedMotion
-        ? window.scrollY > 8
-          ? 1
-          : 0
-        : clamp(window.scrollY / range, 0, 1);
-      const progress = easeToCorner(raw);
+      const documentTop = rect.top + window.scrollY;
 
       const compactWidth = Math.min(
         228,
         Math.max(168, window.innerWidth - (window.innerWidth <= 520 ? 30 : 56)),
       );
       const compactHeight = window.innerWidth <= 520 ? 44 : 48;
-      const width = lerp(rect.width, compactWidth, progress);
-      const height = lerp(rect.height, compactHeight, progress);
       const gutter = window.innerWidth <= 520 ? 15 : 28;
       const navWidth = Math.min(1420, window.innerWidth - gutter * 2);
       const navLeft = (window.innerWidth - navWidth) / 2;
-      const endX = navLeft + navWidth - width;
-      const endY = Math.max(10, (90 - height) / 2);
+      const endX = navLeft + navWidth - compactWidth;
+      const dockY = Math.max(10, (90 - compactHeight) / 2);
+      const travel = Math.max(0, documentTop - dockY);
+      const dockRange = Math.min(180, Math.max(120, window.innerHeight * 0.16));
+      const dockProgress = reducedMotion
+        ? window.scrollY > travel
+          ? 1
+          : 0
+        : clamp((window.scrollY - travel) / dockRange, 0, 1);
+      const easedDockProgress = 1 - (1 - dockProgress) ** 3;
+      const naturalY = documentTop - window.scrollY;
+      const currentWidth = lerp(rect.width, compactWidth, easedDockProgress);
+      const currentHeight = lerp(rect.height, compactHeight, easedDockProgress);
 
-      switchX.set(lerp(rect.left, endX, progress));
-      switchY.set(lerp(rect.top, endY, progress));
-      switchWidth.set(width);
-      switchHeight.set(height);
+      switchX.set(lerp(rect.left, endX, easedDockProgress));
+      switchY.set(dockProgress > 0 ? dockY : naturalY);
+      switchWidth.set(currentWidth);
+      switchHeight.set(currentHeight);
       const site = slot.closest(".site");
       if (site instanceof HTMLElement) {
-        site.style.setProperty("--switch-dock", String(progress));
+        site.style.setProperty("--switch-dock", String(easedDockProgress));
       }
     };
 
@@ -417,14 +459,14 @@ export default function Home() {
         <div className="monogram">AP</div>
         <div className="nav-links">
           {["Home", "About", "Work", "Skills", "Experience"].map((item) => (
-              <a
-                key={`nav-${item}`}
-                className={activeSection === item.toLowerCase() ? "active" : ""}
-                href={`#${item.toLowerCase()}`}
-              >
-                {item}
-              </a>
-            ))}
+            <a
+              key={`nav-${item}`}
+              className={activeSection === item.toLowerCase() ? "active" : ""}
+              href={`#${item.toLowerCase()}`}
+            >
+              {item}
+            </a>
+          ))}
         </div>
         <a className="connect" href="#contact">
           Let&apos;s connect <ArrowUpRight size={15} />
@@ -501,41 +543,41 @@ export default function Home() {
                   : undefined
               }
             >
-            <div
-              className="mode-switch"
-              role="tablist"
-              aria-label="Choose portfolio view"
-            >
-              <motion.div
-                className="switch-knob"
-                animate={{ x: designer ? "0%" : "100%" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 310,
-                  damping: 28,
-                  mass: 0.75,
-                }}
-                aria-hidden="true"
-              />
-              {(["designer", "developer"] as const).map((option) => {
-                const selected = mode === option;
-                return (
-                  <button
-                    key={`mode-${option}`}
-                    type="button"
-                    role="tab"
-                    aria-selected={selected}
-                    aria-controls="mode-preview"
-                    className={selected ? `selected ${option}-selected` : ""}
-                    onClick={() => setMode(option)}
-                  >
-                    <strong>{option.toUpperCase()}</strong>
-                    <span>{content[option].switchDescription}</span>
-                  </button>
-                );
-              })}
-            </div>
-            {/* <p className="switch-hint">Switch between worlds</p> */}
+              <div
+                className="mode-switch"
+                role="tablist"
+                aria-label="Choose portfolio view"
+              >
+                <motion.div
+                  className="switch-knob"
+                  animate={{ x: designer ? "0%" : "100%" }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 310,
+                    damping: 28,
+                    mass: 0.75,
+                  }}
+                  aria-hidden="true"
+                />
+                {(["designer", "developer"] as const).map((option) => {
+                  const selected = mode === option;
+                  return (
+                    <button
+                      key={`mode-${option}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={selected}
+                      aria-controls="mode-preview"
+                      className={selected ? `selected ${option}-selected` : ""}
+                      onClick={() => setMode(option)}
+                    >
+                      <strong>{option.toUpperCase()}</strong>
+                      <span>{content[option].switchDescription}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {/* <p className="switch-hint">Switch between worlds</p> */}
             </motion.section>
           </div>
 
