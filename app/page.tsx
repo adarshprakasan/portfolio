@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -18,6 +18,7 @@ import {
   Mail,
 } from "lucide-react";
 import LiquidText from "@/components/LiquidText";
+import ProjectModal, { type Project } from "@/components/ProjectModal";
 
 type Mode = "designer" | "developer";
 
@@ -179,6 +180,8 @@ export default function Home() {
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [switchPlaced, setSwitchPlaced] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [originRect, setOriginRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const switchSlotRef = useRef<HTMLDivElement>(null);
   const switchX = useMotionValue(0);
   const switchY = useMotionValue(0);
@@ -186,6 +189,20 @@ export default function Home() {
   const switchHeight = useMotionValue(84);
   const designer = mode === "designer";
   const active = content[mode];
+
+  const openProject = useCallback(
+    (project: Project, e: React.MouseEvent<HTMLElement>) => {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      setOriginRect({ x: rect.left, y: rect.top, w: rect.width, h: rect.height });
+      setSelectedProject(project);
+    },
+    [],
+  );
+
+  const closeProject = useCallback(() => {
+    setSelectedProject(null);
+    setOriginRect(null);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -573,6 +590,8 @@ export default function Home() {
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...transition, delay: index * 0.1 }}
+                style={{ cursor: "pointer" }}
+                onClick={(e) => openProject(project, e)}
               >
                 <div className="project-art" aria-hidden="true">
                   <span>{project.number}</span>
@@ -585,7 +604,13 @@ export default function Home() {
                 </div>
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openProject(project, e);
+                  }}
+                >
                   View project <ArrowUpRight size={16} />
                 </button>
               </motion.article>
@@ -729,6 +754,12 @@ export default function Home() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      <ProjectModal
+        project={selectedProject}
+        originRect={originRect}
+        onClose={closeProject}
+      />
     </main>
   );
 }
