@@ -271,11 +271,7 @@ export default function Home() {
     damping: 32,
     mass: 0.55,
   });
-  const switchY = useSpring(useMotionValue(0), {
-    stiffness: 320,
-    damping: 32,
-    mass: 0.55,
-  });
+  const switchY = useMotionValue(0);
   const switchWidth = useSpring(useMotionValue(368), {
     stiffness: 280,
     damping: 30,
