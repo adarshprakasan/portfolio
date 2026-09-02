@@ -68,22 +68,63 @@ const content = {
     ],
     work: {
       headline: "A visual language with purpose.",
+      categories: ["All", "UI/UX", "Graphic Design", "Logo", "3D Works", "Video Editing", "Magazines"] as const,
       projects: [
         {
           number: "01",
-          category: "Brand Identity / UIUX",
-          title: "Beyond Design",
-          description:
-            "Brand systems, digital interfaces and visual storytelling.",
+          category: "UI/UX",
+          title: "Strata Dashboard",
+          description: "A modular analytics dashboard built for clarity and speed, with a dark-mode-first design system.",
           accent: "lilac",
+          designCategory: "UI/UX" as const,
         },
         {
           number: "02",
-          category: "Editorial / Digital",
-          title: "After Hours",
-          description:
-            "A cinematic visual world for a culture-led digital publication.",
+          category: "UI/UX",
+          title: "Bloom App",
+          description: "Mental wellness app UI — calm, breathable layouts that make daily journaling feel effortless.",
           accent: "coral",
+          designCategory: "UI/UX" as const,
+        },
+        {
+          number: "03",
+          category: "Graphic Design",
+          title: "Neon Pulse",
+          description: "Event poster series for a music festival — bold type, chromatic aberration, raw energy.",
+          accent: "coral",
+          designCategory: "Graphic Design" as const,
+        },
+        {
+          number: "04",
+          category: "Logo",
+          title: "Aura Studio",
+          description: "Wordmark and symbol system for a creative studio — geometric, memorable, and endlessly scalable.",
+          accent: "lilac",
+          designCategory: "Logo" as const,
+        },
+        {
+          number: "05",
+          category: "3D Works",
+          title: "Void Objects",
+          description: "Abstract 3D sculpture series rendered in Cinema 4D — materiality, light, and negative space.",
+          accent: "blue",
+          designCategory: "3D Works" as const,
+        },
+        {
+          number: "06",
+          category: "Video Editing",
+          title: "Frame Study",
+          description: "Short-form video edits exploring rhythm and visual storytelling through montage and motion.",
+          accent: "cyan",
+          designCategory: "Video Editing" as const,
+        },
+        {
+          number: "07",
+          category: "Magazines",
+          title: "After Hours",
+          description: "A cinematic editorial magazine — dark, moody layouts for a culture-led digital publication.",
+          accent: "coral",
+          designCategory: "Magazines" as const,
         },
       ],
     },
@@ -175,6 +216,23 @@ const reveal: Variants = {
   exit: { opacity: 0, y: -10, filter: "blur(4px)" },
 };
 
+function getBentoSize(index: number, total: number): string {
+  if (total === 1) return "hero";
+  if (total === 2) return "large";
+  if (total === 3) return ["large", "tall", "tall"][index] ?? "small";
+  const pattern = [
+    "large",
+    "tall",
+    "small",
+    "small",
+    "wide",
+    "medium",
+    "medium",
+    "small",
+  ];
+  return pattern[index % pattern.length] ?? "small";
+}
+
 export default function Home() {
   const [mode, setMode] = useState<Mode>("designer");
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -182,6 +240,8 @@ export default function Home() {
   const [switchPlaced, setSwitchPlaced] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [originRect, setOriginRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [activeSection, setActiveSection] = useState("home");
   const switchSlotRef = useRef<HTMLDivElement>(null);
   const switchX = useMotionValue(0);
   const switchY = useMotionValue(0);
@@ -190,19 +250,41 @@ export default function Home() {
   const designer = mode === "designer";
   const active = content[mode];
 
-  const openProject = useCallback(
-    (project: Project, e: React.MouseEvent<HTMLElement>) => {
-      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      setOriginRect({ x: rect.left, y: rect.top, w: rect.width, h: rect.height });
-      setSelectedProject(project);
-    },
-    [],
-  );
+  // Reset category filter when switching modes
+  useEffect(() => {
+    setActiveCategory("All");
+  }, [mode]);
+
+  const openProject = useCallback((project: Project, target: HTMLElement) => {
+    const rect = target.getBoundingClientRect();
+    setOriginRect({
+      x: rect.left,
+      y: rect.top,
+      w: rect.width,
+      h: rect.height,
+    });
+    setSelectedProject({
+      number: project.number,
+      category: project.category,
+      title: project.title,
+      description: project.description,
+      accent: project.accent,
+      designCategory: project.designCategory,
+    });
+  }, []);
 
   const closeProject = useCallback(() => {
     setSelectedProject(null);
     setOriginRect(null);
   }, []);
+
+  // Filtered projects for designer mode
+  const designerWork = content.designer.work;
+  const filteredProjects = designer
+    ? activeCategory === "All"
+      ? designerWork.projects
+      : designerWork.projects.filter((p) => p.designCategory === activeCategory)
+    : active.work.projects;
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -233,6 +315,26 @@ export default function Home() {
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = ["home", "about", "work", "skills", "experience"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target.id) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-35% 0px -45% 0px", threshold: [0.15, 0.4, 0.7] },
+    );
+
+    ids.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   useLayoutEffect(() => {
@@ -314,17 +416,15 @@ export default function Home() {
       <nav className="nav">
         <div className="monogram">AP</div>
         <div className="nav-links">
-          {["Home", "About", "Work", "Experience", "Skills"].map(
-            (item, index) => (
+          {["Home", "About", "Work", "Skills", "Experience"].map((item) => (
               <a
                 key={`nav-${item}`}
-                className={index === 0 ? "active" : ""}
+                className={activeSection === item.toLowerCase() ? "active" : ""}
                 href={`#${item.toLowerCase()}`}
               >
                 {item}
               </a>
-            ),
-          )}
+            ))}
         </div>
         <a className="connect" href="#contact">
           Let&apos;s connect <ArrowUpRight size={15} />
@@ -558,63 +658,97 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="work" className="preview-section">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`work-heading-${mode}`}
-            className="work-heading"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            <p className="section-label">SELECTED WORK</p>
-            <h2>{active.work.headline}</h2>
-          </motion.div>
-        </AnimatePresence>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`projects-${mode}`}
-            className="projects-grid"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            {active.work.projects.map((project, index) => (
-              <motion.article
-                key={`${mode}-project-${project.number}`}
-                className={`project-card project-${project.accent}`}
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transition, delay: index * 0.1 }}
-                style={{ cursor: "pointer" }}
-                onClick={(e) => openProject(project, e)}
-              >
-                <div className="project-art" aria-hidden="true">
-                  <span>{project.number}</span>
-                  <i />
-                  <b>{project.title}</b>
-                </div>
-                <div className="project-meta">
-                  <span>{project.number}</span>
-                  <span>{project.category}</span>
-                </div>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
+      <section id="work" className="bento-section">
+        <div className="bento-header">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`work-heading-${mode}`}
+              variants={reveal}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={transition}
+            >
+              <p className="section-label">SELECTED WORK</p>
+              <h2 className="bento-headline">{active.work.headline}</h2>
+            </motion.div>
+          </AnimatePresence>
+
+          {designer && (
+            <div className="work-category-bar">
+              {designerWork.categories.map((cat) => (
                 <button
+                  key={cat}
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openProject(project, e);
+                  aria-pressed={activeCategory === cat}
+                  className={`work-cat-btn${activeCategory === cat ? " work-cat-btn--active" : ""}`}
+                  onClick={() => setActiveCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`bento-${mode}-${activeCategory}`}
+            className="bento-grid"
+            variants={reveal}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={transition}
+          >
+            {filteredProjects.length === 0 && (
+              <p className="bento-empty">No projects in this category yet.</p>
+            )}
+            {filteredProjects.map((project, index) => {
+              const size = getBentoSize(index, filteredProjects.length);
+              return (
+                <motion.article
+                  key={`${mode}-bento-${project.number}`}
+                  className={`bento-tile bento-${size} project-${project.accent}`}
+                  data-cursor
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Open ${project.title}`}
+                  initial={{ opacity: 0, scale: 0.94, y: 14 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ ...transition, delay: index * 0.06 }}
+                  onClick={(e) => openProject(project, e.currentTarget)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openProject(project, e.currentTarget);
+                    }
                   }}
                 >
-                  View project <ArrowUpRight size={16} />
-                </button>
-              </motion.article>
-            ))}
+                  {/* Decorative background orb */}
+                  <div className="bento-orb" aria-hidden="true" />
+
+                  {/* Large faded watermark glyph */}
+                  <b className="bento-glyph" aria-hidden="true">
+                    {project.title.split(" ")[0]}
+                  </b>
+
+                  {/* Number badge */}
+                  <span className="bento-num">{project.number}</span>
+
+                  {/* Arrow icon */}
+                  <div className="bento-arrow" aria-hidden="true">
+                    <ArrowUpRight size={13} />
+                  </div>
+
+                  {/* Bottom info strip */}
+                  <div className="bento-info">
+                    <span className="bento-cat-tag">{project.category}</span>
+                    <h3 className="bento-title">{project.title}</h3>
+                  </div>
+                </motion.article>
+              );
+            })}
           </motion.div>
         </AnimatePresence>
       </section>

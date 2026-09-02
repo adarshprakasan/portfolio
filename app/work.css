@@ -1,1 +1,485 @@
-.preview-section{grid-template-columns:.82fr 1.18fr;align-items:start}.work-heading{position:sticky;top:45px}.projects-grid{display:grid;gap:24px}.project-card{position:relative;overflow:hidden;padding:0 0 8px}.project-art{height:225px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.12);margin-bottom:18px;background:linear-gradient(135deg,#171322,#2b173b);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 45px rgba(0,0,0,.18)}.project-art:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.15),transparent 30%);mix-blend-mode:soft-light}.project-art span{position:absolute;right:18px;top:13px;font:10px DM Mono,monospace;letter-spacing:.16em;color:rgba(255,255,255,.55)}.project-art i{position:absolute;width:180px;height:180px;border-radius:50%;right:-35px;bottom:-60px;background:radial-gradient(circle at 32% 30%,#fff,#cf8bff 11%,#693884 40%,transparent 67%);filter:drop-shadow(0 0 24px rgba(204,126,255,.4))}.project-art b{position:absolute;left:28px;bottom:20px;font:72px/.8 Georgia,serif;font-weight:400;letter-spacing:-.08em;color:rgba(255,255,255,.82)}.project-card h3{font-size:38px;letter-spacing:-.06em;margin:14px 0 8px}.project-card p{max-width:470px;margin:0;color:var(--muted);font-size:13px;line-height:1.7}.project-card button{border:0;background:none;padding:22px 0 0;display:flex;gap:8px;align-items:center;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:.15em}.project-card button:hover{color:#fff}.project-coral .project-art{background:linear-gradient(135deg,#281421,#52302b)}.project-coral .project-art i{width:145px;height:145px;left:35%;top:25px;background:radial-gradient(circle at 30% 25%,#fff4db,#ffb06e 12%,#b74975 44%,transparent 69%)}.project-coral .project-art b{font-size:56px;transform:rotate(-7deg)}.project-blue .project-art{background:linear-gradient(135deg,#101a35,#172b55)}.project-blue .project-art i{background:radial-gradient(circle at 32% 30%,#fff,#78a7ff 11%,#2b5aab 40%,transparent 67%)}.project-blue .project-art b{font-family:DM Mono,monospace;font-size:36px;letter-spacing:-.1em}.project-cyan .project-art{background:linear-gradient(135deg,#0d2026,#16404e)}.project-cyan .project-art i{width:150px;height:150px;right:20%;top:32px;background:radial-gradient(circle at 32% 30%,#eaffff,#55d8df 12%,#277f9d 42%,transparent 68%)}.project-cyan .project-art b{font-family:DM Mono,monospace;font-size:32px;letter-spacing:-.1em}.project-lilac .project-art b:after,.project-coral .project-art b:after,.project-blue .project-art b:after,.project-cyan .project-art b:after{content:"";display:block;width:58px;height:3px;margin-top:12px}.project-lilac .project-art b:after{background:#d991ff}.project-coral .project-art b:after{background:#ffad72}.project-blue .project-art b:after{background:#86aeff}.project-cyan .project-art b:after{background:#5bdae4}@media(max-width:1000px){.preview-section{grid-template-columns:1fr}.work-heading{position:static}.projects-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.project-art{height:190px}}@media(max-width:620px){.projects-grid{grid-template-columns:1fr}.project-art{height:220px}}
+/* ═══════════════════════════════════════════════
+   BENTO SECTION — full-bleed mosaic project grid
+   ═══════════════════════════════════════════════ */
+
+.bento-section {
+  width: min(1160px, calc(100% - 56px));
+  margin: 160px auto 0;
+  padding-bottom: 160px;
+}
+
+/* ── Header row: headline left, filters right ── */
+
+.bento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+
+.bento-headline {
+  font-size: clamp(34px, 4vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  margin: 16px 0 0;
+}
+
+/* ── Category filter pills ── */
+
+.work-category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-end;
+  /* max-width: 440px; */
+  padding-bottom: 4px;
+}
+
+.work-cat-btn {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font:
+    9px/1 DM Mono,
+    monospace;
+  letter-spacing: 0.16em;
+  color: #77778a;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.22s ease,
+    color 0.2s ease,
+    box-shadow 0.25s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+
+.work-cat-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  color: #cccadb;
+  transform: translateY(-1px);
+}
+
+.work-cat-btn--active {
+  border-color: var(--accent);
+  background: rgba(183, 122, 255, 0.1);
+  color: var(--accent);
+  box-shadow: 0 0 14px rgba(183, 122, 255, 0.18);
+}
+
+.work-cat-btn--active:hover {
+  background: rgba(183, 122, 255, 0.16);
+  box-shadow: 0 0 20px rgba(183, 122, 255, 0.26);
+}
+
+.mode-developer .work-cat-btn--active {
+  border-color: var(--accent2);
+  background: rgba(111, 145, 255, 0.1);
+  color: var(--accent2);
+  box-shadow: 0 0 14px rgba(111, 145, 255, 0.18);
+}
+
+/* ═══════════════════════════════════════════════
+   BENTO GRID
+   ═══════════════════════════════════════════════ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 210px;
+  gap: 10px;
+}
+
+.bento-empty {
+  grid-column: 1 / -1;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ── Tile size variants ── */
+
+.bento-hero {
+  grid-column: span 4;
+  grid-row: span 2;
+}
+.bento-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.bento-tall {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+.bento-wide {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+.bento-medium {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+.bento-small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+/* ═══════════════════════════════════════════════
+   BENTO TILE — base
+   ═══════════════════════════════════════════════ */
+
+.bento-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  background: linear-gradient(140deg, #161124, #261540);
+  transition:
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.36s ease;
+  isolation: isolate;
+}
+
+.bento-tile::before {
+  /* top-edge glass sheen */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.bento-tile:hover {
+  transform: scale(1.016) translateZ(0);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  z-index: 2;
+}
+
+.bento-tile:active {
+  transform: scale(1.008);
+  transition-duration: 0.1s;
+}
+
+/* ── Floating orb ── */
+
+.bento-orb {
+  position: absolute;
+  width: 65%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  right: -18%;
+  top: -22%;
+  background: radial-gradient(
+    circle at 34% 32%,
+    rgba(255, 255, 255, 0.88),
+    #c87aff 18%,
+    #6a2e8c 46%,
+    transparent 70%
+  );
+  filter: blur(1.5px) drop-shadow(0 0 38px rgba(183, 122, 255, 0.32));
+  opacity: 0.52;
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bento-tile:hover .bento-orb {
+  transform: scale(1.12) translate(3%, -4%);
+  opacity: 0.68;
+}
+
+/* ── Watermark glyph ── */
+
+.bento-glyph {
+  position: absolute;
+  right: 18px;
+  bottom: 52px;
+  font:
+    80px / 0.85 Georgia,
+    serif;
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+  z-index: 1;
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+
+.bento-large .bento-glyph,
+.bento-hero .bento-glyph {
+  font-size: 108px;
+}
+.bento-wide .bento-glyph {
+  font-size: 72px;
+  bottom: 42px;
+}
+.bento-medium .bento-glyph {
+  font-size: 64px;
+}
+.bento-small .bento-glyph {
+  font-size: 52px;
+}
+
+.bento-tile:hover .bento-glyph {
+  opacity: 0;
+  transform: translateX(8px);
+}
+
+/* ── Number badge ── */
+
+.bento-num {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  font:
+    9px / 1 DM Mono,
+    monospace;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.32);
+  z-index: 3;
+}
+
+/* ── Arrow icon ── */
+
+.bento-arrow {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  opacity: 0;
+  transform: scale(0.6) rotate(-45deg);
+  transition:
+    opacity 0.28s ease,
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bento-tile:hover .bento-arrow {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* ── Bottom info overlay ── */
+
+.bento-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 20px 18px;
+  background: linear-gradient(
+    to top,
+    rgba(4, 4, 10, 0.92) 0%,
+    rgba(4, 4, 10, 0.55) 55%,
+    transparent 100%
+  );
+  z-index: 3;
+  transition: padding 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bento-tile:hover .bento-info {
+  padding-bottom: 22px;
+}
+
+.bento-cat-tag {
+  display: block;
+  font:
+    8px / 1 DM Mono,
+    monospace;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.42);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color 0.25s ease;
+}
+
+.bento-tile:hover .bento-cat-tag {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.bento-title {
+  font-size: 17px;
+  letter-spacing: -0.04em;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.9);
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s;
+}
+
+.bento-large .bento-title,
+.bento-hero .bento-title {
+  font-size: 28px;
+}
+.bento-wide .bento-title {
+  font-size: 22px;
+}
+.bento-medium .bento-title {
+  font-size: 20px;
+}
+
+.bento-tile:hover .bento-title {
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════
+   ACCENT COLOR THEMES
+   ═══════════════════════════════════════════════ */
+
+/* Coral */
+.bento-tile.project-coral {
+  background: linear-gradient(140deg, #211219, #3d2219);
+}
+.bento-tile.project-coral .bento-orb {
+  background: radial-gradient(
+    circle at 34% 32%,
+    rgba(255, 255, 255, 0.9),
+    #ffad70 18%,
+    #b84a6a 46%,
+    transparent 70%
+  );
+  filter: blur(1.5px) drop-shadow(0 0 38px rgba(255, 140, 80, 0.28));
+}
+
+/* Blue */
+.bento-tile.project-blue {
+  background: linear-gradient(140deg, #0e1727, #152244);
+}
+.bento-tile.project-blue .bento-orb {
+  background: radial-gradient(
+    circle at 34% 32%,
+    rgba(255, 255, 255, 0.9),
+    #80aaff 18%,
+    #2b56a8 46%,
+    transparent 70%
+  );
+  filter: blur(1.5px) drop-shadow(0 0 38px rgba(100, 150, 255, 0.28));
+}
+
+/* Cyan */
+.bento-tile.project-cyan {
+  background: linear-gradient(140deg, #0c1e24, #133640);
+}
+.bento-tile.project-cyan .bento-orb {
+  background: radial-gradient(
+    circle at 34% 32%,
+    rgba(255, 255, 255, 0.9),
+    #52d6de 18%,
+    #1f7a96 46%,
+    transparent 70%
+  );
+  filter: blur(1.5px) drop-shadow(0 0 38px rgba(70, 210, 220, 0.28));
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 1000px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 190px;
+  }
+
+  .bento-hero {
+    grid-column: span 3;
+  }
+  .bento-large {
+    grid-column: span 2;
+  }
+  .bento-tall {
+    grid-column: span 1;
+  }
+  .bento-wide {
+    grid-column: span 3;
+  }
+  .bento-medium {
+    grid-column: span 2;
+  }
+  .bento-small {
+    grid-column: span 1;
+  }
+
+  .bento-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .work-category-bar {
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-section {
+    width: calc(100% - 30px);
+    margin-top: 120px;
+  }
+
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 170px;
+    gap: 8px;
+  }
+
+  .bento-hero {
+    grid-column: span 2;
+  }
+  .bento-large {
+    grid-column: span 2;
+  }
+  .bento-tall {
+    grid-column: span 1;
+  }
+  .bento-wide {
+    grid-column: span 2;
+  }
+  .bento-medium {
+    grid-column: span 2;
+  }
+  .bento-small {
+    grid-column: span 1;
+  }
+
+  .bento-headline {
+    font-size: 32px;
+  }
+
+  .bento-large .bento-title,
+  .bento-hero .bento-title {
+    font-size: 22px;
+  }
+}

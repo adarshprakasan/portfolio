@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, X, Github, ExternalLink } from "lucide-react";
+import { X, Github, ExternalLink } from "lucide-react";
 
 export type Project = {
   number: string;
@@ -10,6 +10,7 @@ export type Project = {
   title: string;
   description: string;
   accent: string;
+  designCategory?: string;
 };
 
 type ProjectDetails = {
@@ -23,32 +24,91 @@ type ProjectDetails = {
 };
 
 const projectDetails: Record<string, ProjectDetails> = {
-  "Beyond Design": {
+  "Strata Dashboard": {
     longDescription:
-      "A comprehensive brand identity and UI/UX project that redefines how design studios communicate their value. Built a cohesive visual language — from typography systems and color palettes to responsive interfaces — that balances artistic expression with functional clarity.",
-    tags: ["Brand Identity", "UI/UX", "Design Systems", "Typography"],
+      "A modular analytics dashboard designed for data-heavy teams who need to think clearly under pressure. Built with a dark-mode-first design system, every panel, chart, and filter state was crafted for speed, scanability, and elegance.",
+    tags: ["UI/UX", "Dashboard", "Design Systems", "Figma", "Dark Mode"],
     year: "2024",
-    role: "Lead Designer",
-    githubUrl: "#",
+    role: "Lead UI/UX Designer",
     liveUrl: "#",
     highlights: [
-      "Created a multi-touch type system spanning 6 weights and 3 optical sizes",
-      "Designed 40+ production-ready UI components with Figma variables",
-      "Achieved a 92 Lighthouse accessibility score across all pages",
+      "Designed a 60+ component Figma library with auto-layout and variables",
+      "Reduced average task-completion time by 34% through layout restructure",
+      "Built interactive prototypes tested with 12 real users across 3 sessions",
+    ],
+  },
+  "Bloom App": {
+    longDescription:
+      "A mental wellness companion designed around calm, breathable UX. Daily journaling, mood tracking, and guided sessions live inside layouts that feel as light as the content they hold — intentional whitespace, soft palettes, and micro-interactions that reward reflection.",
+    tags: ["UI/UX", "Mobile App", "Wellness", "Figma", "Prototyping"],
+    year: "2024",
+    role: "Product Designer",
+    liveUrl: "#",
+    highlights: [
+      "Delivered 80+ mobile screens across iOS and Android breakpoints",
+      "Ran usability tests that cut onboarding drop-off by 48%",
+      "Designed a custom iconography set with 90 wellness-themed glyphs",
+    ],
+  },
+  "Neon Pulse": {
+    longDescription:
+      "An event poster series for a multi-day music festival — kinetic, chromatic, and deliberately raw. Each poster pushed typography into territory that feels almost physical: layered halftones, chromatic aberration, and color grades borrowed from underground print culture.",
+    tags: ["Graphic Design", "Print", "Typography", "Poster", "Festival"],
+    year: "2023",
+    role: "Graphic Designer",
+    highlights: [
+      "Produced 18 distinct poster designs across 3 stage themes",
+      "Developed a flexible modular grid that kept all variants on-brand",
+      "Printed at 120×180cm — designed for impact at both scale and screen",
+    ],
+  },
+  "Aura Studio": {
+    longDescription:
+      "A complete identity system for a creative studio — from the first sketch of the mark to the final brand standards guide. The wordmark balances geometric precision with a sense of open possibility, scaling perfectly from favicon to billboard.",
+    tags: ["Logo", "Brand Identity", "Typography", "Visual Identity"],
+    year: "2023",
+    role: "Identity Designer",
+    highlights: [
+      "Delivered primary mark, wordmark, and 6 lockup variations",
+      "Built a brand standards document covering 48 pages of usage rules",
+      "Designed a full stationery and digital asset suite",
+    ],
+  },
+  "Void Objects": {
+    longDescription:
+      "A series of abstract 3D sculptures exploring the tension between form and emptiness. Each piece was modelled, lit, and rendered in Cinema 4D — chasing the quality of physical objects: weight, surface memory, and the precise way light catches an edge.",
+    tags: ["3D", "Cinema 4D", "Octane Render", "Sculpture", "Abstract"],
+    year: "2024",
+    role: "3D Artist",
+    highlights: [
+      "Series of 12 final renders at 4K resolution with Octane",
+      "Each piece built with fully procedural materials and HDRi lighting",
+      "Selected for display in a digital gallery exhibition",
+    ],
+  },
+  "Frame Study": {
+    longDescription:
+      "A collection of short-form video edits that treat film as a compositional instrument. Every cut, colour grade, and sound choice is deliberate — studying how rhythm, pacing, and visual grammar can transform raw footage into something felt rather than just watched.",
+    tags: ["Video Editing", "Motion", "Premiere Pro", "Color Grading", "Montage"],
+    year: "2024",
+    role: "Video Editor & Colorist",
+    highlights: [
+      "6 short films ranging from 45 seconds to 4 minutes",
+      "Developed a signature grade built from custom LUTs in DaVinci Resolve",
+      "Original sound design layered using Adobe Audition",
     ],
   },
   "After Hours": {
     longDescription:
-      "A cinematic visual world built for a culture-led digital publication. Blending editorial photography, motion graphics, and immersive layout design into an experience that reads as much as it breathes — dark, moody, deliberate.",
-    tags: ["Editorial", "Digital", "Motion", "Photography"],
+      "A cinematic editorial magazine built for a culture-led digital publication. Blending editorial photography, immersive layout design, and typographic restraint into something that reads as much as it breathes — dark, moody, deliberate.",
+    tags: ["Magazine", "Editorial", "InDesign", "Typography", "Photography"],
     year: "2023",
-    role: "Creative Director",
-    githubUrl: "#",
+    role: "Art Director",
     liveUrl: "#",
     highlights: [
-      "Art directed a 12-issue editorial shoot series",
-      "Designed 8 unique page layout templates for recurring content types",
-      "Built custom scroll-based animation sequences with GSAP",
+      "Designed 12 issues with an average 64-page layout each",
+      "Built a modular editorial grid adaptable across print and PDF",
+      "Directed a photoshoot series with 3 contributing photographers",
     ],
   },
   HospEasy: {
@@ -114,36 +174,43 @@ type Props = {
 
 export default function ProjectModal({ project, originRect, onClose }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<number | null>(null);
   const [phase, setPhase] = useState<"idle" | "entering" | "open" | "exiting">(
     "idle",
   );
 
-  // Lock body scroll when modal is open
   useEffect(() => {
     if (project) {
       document.body.style.overflow = "hidden";
       setPhase("entering");
-      const t = setTimeout(() => setPhase("open"), 20);
-      return () => clearTimeout(t);
-    } else {
-      document.body.style.overflow = "";
-      setPhase("idle");
+      const t = window.setTimeout(() => setPhase("open"), 20);
+      return () => window.clearTimeout(t);
     }
+    document.body.style.overflow = "";
+    setPhase("idle");
   }, [project]);
 
   const handleClose = useCallback(() => {
-    setPhase("exiting");
-    setTimeout(onClose, 520);
-  }, [onClose]);
+    if (!project) return;
+    setPhase((current) => (current === "exiting" ? current : "exiting"));
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(onClose, 520);
+  }, [onClose, project]);
 
-  // Close on Escape
   useEffect(() => {
+    return () => {
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!project) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [handleClose]);
+  }, [handleClose, project]);
 
   if (!project) return null;
 
@@ -155,6 +222,8 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
     highlights: [],
   };
   const colors = accentMap[project.accent] ?? accentMap.lilac;
+  const hasLive = Boolean(details.liveUrl && details.liveUrl !== "#");
+  const hasSource = Boolean(details.githubUrl && details.githubUrl !== "#");
 
   // Build clip-path origin for the liquid morph
   const vw = typeof window !== "undefined" ? window.innerWidth : 1440;
@@ -359,8 +428,8 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                     </motion.div>
                   )}
 
-                  {/* CTA buttons */}
-                  <motion.div
+                  {(hasLive || hasSource) && (
+                    <motion.div
                     className="project-modal-actions"
                     initial={{ opacity: 0, y: 16 }}
                     animate={
@@ -370,7 +439,7 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                     }
                     transition={{ duration: 0.4, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {details.liveUrl && (
+                    {hasLive && (
                       <a
                         href={details.liveUrl}
                         target="_blank"
@@ -380,7 +449,7 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         View Live <ExternalLink size={14} />
                       </a>
                     )}
-                    {details.githubUrl && (
+                    {hasSource && (
                       <a
                         href={details.githubUrl}
                         target="_blank"
@@ -391,6 +460,7 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                       </a>
                     )}
                   </motion.div>
+                  )}
                 </div>
               </div>
             </div>
