@@ -452,9 +452,11 @@ export default function Home() {
       <div className="grid-floor" />
 
       <nav className="nav">
-        <div className="monogram">AP</div>
+        <a className="monogram" href="#home" aria-label="Go to home">
+          AP
+        </a>
         <div className="nav-links">
-          {["Home", "About", "Work", "Skills", "Experience"].map((item) => (
+          {["Work", "About", "Experience"].map((item) => (
             <a
               key={`nav-${item}`}
               className={activeSection === item.toLowerCase() ? "active" : ""}
@@ -464,9 +466,14 @@ export default function Home() {
             </a>
           ))}
         </div>
-        <a className="connect" href="#contact">
-          Let&apos;s connect <ArrowUpRight size={15} />
-        </a>
+        <div className="nav-actions">
+          <a className="resume-link" href="/resume.pdf">
+            Resume <ArrowUpRight size={13} aria-hidden="true" />
+          </a>
+          <a className="connect" href="#contact">
+            Let&apos;s talk <ArrowUpRight size={15} aria-hidden="true" />
+          </a>
+        </div>
       </nav>
 
       <section id="home" className="hero">
@@ -653,49 +660,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="about" className="about-section">
-        <div className="about-intro">
-          <p className="section-label">THE HYBRID ADVANTAGE</p>
-          <h2>
-            Designed with feeling.
-            <br />
-            Built with intention.
-          </h2>
-          <p>
-            I bring a designer&apos;s eye and a developer&apos;s discipline to
-            the same table—so the idea stays intact from the first sketch to the
-            final interaction.
-          </p>
-        </div>
-        <div className="about-details">
-          {[
-            [
-              "01",
-              "See the whole picture",
-              "Strategy, visual identity, product thinking, and the details that make an experience feel considered.",
-            ],
-            [
-              "02",
-              "Make it real",
-              "Production-ready interfaces that are responsive, accessible, and built to perform.",
-            ],
-            [
-              "03",
-              "Keep it human",
-              "Technology is the medium. Clarity, character, and a useful experience are the point.",
-            ],
-          ].map(([number, title, description]) => (
-            <article key={`principle-${number}`} className="principle">
-              <span>{number}</span>
-              <div>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section id="work" className="bento-section">
         <div className="bento-header">
           <AnimatePresence mode="wait">
@@ -791,6 +755,89 @@ export default function Home() {
         </AnimatePresence>
       </section>
 
+      <section id="about" className="about-section">
+        <div className="about-intro">
+          <p className="section-label">THE HYBRID ADVANTAGE</p>
+          <h2>
+            Designed with feeling.
+            <br />
+            Built with intention.
+          </h2>
+          <p>
+            I bring a designer&apos;s eye and a developer&apos;s discipline to
+            the same table—so the idea stays intact from the first sketch to the
+            final interaction.
+          </p>
+        </div>
+        <div className="about-details">
+          {[
+            [
+              "01",
+              "See the whole picture",
+              "Strategy, visual identity, product thinking, and the details that make an experience feel considered.",
+            ],
+            [
+              "02",
+              "Make it real",
+              "Production-ready interfaces that are responsive, accessible, and built to perform.",
+            ],
+            [
+              "03",
+              "Keep it human",
+              "Technology is the medium. Clarity, character, and a useful experience are the point.",
+            ],
+          ].map(([number, title, description]) => (
+            <article key={`principle-${number}`} className="principle">
+              <span>{number}</span>
+              <div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="experience" className="experience-section">
+        <div className="experience-heading">
+          <p className="section-label">SELECTED EXPERIENCE</p>
+          <h2>
+            Good work leaves
+            <br />a trace.
+          </h2>
+          <span>Placeholder entries — replace with your real experience.</span>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`experience-${mode}`}
+            className="experience-list"
+            variants={reveal}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={transition}
+          >
+            {active.experience.map((entry, index) => (
+              <motion.article
+                key={`${mode}-experience-${index}`}
+                className="experience-item"
+                initial={{ opacity: 0, x: 18 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ ...transition, delay: index * 0.09 }}
+              >
+                <span className="experience-date">{entry.dates}</span>
+                <div>
+                  <h3>{entry.role}</h3>
+                  <p className="experience-place">{entry.place}</p>
+                  <p>{entry.summary}</p>
+                </div>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </motion.article>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </section>
+
       <section id="skills" className="skills-section">
         <div className="skills-heading">
           <p className="section-label">SKILLS &amp; TOOLS</p>
@@ -829,46 +876,6 @@ export default function Home() {
                   ))}
                 </ul>
               </article>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </section>
-
-      <section id="experience" className="experience-section">
-        <div className="experience-heading">
-          <p className="section-label">SELECTED EXPERIENCE</p>
-          <h2>
-            Good work leaves
-            <br />a trace.
-          </h2>
-          <span>Placeholder entries — replace with your real experience.</span>
-        </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`experience-${mode}`}
-            className="experience-list"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            {active.experience.map((entry, index) => (
-              <motion.article
-                key={`${mode}-experience-${index}`}
-                className="experience-item"
-                initial={{ opacity: 0, x: 18 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ ...transition, delay: index * 0.09 }}
-              >
-                <span className="experience-date">{entry.dates}</span>
-                <div>
-                  <h3>{entry.role}</h3>
-                  <p className="experience-place">{entry.place}</p>
-                  <p>{entry.summary}</p>
-                </div>
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </motion.article>
             ))}
           </motion.div>
         </AnimatePresence>

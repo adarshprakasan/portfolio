@@ -45,9 +45,11 @@ button {
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(circle at 50% 40%,
+    radial-gradient(
+      circle at 50% 40%,
       rgba(70, 65, 120, 0.12),
-      transparent 34%),
+      transparent 34%
+    ),
     #07080d;
 }
 
@@ -102,6 +104,7 @@ button {
 }
 
 .nav {
+  position: relative;
   width: min(1420px, calc(100% - 56px));
   margin: auto;
   height: 90px;
@@ -118,8 +121,17 @@ button {
   width: 90px;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .nav-links {
   display: flex;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   gap: 38px;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -130,6 +142,16 @@ button {
 .nav-links a {
   position: relative;
   padding: 35px 0;
+  transition:
+    color 0.2s ease,
+    font-weight 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
 }
 
 .nav-links a.active {
@@ -152,6 +174,30 @@ button {
   background: var(--accent2);
 }
 
+.resume-link {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 10px;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.resume-link:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: var(--bg);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
+}
+
 .connect {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -168,6 +214,13 @@ button {
   overflow: hidden;
   white-space: nowrap;
   padding-inline: calc(18px * (1 - var(--switch-dock, 0)));
+}
+
+.connect:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: var(--bg);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
 }
 
 .hero {
@@ -279,11 +332,13 @@ button {
   border-radius: 50%;
   right: 80px;
   top: 35px;
-  background: radial-gradient(circle at 30% 25%,
-      #fff,
-      #9d6aff 8%,
-      #27173e 40%,
-      transparent 67%);
+  background: radial-gradient(
+    circle at 30% 25%,
+    #fff,
+    #9d6aff 8%,
+    #27173e 40%,
+    transparent 67%
+  );
   filter: drop-shadow(0 0 30px rgba(164, 94, 255, 0.3));
 }
 
@@ -319,11 +374,13 @@ button {
   position: absolute;
   width: 180px;
   height: 25px;
-  background: linear-gradient(90deg,
-      transparent,
-      #ef6f9f,
-      #ffb66b,
-      transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ef6f9f,
+    #ffb66b,
+    transparent
+  );
   filter: blur(4px);
   left: 55px;
   bottom: 55px;
@@ -459,15 +516,17 @@ button {
   left: 4px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: radial-gradient(circle at 25% 30%,
-      rgba(255, 150, 255, 0.5),
-      rgba(50, 20, 75, 0.4) 35%,
-      rgba(20, 20, 30, 0.9));
+  background: radial-gradient(
+    circle at 25% 30%,
+    rgba(255, 150, 255, 0.5),
+    rgba(50, 20, 75, 0.4) 35%,
+    rgba(20, 20, 30, 0.9)
+  );
   box-shadow: 0 0 30px rgba(185, 100, 255, 0.3);
   pointer-events: none;
 }
 
-.developer-selected+.switch-knob {
+.developer-selected + .switch-knob {
   box-shadow: 0 0 30px rgba(80, 130, 255, 0.3);
 }
 
@@ -563,7 +622,6 @@ button {
 }
 
 @media (max-width: 520px) {
-
   .nav,
   .hero,
   .footer {
@@ -572,6 +630,11 @@ button {
 
   .connect {
     padding: 10px 12px;
+    font-size: 8px;
+  }
+
+  .resume-link {
+    padding: 9px 10px;
     font-size: 8px;
   }
 
@@ -647,9 +710,11 @@ button {
 
 .mode-developer {
   background:
-    radial-gradient(circle at 62% 30%,
+    radial-gradient(
+      circle at 62% 30%,
       rgba(55, 102, 210, 0.16),
-      transparent 38%),
+      transparent 38%
+    ),
     #07080d;
 }
 
@@ -691,11 +756,13 @@ button {
 }
 
 .mode-developer .orb {
-  background: radial-gradient(circle at 30% 25%,
-      #fff,
-      #6d9cff 9%,
-      #142c58 42%,
-      transparent 67%);
+  background: radial-gradient(
+    circle at 30% 25%,
+    #fff,
+    #6d9cff 9%,
+    #142c58 42%,
+    transparent 67%
+  );
   filter: drop-shadow(0 0 34px rgba(76, 137, 255, 0.34));
 }
 
@@ -727,9 +794,11 @@ button {
   height: 100%;
   padding: 5px;
   border-color: rgba(255, 255, 255, 0.15);
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08),
-      rgba(8, 9, 15, 0.85));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(8, 9, 15, 0.85)
+  );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 16px 36px rgba(0, 0, 0, 0.26),
@@ -741,9 +810,11 @@ button {
   position: absolute;
   inset: 2px;
   border-radius: inherit;
-  background: linear-gradient(115deg,
-      rgba(255, 255, 255, 0.05),
-      transparent 38%);
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.05),
+    transparent 38%
+  );
   pointer-events: none;
 }
 
@@ -768,10 +839,12 @@ button {
   width: calc(50% - 5px);
   height: calc(100% - 10px);
   left: 4px;
-  background: radial-gradient(circle at 25% 25%,
-      rgba(238, 164, 255, 0.5),
-      rgba(79, 35, 114, 0.58) 37%,
-      rgba(20, 20, 30, 0.96));
+  background: radial-gradient(
+    circle at 25% 25%,
+    rgba(238, 164, 255, 0.5),
+    rgba(79, 35, 114, 0.58) 37%,
+    rgba(20, 20, 30, 0.96)
+  );
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.24),
     0 5px 14px rgba(0, 0, 0, 0.35),
@@ -779,10 +852,12 @@ button {
 }
 
 .mode-developer .switch-knob {
-  background: radial-gradient(circle at 25% 25%,
-      rgba(144, 195, 255, 0.48),
-      rgba(28, 62, 126, 0.6) 37%,
-      rgba(17, 22, 36, 0.96));
+  background: radial-gradient(
+    circle at 25% 25%,
+    rgba(144, 195, 255, 0.48),
+    rgba(28, 62, 126, 0.6) 37%,
+    rgba(17, 22, 36, 0.96)
+  );
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.24),
     0 5px 14px rgba(0, 0, 0, 0.35),
@@ -799,7 +874,6 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *:before,
   *:after {
@@ -827,7 +901,7 @@ button {
   margin: 22px 0 28px;
 }
 
-.about-intro>p:last-child {
+.about-intro > p:last-child {
   max-width: 460px;
   color: var(--muted);
   font-size: 15px;
@@ -854,7 +928,7 @@ button {
   border-bottom: 0;
 }
 
-.principle>span {
+.principle > span {
   font:
     10px DM Mono,
     monospace;
@@ -875,11 +949,11 @@ button {
   line-height: 1.75;
 }
 
-.mode-developer .principle>span {
+.mode-developer .principle > span {
   color: #8badff;
 }
 
-.mode-designer .principle>span {
+.mode-designer .principle > span {
   color: #d692ff;
 }
 
@@ -904,7 +978,6 @@ button {
     gap: 15px;
   }
 }
-
 
 html,
 body {
@@ -953,7 +1026,6 @@ select {
   mix-blend-mode: difference;
 }
 
-
 .liquid-text {
   position: relative;
   display: inline-block;
@@ -989,15 +1061,22 @@ select {
   justify-content: center;
   cursor: pointer;
   z-index: 9999;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.25);
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.25);
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .scroll-top-btn:hover {
   transform: translateY(-4px) scale(1.08);
   background: #ffffff;
   color: #000000;
-  box-shadow: 0 12px 32px rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 12px 32px rgba(255, 255, 255, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
 }
 
 .scroll-top-btn:active {
@@ -1120,15 +1199,22 @@ select {
 }
 
 @keyframes orbFloat {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-16px) scale(1.04); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-16px) scale(1.04);
+  }
 }
 
 .project-modal-number {
   position: absolute;
   top: 24px;
   left: 28px;
-  font: 10px DM Mono, monospace;
+  font:
+    10px DM Mono,
+    monospace;
   letter-spacing: 0.2em;
   color: rgba(255, 255, 255, 0.45);
   z-index: 2;
@@ -1137,7 +1223,9 @@ select {
 .project-modal-title-art {
   position: relative;
   z-index: 2;
-  font: 62px / 0.9 Georgia, serif;
+  font:
+    62px / 0.9 Georgia,
+    serif;
   font-weight: 400;
   letter-spacing: -0.06em;
   color: rgba(255, 255, 255, 0.88);
@@ -1158,14 +1246,18 @@ select {
 }
 
 .project-modal-category {
-  font: 10px DM Mono, monospace;
+  font:
+    10px DM Mono,
+    monospace;
   letter-spacing: 0.2em;
   color: var(--accent-primary);
   text-transform: uppercase;
 }
 
 .project-modal-year {
-  font: 10px DM Mono, monospace;
+  font:
+    10px DM Mono,
+    monospace;
   letter-spacing: 0.15em;
   color: #666675;
 }
@@ -1201,7 +1293,9 @@ select {
   letter-spacing: 0.1em;
   color: #c0bfcc;
   background: rgba(255, 255, 255, 0.04);
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .project-modal-tag:hover {
@@ -1220,7 +1314,9 @@ select {
 }
 
 .project-modal-role-label {
-  font: 10px DM Mono, monospace;
+  font:
+    10px DM Mono,
+    monospace;
   letter-spacing: 0.2em;
   color: #666675;
   text-transform: uppercase;
@@ -1238,7 +1334,9 @@ select {
 }
 
 .project-modal-highlights-label {
-  font: 10px DM Mono, monospace;
+  font:
+    10px DM Mono,
+    monospace;
   letter-spacing: 0.2em;
   color: #666675;
   text-transform: uppercase;
