@@ -517,7 +517,7 @@ export default function Home() {
             <br />
             <LiquidText>PRAKASAN</LiquidText>
           </motion.h1>
-          <AnimatePresence mode="wait">
+          {/* <AnimatePresence mode="wait">
             <motion.p
               key={`eyebrow-${mode}`}
               className="eyebrow"
@@ -529,7 +529,15 @@ export default function Home() {
             >
               {active.eyebrow}
             </motion.p>
-          </AnimatePresence>
+          </AnimatePresence> */}
+
+          <div
+            className="availability"
+            aria-label="Available for opportunities"
+          >
+            <span className="availability-dot" aria-hidden="true" />
+            Available for opportunities
+          </div>
 
           <div className="switch-slot" ref={switchSlotRef}>
             <motion.section
@@ -584,7 +592,7 @@ export default function Home() {
             </motion.section>
           </div>
 
-          <AnimatePresence mode="wait">
+          {/* <AnimatePresence mode="wait">
             <motion.p
               key={`description-${mode}`}
               className="subcopy"
@@ -596,7 +604,7 @@ export default function Home() {
             >
               {active.description}
             </motion.p>
-          </AnimatePresence>
+          </AnimatePresence> */}
         </div>
 
         <div className="visual-card" id="mode-preview" role="tabpanel">
@@ -883,16 +891,17 @@ export default function Home() {
 
       <footer id="contact" className="footer">
         <div>
-          <span className="section-label">AVAILABLE FOR</span>
+          <span className="section-label">AVAILABLE FOR OPPORTUNITIES</span>
           <h2>
-            Let&apos;s build something
+            {/* Let&apos;s build something */}
+            Building something
             <br />
             worth remembering.
           </h2>
         </div>
         <div className="footer-links">
           <a href="mailto:adarshp2911@gmail.com">
-            <Mail size={17} /> Email
+            <Mail size={17} /> Email me
           </a>
           <a href="https://github.com/adarshprakasan">
             <Github size={17} /> GitHub
@@ -904,6 +913,9 @@ export default function Home() {
             <Instagram size={17} /> Instagram
           </a>
         </div>
+        <p className="copyright">
+          © 2026 Adarsh Prakasan. All rights reserved.
+        </p>
       </footer>
       <AnimatePresence>
         {!isAtBottom && (

@@ -243,6 +243,30 @@ button {
   align-items: center;
 }
 
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 8px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #d8d5df;
+  font:
+    500 10px DM Mono,
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.availability-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a7f36b;
+  box-shadow: 0 0 10px rgba(167, 243, 107, 0.8);
+}
+
 .eyebrow,
 .section-label {
   font:
@@ -543,8 +567,9 @@ button {
   width: min(1100px, calc(100% - 56px));
   margin: auto;
   border-top: 1px solid var(--line);
-  padding: 100px 0 120px;
+  padding: 100px 0 42px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 40px;
 }
@@ -569,6 +594,18 @@ button {
   gap: 9px;
   color: #aaaab3;
   font-size: 12px;
+}
+
+.copyright {
+  width: 100%;
+  margin: 30px 0 0;
+  color: #777783;
+  text-align: center;
+  font:
+    9px DM Mono,
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .scroll {
