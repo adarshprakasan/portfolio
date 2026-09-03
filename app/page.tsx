@@ -507,6 +507,16 @@ export default function Home() {
         </div>
 
         <div className="hero-copy">
+          <div className="identity">
+            <span className="designer-text">Designer</span>
+            <span className="cross">×</span>
+            <span className="developer-text">Developer</span>
+          </div>
+          <motion.h1 layout transition={transition}>
+            <LiquidText>ADARSH</LiquidText>
+            <br />
+            <LiquidText>PRAKASAN</LiquidText>
+          </motion.h1>
           <AnimatePresence mode="wait">
             <motion.p
               key={`eyebrow-${mode}`}
@@ -520,16 +530,6 @@ export default function Home() {
               {active.eyebrow}
             </motion.p>
           </AnimatePresence>
-          <motion.h1 layout transition={transition}>
-            <LiquidText>ADARSH</LiquidText>
-            <br />
-            <LiquidText>PRAKASAN</LiquidText>
-          </motion.h1>
-          <div className="identity">
-            <span className="designer-text">Designer</span>
-            <span className="cross">×</span>
-            <span className="developer-text">Developer</span>
-          </div>
 
           <div className="switch-slot" ref={switchSlotRef}>
             <motion.section
