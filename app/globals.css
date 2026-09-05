@@ -1027,53 +1027,197 @@ button {
   }
 }
 
-/* ---------------------MOUSE CURSOR--------------------- */
+/* ---------------------MOUSE CURSOR (MATCHSTICK)--------------------- */
 
-html,
-body {
-  cursor: none;
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: none;
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    cursor: none;
+  }
 }
 
-a,
-button,
-input,
-textarea,
-select {
-  cursor: none;
-}
-
-.cursor-dot {
+.matchstick-cursor {
   position: fixed;
-  top: -4px;
-  left: -4px;
-
-  width: 8px;
-  height: 8px;
-
-  border-radius: 50%;
-  background: white;
-
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   pointer-events: none;
   z-index: 9999;
-
-  mix-blend-mode: difference;
+  will-change: transform, opacity;
+  transition: opacity 0.15s ease;
 }
 
-.cursor-ring {
-  position: fixed;
-  top: -18px;
-  left: -18px;
+.matchstick-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  width: 36px;
-  height: 36px;
+/* Wooden stick — extends behind the tip (the tip/flame is the true hotspot) */
+.matchstick-stick {
+  position: absolute;
+  top: -2px;
+  left: 5px;
+  width: 30px;
+  height: 4px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #caa06a, #8a5a34 55%, #6b4324);
+  box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.5);
+}
 
-  border: 1px solid white;
+/* Unlit / cooling match head */
+.matchstick-head {
+  position: absolute;
+  top: -6px;
+  left: -1px;
+  width: 10px;
+  height: 12px;
+  border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #d96b5a,
+    #922f28 55%,
+    #4a1512 90%
+  );
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.15s ease;
+}
+
+/* Flame cluster sits exactly at (0,0) — the real cursor position */
+.matchstick-flame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 26px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.flame-glow,
+.flame-outer,
+.flame-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+}
+
+.flame-glow {
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -40%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 55%, #ffb347 45%),
+    transparent 70%
+  );
+  filter: blur(6px);
+  opacity: 0.55;
+}
+
+.flame-outer {
+  width: 14px;
+  height: 22px;
+  transform: translate(-50%, -62%);
+  background: linear-gradient(180deg, #fff2b8 0%, #ffb84d 45%, #ff6a2e 85%);
+  filter: blur(0.4px);
+  animation: flame-flicker-outer 0.42s ease-in-out infinite alternate;
+}
+
+.flame-core {
+  width: 6px;
+  height: 11px;
+  transform: translate(-50%, -78%);
+  background: linear-gradient(180deg, #ffffff 0%, #fff2b0 60%, #ffcf6b 100%);
+  animation: flame-flicker-core 0.31s ease-in-out infinite alternate;
+}
+
+@keyframes flame-flicker-outer {
+  0% {
+    transform: translate(-50%, -62%) scale(0.94, 1) rotate(-3deg);
+  }
+  50% {
+    transform: translate(-50%, -60%) scale(1.05, 1.08) rotate(2deg);
+  }
+  100% {
+    transform: translate(-50%, -63%) scale(0.97, 0.96) rotate(-1deg);
+  }
+}
+
+@keyframes flame-flicker-core {
+  0% {
+    transform: translate(-50%, -78%) scale(0.9, 0.95) rotate(2deg);
+  }
+  100% {
+    transform: translate(-50%, -76%) scale(1.08, 1.05) rotate(-2deg);
+  }
+}
+
+.matchstick-smoke-layer,
+.matchstick-spark-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.smoke-particle {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-
+  background: radial-gradient(
+    circle,
+    rgba(210, 210, 218, 0.55),
+    rgba(210, 210, 218, 0) 70%
+  );
+  filter: blur(2px);
   pointer-events: none;
-  z-index: 9998;
+  will-change: transform, opacity;
+}
 
-  mix-blend-mode: difference;
+.spark-particle {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6d0, #ffb347 60%, transparent 80%);
+  box-shadow: 0 0 6px 1px rgba(255, 180, 60, 0.8);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@media (pointer: coarse) {
+  .matchstick-cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flame-outer,
+  .flame-core {
+    animation: none;
+  }
 }
 
 /* ---------------------HERO TEXT--------------------- */
