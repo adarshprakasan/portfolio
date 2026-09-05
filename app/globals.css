@@ -565,14 +565,16 @@ button {
 }
 
 .footer {
-  width: min(1100px, calc(100% - 56px));
+  width: 100%;
   margin: auto;
-  border-top: 1px solid var(--line);
-  padding: 100px 0 42px;
+  border-top: 1px solid #e6e6ea;
+  padding: 100px max(28px, calc((100% - 1100px) / 2)) 42px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 40px;
+  background: #fff;
+  color: #07080d;
 }
 
 .footer h2 {
@@ -593,7 +595,7 @@ button {
   display: flex;
   align-items: center;
   gap: 9px;
-  color: #aaaab3;
+  color: #555563;
   font-size: 12px;
   transition:
     color 0.2s ease,
@@ -602,9 +604,9 @@ button {
 }
 
 .footer-links a:hover {
-  color: #fff;
+  color: #07080d;
   /* font-weight: 700; */
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+  text-shadow: 0 0 14px rgba(7, 8, 13, 0.18);
 }
 
 .copyright {
@@ -671,9 +673,12 @@ button {
 
 @media (max-width: 520px) {
   .nav,
-  .hero,
-  .footer {
+  .hero {
     width: calc(100% - 30px);
+  }
+
+  .footer {
+    padding-inline: 15px;
   }
 
   .connect {
