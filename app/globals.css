@@ -51,10 +51,11 @@ button {
       transparent 34%
     ),
     #07080d;
+  background-attachment: fixed;
 }
 
 .ambient {
-  position: absolute;
+  position: fixed;
   width: 55vw;
   height: 55vw;
   border-radius: 50%;
@@ -88,7 +89,7 @@ button {
 }
 
 .grid-floor {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 520px;
   width: 120%;
@@ -1016,6 +1017,8 @@ button {
   }
 }
 
+/* ---------------------MOUSE CURSOR--------------------- */
+
 html,
 body {
   cursor: none;
@@ -1063,6 +1066,8 @@ select {
   mix-blend-mode: difference;
 }
 
+/* ---------------------HERO TEXT--------------------- */
+
 .liquid-text {
   position: relative;
   display: inline-block;
@@ -1082,6 +1087,8 @@ select {
 .liquid-text-hidden {
   visibility: hidden;
 }
+
+/* ---------------------SCROLL TO TOP BUTTON--------------------- */
 
 .scroll-top-btn {
   position: fixed;
@@ -1129,7 +1136,7 @@ select {
   }
 }
 
-/* ─── Project Modal ─────────────────────────────────────────── */
+/* ---------------------PROJECT MODAL--------------------- */
 
 .project-modal-backdrop {
   position: fixed;
@@ -1191,7 +1198,7 @@ select {
   align-items: start;
 }
 
-/* ── Art Panel ── */
+/* ---------------------ART PANEL--------------------- */
 
 .project-modal-art {
   position: sticky;
@@ -1269,7 +1276,7 @@ select {
   word-break: break-word;
 }
 
-/* ── Content Panel ── */
+/* ---------------------CONTENT PANEL--------------------- */
 
 .project-modal-content {
   padding-top: 16px;
@@ -1457,7 +1464,7 @@ select {
   transform: translateY(-2px);
 }
 
-/* ── Responsive ── */
+/* ---------------------RESPONSIVE--------------------- */
 
 @media (max-width: 1000px) {
   .project-modal-layout {
