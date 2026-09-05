@@ -15,8 +15,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <FluidCursor /> */}
-        {/* <CustomCursor /> */}
+        <FluidCursor />
+        <CustomCursor />
         {children}
       </body>
     </html>
