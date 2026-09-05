@@ -445,79 +445,80 @@ export default function Home() {
   }, [switchHeight, switchWidth, switchX, switchY]);
 
   return (
-    <main className={`site mode-${mode}`}>
-      <div className="ambient ambient-left" />
-      <div className="ambient ambient-right" />
-      <div className="atmosphere-ring" />
-      <div className="grid-floor" />
+    <>
+      <main className={`site mode-${mode}`}>
+        <div className="ambient ambient-left" />
+        <div className="ambient ambient-right" />
+        <div className="atmosphere-ring" />
+        <div className="grid-floor" />
 
-      <nav className="nav">
-        <a className="monogram" href="#home" aria-label="Go to home">
-          AP
-        </a>
-        <div className="nav-links">
-          {["Work", "About", "Experience"].map((item) => (
-            <a
-              key={`nav-${item}`}
-              className={activeSection === item.toLowerCase() ? "active" : ""}
-              href={`#${item.toLowerCase()}`}
-            >
-              {item}
-            </a>
-          ))}
-        </div>
-        <div className="nav-actions">
-          <a className="resume-link" href="/resume.pdf">
-            Resume <ArrowUpRight size={13} aria-hidden="true" />
+        <nav className="nav">
+          <a className="monogram" href="#home" aria-label="Go to home">
+            AP
           </a>
-          <a className="connect" href="#contact">
-            Let&apos;s talk <ArrowUpRight size={15} aria-hidden="true" />
-          </a>
-        </div>
-      </nav>
-
-      <section id="home" className="hero">
-        <div className="side-rail left-rail" aria-label={`${mode} skills`}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`rail-${mode}`}
-              className="rail-list"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={reveal}
-              transition={transition}
-            >
-              {active.skills.map((skill, index) => (
-                <motion.div
-                  key={`${mode}-skill-${index}`}
-                  className="rail-item"
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ ...transition, delay: index * 0.055 }}
-                >
-                  <span className="rail-dot">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span>{skill}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className="hero-copy">
-          <div className="identity">
-            <span className="designer-text">Designer</span>
-            <span className="cross">×</span>
-            <span className="developer-text">Developer</span>
+          <div className="nav-links">
+            {["Work", "About", "Experience"].map((item) => (
+              <a
+                key={`nav-${item}`}
+                className={activeSection === item.toLowerCase() ? "active" : ""}
+                href={`#${item.toLowerCase()}`}
+              >
+                {item}
+              </a>
+            ))}
           </div>
-          <motion.h1 layout transition={transition}>
-            <LiquidText>ADARSH</LiquidText>
-            <br />
-            <LiquidText>PRAKASAN</LiquidText>
-          </motion.h1>
-          {/* <AnimatePresence mode="wait">
+          <div className="nav-actions">
+            <a className="resume-link" href="/resume.pdf">
+              Resume <ArrowUpRight size={13} aria-hidden="true" />
+            </a>
+            <a className="connect" href="#contact">
+              Let&apos;s talk <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </div>
+        </nav>
+
+        <section id="home" className="hero">
+          <div className="side-rail left-rail" aria-label={`${mode} skills`}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`rail-${mode}`}
+                className="rail-list"
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                variants={reveal}
+                transition={transition}
+              >
+                {active.skills.map((skill, index) => (
+                  <motion.div
+                    key={`${mode}-skill-${index}`}
+                    className="rail-item"
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ ...transition, delay: index * 0.055 }}
+                  >
+                    <span className="rail-dot">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span>{skill}</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="hero-copy">
+            <div className="identity">
+              <span className="designer-text">Designer</span>
+              <span className="cross">×</span>
+              <span className="developer-text">Developer</span>
+            </div>
+            <motion.h1 layout transition={transition}>
+              <LiquidText>ADARSH</LiquidText>
+              <br />
+              <LiquidText>PRAKASAN</LiquidText>
+            </motion.h1>
+            {/* <AnimatePresence mode="wait">
             <motion.p
               key={`eyebrow-${mode}`}
               className="eyebrow"
@@ -531,68 +532,70 @@ export default function Home() {
             </motion.p>
           </AnimatePresence> */}
 
-          <div
-            className="availability"
-            aria-label="Available for opportunities"
-          >
-            <span className="availability-dot" aria-hidden="true" />
-            Available for opportunities
-          </div>
-
-          <div className="switch-slot" ref={switchSlotRef}>
-            <motion.section
-              className={`switch-wrap${switchPlaced ? " is-floating" : ""}`}
-              aria-label="Profile mode switch"
-              style={
-                switchPlaced
-                  ? {
-                      x: switchX,
-                      y: switchY,
-                      width: switchWidth,
-                      height: switchHeight,
-                    }
-                  : undefined
-              }
+            <div
+              className="availability"
+              aria-label="Available for opportunities"
             >
-              <div
-                className="mode-switch"
-                role="tablist"
-                aria-label="Choose portfolio view"
-              >
-                <motion.div
-                  className="switch-knob"
-                  animate={{ x: designer ? "0%" : "100%" }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 310,
-                    damping: 28,
-                    mass: 0.75,
-                  }}
-                  aria-hidden="true"
-                />
-                {(["designer", "developer"] as const).map((option) => {
-                  const selected = mode === option;
-                  return (
-                    <button
-                      key={`mode-${option}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={selected}
-                      aria-controls="mode-preview"
-                      className={selected ? `selected ${option}-selected` : ""}
-                      onClick={() => setMode(option)}
-                    >
-                      <strong>{option.toUpperCase()}</strong>
-                      <span>{content[option].switchDescription}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              {/* <p className="switch-hint">Switch between worlds</p> */}
-            </motion.section>
-          </div>
+              <span className="availability-dot" aria-hidden="true" />
+              Available for opportunities
+            </div>
 
-          {/* <AnimatePresence mode="wait">
+            <div className="switch-slot" ref={switchSlotRef}>
+              <motion.section
+                className={`switch-wrap${switchPlaced ? " is-floating" : ""}`}
+                aria-label="Profile mode switch"
+                style={
+                  switchPlaced
+                    ? {
+                        x: switchX,
+                        y: switchY,
+                        width: switchWidth,
+                        height: switchHeight,
+                      }
+                    : undefined
+                }
+              >
+                <div
+                  className="mode-switch"
+                  role="tablist"
+                  aria-label="Choose portfolio view"
+                >
+                  <motion.div
+                    className="switch-knob"
+                    animate={{ x: designer ? "0%" : "100%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 310,
+                      damping: 28,
+                      mass: 0.75,
+                    }}
+                    aria-hidden="true"
+                  />
+                  {(["designer", "developer"] as const).map((option) => {
+                    const selected = mode === option;
+                    return (
+                      <button
+                        key={`mode-${option}`}
+                        type="button"
+                        role="tab"
+                        aria-selected={selected}
+                        aria-controls="mode-preview"
+                        className={
+                          selected ? `selected ${option}-selected` : ""
+                        }
+                        onClick={() => setMode(option)}
+                      >
+                        <strong>{option.toUpperCase()}</strong>
+                        <span>{content[option].switchDescription}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* <p className="switch-hint">Switch between worlds</p> */}
+              </motion.section>
+            </div>
+
+            {/* <AnimatePresence mode="wait">
             <motion.p
               key={`description-${mode}`}
               className="subcopy"
@@ -605,352 +608,355 @@ export default function Home() {
               {active.description}
             </motion.p>
           </AnimatePresence> */}
-        </div>
+          </div>
 
-        <div className="visual-card" id="mode-preview" role="tabpanel">
-          <motion.div
-            className="orb"
-            animate={{
-              rotate: designer ? 360 : -360,
-              scale: designer ? 1 : 1.12,
-            }}
-            transition={{
-              rotate: { duration: 18, repeat: Infinity, ease: "linear" },
-              scale: transition,
-            }}
-          />
-          <AnimatePresence mode="wait">
-            {designer ? (
-              <motion.div
-                key="designer-visual"
-                className="visual-scene designer-scene"
-                initial={{ opacity: 0, scale: 0.92, rotate: -3 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 1.05, rotate: 3 }}
-                transition={transition}
-              >
-                <div className="poster">
-                  <span>
-                    BEYOND
-                    <br />
-                    DESIGN.
-                  </span>
-                  <small>
-                    We don&apos;t just make it look good.
-                    <br />
-                    We make it meaningful.
-                  </small>
-                </div>
-                <div className="brush" />
-                <div className="a-mark">A</div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="developer-visual"
-                className="visual-scene developer-scene"
-                initial={{ opacity: 0, scale: 0.94, x: 20 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.96, x: -20 }}
-                transition={transition}
-              >
-                <div className="code-window">
-                  <div className="window-bar">
-                    <i />
-                    <i />
-                    <i />
-                    <span>adarsh.tsx</span>
+          <div className="visual-card" id="mode-preview" role="tabpanel">
+            <motion.div
+              className="orb"
+              animate={{
+                rotate: designer ? 360 : -360,
+                scale: designer ? 1 : 1.12,
+              }}
+              transition={{
+                rotate: { duration: 18, repeat: Infinity, ease: "linear" },
+                scale: transition,
+              }}
+            />
+            <AnimatePresence mode="wait">
+              {designer ? (
+                <motion.div
+                  key="designer-visual"
+                  className="visual-scene designer-scene"
+                  initial={{ opacity: 0, scale: 0.92, rotate: -3 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 1.05, rotate: 3 }}
+                  transition={transition}
+                >
+                  <div className="poster">
+                    <span>
+                      BEYOND
+                      <br />
+                      DESIGN.
+                    </span>
+                    <small>
+                      We don&apos;t just make it look good.
+                      <br />
+                      We make it meaningful.
+                    </small>
                   </div>
-                  <pre>{`const Adarsh = {\n  role: "Designer × Developer",\n  focus: ["UX", "React", "Next.js"],\n  mindset: "Build beautifully."\n};`}</pre>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </section>
+                  <div className="brush" />
+                  <div className="a-mark">A</div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="developer-visual"
+                  className="visual-scene developer-scene"
+                  initial={{ opacity: 0, scale: 0.94, x: 20 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, x: -20 }}
+                  transition={transition}
+                >
+                  <div className="code-window">
+                    <div className="window-bar">
+                      <i />
+                      <i />
+                      <i />
+                      <span>adarsh.tsx</span>
+                    </div>
+                    <pre>{`const Adarsh = {\n  role: "Designer × Developer",\n  focus: ["UX", "React", "Next.js"],\n  mindset: "Build beautifully."\n};`}</pre>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </section>
 
-      <section id="work" className="bento-section">
-        <div className="bento-header">
+        <section id="work" className="bento-section">
+          <div className="bento-header">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`work-heading-${mode}`}
+                variants={reveal}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={transition}
+              >
+                <p className="section-label">SELECTED WORKS</p>
+                <h2 className="bento-headline">{active.work.headline}</h2>
+              </motion.div>
+            </AnimatePresence>
+
+            {designer && (
+              <div className="work-category-bar">
+                {designerWork.categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    aria-pressed={activeCategory === cat}
+                    className={`work-cat-btn${activeCategory === cat ? " work-cat-btn--active" : ""}`}
+                    onClick={() => setActiveCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <AnimatePresence mode="wait">
             <motion.div
-              key={`work-heading-${mode}`}
+              key={`bento-${mode}-${activeCategory}`}
+              className="bento-grid"
               variants={reveal}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={transition}
             >
-              <p className="section-label">SELECTED WORKS</p>
-              <h2 className="bento-headline">{active.work.headline}</h2>
+              {filteredProjects.length === 0 && (
+                <p className="bento-empty">No projects in this category yet.</p>
+              )}
+              {filteredProjects.map((project, index) => {
+                const size = getBentoSize(index, filteredProjects.length);
+                return (
+                  <motion.article
+                    key={`${mode}-bento-${project.number}`}
+                    className={`bento-tile bento-${size} project-${project.accent}`}
+                    data-cursor
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Open ${project.title}`}
+                    initial={{ opacity: 0, scale: 0.94, y: 14 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ ...transition, delay: index * 0.06 }}
+                    onClick={(e) => openProject(project, e.currentTarget)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openProject(project, e.currentTarget);
+                      }
+                    }}
+                  >
+                    {/* Decorative background orb */}
+                    <div className="bento-orb" aria-hidden="true" />
+
+                    {/* Large faded watermark glyph */}
+                    <b className="bento-glyph" aria-hidden="true">
+                      {project.title.split(" ")[0]}
+                    </b>
+
+                    {/* Number badge */}
+                    <span className="bento-num">{project.number}</span>
+
+                    {/* Arrow icon */}
+                    <div className="bento-arrow" aria-hidden="true">
+                      <ArrowUpRight size={13} />
+                    </div>
+
+                    {/* Bottom info strip */}
+                    <div className="bento-info">
+                      <span className="bento-cat-tag">{project.category}</span>
+                      <h3 className="bento-title">{project.title}</h3>
+                    </div>
+                  </motion.article>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
+        </section>
 
-          {designer && (
-            <div className="work-category-bar">
-              {designerWork.categories.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  aria-pressed={activeCategory === cat}
-                  className={`work-cat-btn${activeCategory === cat ? " work-cat-btn--active" : ""}`}
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`bento-${mode}-${activeCategory}`}
-            className="bento-grid"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            {filteredProjects.length === 0 && (
-              <p className="bento-empty">No projects in this category yet.</p>
-            )}
-            {filteredProjects.map((project, index) => {
-              const size = getBentoSize(index, filteredProjects.length);
-              return (
-                <motion.article
-                  key={`${mode}-bento-${project.number}`}
-                  className={`bento-tile bento-${size} project-${project.accent}`}
-                  data-cursor
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Open ${project.title}`}
-                  initial={{ opacity: 0, scale: 0.94, y: 14 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ ...transition, delay: index * 0.06 }}
-                  onClick={(e) => openProject(project, e.currentTarget)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      openProject(project, e.currentTarget);
-                    }
-                  }}
-                >
-                  {/* Decorative background orb */}
-                  <div className="bento-orb" aria-hidden="true" />
-
-                  {/* Large faded watermark glyph */}
-                  <b className="bento-glyph" aria-hidden="true">
-                    {project.title.split(" ")[0]}
-                  </b>
-
-                  {/* Number badge */}
-                  <span className="bento-num">{project.number}</span>
-
-                  {/* Arrow icon */}
-                  <div className="bento-arrow" aria-hidden="true">
-                    <ArrowUpRight size={13} />
-                  </div>
-
-                  {/* Bottom info strip */}
-                  <div className="bento-info">
-                    <span className="bento-cat-tag">{project.category}</span>
-                    <h3 className="bento-title">{project.title}</h3>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
-      </section>
-
-      <section id="about" className="about-section">
-        <div className="about-intro">
-          <p className="section-label">THE HYBRID ADVANTAGE</p>
-          <h2>
-            Designed with feeling.
-            <br />
-            Built with intention.
-          </h2>
-          <p>
-            I bring a designer&apos;s eye and a developer&apos;s discipline to
-            the same table—so the idea stays intact from the first sketch to the
-            final interaction.
-          </p>
-        </div>
-        <div className="about-details">
-          {[
-            [
-              "01",
-              "See the whole picture",
-              "Strategy, visual identity, product thinking, and the details that make an experience feel considered.",
-            ],
-            [
-              "02",
-              "Make it real",
-              "Production-ready interfaces that are responsive, accessible, and built to perform.",
-            ],
-            [
-              "03",
-              "Keep it human",
-              "Technology is the medium. Clarity, character, and a useful experience are the point.",
-            ],
-          ].map(([number, title, description]) => (
-            <article key={`principle-${number}`} className="principle">
-              <span>{number}</span>
-              <div>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="experience" className="experience-section">
-        <div className="experience-heading">
-          <p className="section-label">SELECTED EXPERIENCE</p>
-          <h2>
-            Good work leaves
-            <br />a trace.
-          </h2>
-          <span>Placeholder entries — replace with your real experience.</span>
-        </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`experience-${mode}`}
-            className="experience-list"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            {active.experience.map((entry, index) => (
-              <motion.article
-                key={`${mode}-experience-${index}`}
-                className="experience-item"
-                initial={{ opacity: 0, x: 18 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ ...transition, delay: index * 0.09 }}
-              >
-                <span className="experience-date">{entry.dates}</span>
+        <section id="about" className="about-section">
+          <div className="about-intro">
+            <p className="section-label">THE HYBRID ADVANTAGE</p>
+            <h2>
+              Designed with feeling.
+              <br />
+              Built with intention.
+            </h2>
+            <p>
+              I bring a designer&apos;s eye and a developer&apos;s discipline to
+              the same table—so the idea stays intact from the first sketch to
+              the final interaction.
+            </p>
+          </div>
+          <div className="about-details">
+            {[
+              [
+                "01",
+                "See the whole picture",
+                "Strategy, visual identity, product thinking, and the details that make an experience feel considered.",
+              ],
+              [
+                "02",
+                "Make it real",
+                "Production-ready interfaces that are responsive, accessible, and built to perform.",
+              ],
+              [
+                "03",
+                "Keep it human",
+                "Technology is the medium. Clarity, character, and a useful experience are the point.",
+              ],
+            ].map(([number, title, description]) => (
+              <article key={`principle-${number}`} className="principle">
+                <span>{number}</span>
                 <div>
-                  <h3>{entry.role}</h3>
-                  <p className="experience-place">{entry.place}</p>
-                  <p>{entry.summary}</p>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
                 </div>
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </motion.article>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </section>
-
-      <section id="skills" className="skills-section">
-        <div className="skills-heading">
-          <p className="section-label">SKILLS &amp; TOOLS</p>
-          <h2>
-            Two disciplines.
-            <br />
-            One standard.
-          </h2>
-          <p>
-            Every skill is in service of making the final experience more clear,
-            useful, and memorable.
-          </p>
-        </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`toolset-${mode}`}
-            className="toolset"
-            variants={reveal}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={transition}
-          >
-            {active.toolset.map((group, index) => (
-              <article
-                key={`${mode}-tool-group-${group.label}`}
-                className="tool-group"
-              >
-                <div className="tool-group-label">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <h3>{group.label}</h3>
-                </div>
-                <ul>
-                  {group.tools.map((tool) => (
-                    <li key={`${mode}-${group.label}-${tool}`}>{tool}</li>
-                  ))}
-                </ul>
               </article>
             ))}
-          </motion.div>
+          </div>
+        </section>
+
+        <section id="experience" className="experience-section">
+          <div className="experience-heading">
+            <p className="section-label">SELECTED EXPERIENCE</p>
+            <h2>
+              Good work leaves
+              <br />a trace.
+            </h2>
+            <span>
+              Placeholder entries — replace with your real experience.
+            </span>
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`experience-${mode}`}
+              className="experience-list"
+              variants={reveal}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={transition}
+            >
+              {active.experience.map((entry, index) => (
+                <motion.article
+                  key={`${mode}-experience-${index}`}
+                  className="experience-item"
+                  initial={{ opacity: 0, x: 18 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ ...transition, delay: index * 0.09 }}
+                >
+                  <span className="experience-date">{entry.dates}</span>
+                  <div>
+                    <h3>{entry.role}</h3>
+                    <p className="experience-place">{entry.place}</p>
+                    <p>{entry.summary}</p>
+                  </div>
+                  <ArrowUpRight size={17} aria-hidden="true" />
+                </motion.article>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </section>
+
+        <section id="skills" className="skills-section">
+          <div className="skills-heading">
+            <p className="section-label">SKILLS &amp; TOOLS</p>
+            <h2>
+              Two disciplines.
+              <br />
+              One standard.
+            </h2>
+            <p>
+              Every skill is in service of making the final experience more
+              clear, useful, and memorable.
+            </p>
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`toolset-${mode}`}
+              className="toolset"
+              variants={reveal}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={transition}
+            >
+              {active.toolset.map((group, index) => (
+                <article
+                  key={`${mode}-tool-group-${group.label}`}
+                  className="tool-group"
+                >
+                  <div className="tool-group-label">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <h3>{group.label}</h3>
+                  </div>
+                  <ul>
+                    {group.tools.map((tool) => (
+                      <li key={`${mode}-${group.label}-${tool}`}>{tool}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </section>
+
+        <footer id="contact" className="footer">
+          <div>
+            <span className="section-label">AVAILABLE FOR OPPORTUNITIES</span>
+            <h2>
+              {/* Let&apos;s build something */}
+              Building something
+              <br />
+              worth remembering.
+            </h2>
+          </div>
+          <div className="footer-links">
+            <a href="mailto:adarshp2911@gmail.com">
+              <Mail size={17} /> Email me
+            </a>
+            <a href="https://github.com/adarshprakasan">
+              <Github size={17} /> GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/adarshprakasan/">
+              <Linkedin size={17} /> LinkedIn
+            </a>
+            <a href="https://www.instagram.com/adarsh.prakasan/">
+              <Instagram size={17} /> Instagram
+            </a>
+          </div>
+          <p className="copyright">
+            © 2026 Adarsh Prakasan. All rights reserved.
+          </p>
+        </footer>
+        <AnimatePresence>
+          {!isAtBottom && (
+            <motion.div
+              className="scroll"
+              initial={{ opacity: 0, x: "-50%", y: 10 }}
+              animate={{ opacity: 1, x: "-50%", y: 0 }}
+              exit={{ opacity: 0, x: "-50%", y: 10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <span>SCROLL TO EXPLORE</span>
+              <ChevronDown size={16} />
+            </motion.div>
+          )}
+          {showScrollTop && (
+            <motion.button
+              type="button"
+              className="scroll-top-btn"
+              onClick={scrollToTop}
+              aria-label="Scroll to top"
+              initial={{ opacity: 0, scale: 0.7, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.7, y: 12 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ArrowUp size={20} />
+            </motion.button>
+          )}
         </AnimatePresence>
-      </section>
 
-      <footer id="contact" className="footer">
-        <div>
-          <span className="section-label">AVAILABLE FOR OPPORTUNITIES</span>
-          <h2>
-            {/* Let&apos;s build something */}
-            Building something
-            <br />
-            worth remembering.
-          </h2>
-        </div>
-        <div className="footer-links">
-          <a href="mailto:adarshp2911@gmail.com">
-            <Mail size={17} /> Email me
-          </a>
-          <a href="https://github.com/adarshprakasan">
-            <Github size={17} /> GitHub
-          </a>
-          <a href="https://www.linkedin.com/in/adarshprakasan/">
-            <Linkedin size={17} /> LinkedIn
-          </a>
-          <a href="https://www.instagram.com/adarsh.prakasan/">
-            <Instagram size={17} /> Instagram
-          </a>
-        </div>
-        <p className="copyright">
-          © 2026 Adarsh Prakasan. All rights reserved.
-        </p>
-      </footer>
-      <AnimatePresence>
-        {!isAtBottom && (
-          <motion.div
-            className="scroll"
-            initial={{ opacity: 0, x: "-50%", y: 10 }}
-            animate={{ opacity: 1, x: "-50%", y: 0 }}
-            exit={{ opacity: 0, x: "-50%", y: 10 }}
-            transition={{ duration: 0.25 }}
-          >
-            <span>SCROLL TO EXPLORE</span>
-            <ChevronDown size={16} />
-          </motion.div>
-        )}
-        {showScrollTop && (
-          <motion.button
-            type="button"
-            className="scroll-top-btn"
-            onClick={scrollToTop}
-            aria-label="Scroll to top"
-            initial={{ opacity: 0, scale: 0.7, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.7, y: 12 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ArrowUp size={20} />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      <ProjectModal
-        project={selectedProject}
-        originRect={originRect}
-        onClose={closeProject}
-      />
-    </main>
+        <ProjectModal
+          project={selectedProject}
+          originRect={originRect}
+          onClose={closeProject}
+        />
+      </main>
+    </>
   );
 }
