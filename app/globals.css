@@ -51,10 +51,11 @@ button {
       transparent 34%
     ),
     #07080d;
+  background-attachment: fixed;
 }
 
 .ambient {
-  position: absolute;
+  position: fixed;
   width: 55vw;
   height: 55vw;
   border-radius: 50%;
@@ -88,7 +89,7 @@ button {
 }
 
 .grid-floor {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 520px;
   width: 120%;
@@ -1496,74 +1497,5 @@ select {
   .project-modal-close {
     top: 18px;
     right: 18px;
-  }
-}
-
-/* ---------------------MOUSE CURSOR BLOB--------------------- */
-
-.fluid-blob {
-  width: 150px;
-  height: 100px;
-
-  position: relative;
-
-  filter: url("#fluid-goo");
-
-  border-radius: 58% 42% 52% 48% / 48% 55% 45% 52%;
-
-  background: radial-gradient(
-    circle at 35% 30%,
-    rgba(54, 89, 180, 0.95),
-    rgba(14, 39, 91, 0.98) 45%,
-    rgba(4, 15, 42, 1) 100%
-  );
-
-  box-shadow:
-    inset -20px -12px 30px rgba(0, 0, 0, 0.35),
-    inset 15px 10px 25px rgba(70, 110, 220, 0.18),
-    0 12px 35px rgba(15, 40, 110, 0.25);
-
-  overflow: hidden;
-
-  opacity: 0;
-  transition: opacity 240ms ease-out;
-
-  will-change: transform;
-}
-
-.fluid-blob-inner {
-  position: absolute;
-  inset: -20%;
-
-  background:
-    radial-gradient(
-      circle at 30% 35%,
-      rgba(255, 255, 255, 0.12) 0 1px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 70% 60%,
-      rgba(255, 255, 255, 0.08) 0 1px,
-      transparent 2px
-    );
-
-  background-size:
-    17px 19px,
-    23px 27px;
-
-  opacity: 0.7;
-
-  mix-blend-mode: screen;
-
-  animation: fluidTexture 8s linear infinite;
-}
-
-@keyframes fluidTexture {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(20px, -15px, 0);
   }
 }

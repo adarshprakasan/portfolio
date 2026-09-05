@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CustomCursor from "../components/CustomCursor";
-import FluidCursor from "@/components/FluidCursor";
 
 export const metadata: Metadata = {
   title: "Adarsh Prakasan — Designer × Developer",
@@ -15,7 +14,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <FluidCursor />
         <CustomCursor />
         {children}
       </body>
