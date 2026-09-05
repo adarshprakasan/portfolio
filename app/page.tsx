@@ -679,7 +679,7 @@ export default function Home() {
               exit="exit"
               transition={transition}
             >
-              <p className="section-label">SELECTED WORK</p>
+              <p className="section-label">SELECTED WORKS</p>
               <h2 className="bento-headline">{active.work.headline}</h2>
             </motion.div>
           </AnimatePresence>
