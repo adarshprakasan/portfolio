@@ -24,13 +24,14 @@ type ProjectDetails = {
 };
 
 const projectDetails: Record<string, ProjectDetails> = {
-  "Strata Dashboard": {
+  "Illford Digital": {
     longDescription:
-      "A modular analytics dashboard designed for data-heavy teams who need to think clearly under pressure. Built with a dark-mode-first design system, every panel, chart, and filter state was crafted for speed, scanability, and elegance.",
+      "A modernized website for a Digital Marketing Agency — clean, bold, and easy to navigate. The design system is built around a dark-mode-first aesthetic, with a modular component library that allows for rapid iteration and consistent branding across the site.",
     tags: ["UI/UX", "Dashboard", "Design Systems", "Figma", "Dark Mode"],
     year: "2024",
     role: "Lead UI/UX Designer",
-    liveUrl: "#",
+    liveUrl:
+      "https://www.figma.com/design/aUr1APUeRvqvy7UaHkGUVT/ILLFORD?node-id=0-1&t=IolbrLCidgkrxjmM-1",
     highlights: [
       "Designed a 60+ component Figma library with auto-layout and variables",
       "Reduced average task-completion time by 34% through layout restructure",
@@ -43,7 +44,8 @@ const projectDetails: Record<string, ProjectDetails> = {
     tags: ["UI/UX", "Mobile App", "Wellness", "Figma", "Prototyping"],
     year: "2024",
     role: "Product Designer",
-    liveUrl: "#",
+    liveUrl:
+      "https://www.figma.com/design/h6sEgAbjYCP78OqTjzmLVc/Designer-Hiring?node-id=258-167&t=IolbrLCidgkrxjmM-1",
     highlights: [
       "Delivered 80+ mobile screens across iOS and Android breakpoints",
       "Ran usability tests that cut onboarding drop-off by 48%",
@@ -89,7 +91,13 @@ const projectDetails: Record<string, ProjectDetails> = {
   "Frame Study": {
     longDescription:
       "A collection of short-form video edits that treat film as a compositional instrument. Every cut, colour grade, and sound choice is deliberate — studying how rhythm, pacing, and visual grammar can transform raw footage into something felt rather than just watched.",
-    tags: ["Video Editing", "Motion", "Premiere Pro", "Color Grading", "Montage"],
+    tags: [
+      "Video Editing",
+      "Motion",
+      "Premiere Pro",
+      "Color Grading",
+      "Montage",
+    ],
     year: "2024",
     role: "Video Editor & Colorist",
     highlights: [
@@ -141,28 +149,29 @@ const projectDetails: Record<string, ProjectDetails> = {
   },
 };
 
-const accentMap: Record<string, { primary: string; glow: string; bg: string }> = {
-  lilac: {
-    primary: "#c98aff",
-    glow: "rgba(185, 100, 255, 0.25)",
-    bg: "linear-gradient(145deg, #1a1228, #2d1845)",
-  },
-  coral: {
-    primary: "#ffb06e",
-    glow: "rgba(255, 140, 80, 0.22)",
-    bg: "linear-gradient(145deg, #281421, #52302b)",
-  },
-  blue: {
-    primary: "#78a7ff",
-    glow: "rgba(100, 150, 255, 0.22)",
-    bg: "linear-gradient(145deg, #101a35, #172b55)",
-  },
-  cyan: {
-    primary: "#55d8df",
-    glow: "rgba(70, 210, 220, 0.22)",
-    bg: "linear-gradient(145deg, #0d2026, #16404e)",
-  },
-};
+const accentMap: Record<string, { primary: string; glow: string; bg: string }> =
+  {
+    lilac: {
+      primary: "#c98aff",
+      glow: "rgba(185, 100, 255, 0.25)",
+      bg: "linear-gradient(145deg, #1a1228, #2d1845)",
+    },
+    coral: {
+      primary: "#ffb06e",
+      glow: "rgba(255, 140, 80, 0.22)",
+      bg: "linear-gradient(145deg, #281421, #52302b)",
+    },
+    blue: {
+      primary: "#78a7ff",
+      glow: "rgba(100, 150, 255, 0.22)",
+      bg: "linear-gradient(145deg, #101a35, #172b55)",
+    },
+    cyan: {
+      primary: "#55d8df",
+      glow: "rgba(70, 210, 220, 0.22)",
+      bg: "linear-gradient(145deg, #0d2026, #16404e)",
+    },
+  };
 
 type OriginRect = { x: number; y: number; w: number; h: number };
 
@@ -283,9 +292,7 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
             transition={{
               clipPath: {
                 duration: isExiting ? 0.5 : 0.65,
-                ease: isExiting
-                  ? [0.55, 0, 0.45, 1]
-                  : [0.16, 1, 0.3, 1],
+                ease: isExiting ? [0.55, 0, 0.45, 1] : [0.16, 1, 0.3, 1],
               },
               opacity: { duration: 0.25 },
             }}
@@ -307,7 +314,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                     ? { opacity: 1, scale: 1, rotate: 0 }
                     : { opacity: 0, scale: 0.7, rotate: -90 }
                 }
-                transition={{ duration: 0.35, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  duration: 0.35,
+                  delay: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
                 <X size={20} />
               </motion.button>
@@ -322,7 +333,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                       ? { opacity: 1, scale: 1 }
                       : { opacity: 0, scale: 0.9 }
                   }
-                  transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                 >
                   <div className="project-modal-art-bg" />
                   <div className="project-modal-orb" />
@@ -340,7 +355,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         ? { opacity: 1, y: 0 }
                         : { opacity: 0, y: 20 }
                     }
-                    transition={{ duration: 0.4, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.28,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     <span className="project-modal-category">
                       {project.category}
@@ -356,7 +375,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         ? { opacity: 1, y: 0, filter: "blur(0px)" }
                         : { opacity: 0, y: 28, filter: "blur(8px)" }
                     }
-                    transition={{ duration: 0.5, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.32,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {project.title}
                   </motion.h2>
@@ -369,7 +392,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         ? { opacity: 1, y: 0 }
                         : { opacity: 0, y: 18 }
                     }
-                    transition={{ duration: 0.45, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.45,
+                      delay: 0.38,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {details.longDescription}
                   </motion.p>
@@ -383,7 +410,11 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         ? { opacity: 1, y: 0 }
                         : { opacity: 0, y: 14 }
                     }
-                    transition={{ duration: 0.4, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.44,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {details.tags.map((tag) => (
                       <span key={tag} className="project-modal-tag">
@@ -401,11 +432,55 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         ? { opacity: 1, y: 0 }
                         : { opacity: 0, y: 14 }
                     }
-                    transition={{ duration: 0.4, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.48,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     <span className="project-modal-role-label">Role</span>
-                    <span className="project-modal-role-value">{details.role}</span>
+                    <span className="project-modal-role-value">
+                      {details.role}
+                    </span>
                   </motion.div>
+
+                  {(hasLive || hasSource) && (
+                    <motion.div
+                      className="project-modal-actions"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={
+                        isOpen && !isExiting
+                          ? { opacity: 1, y: 0 }
+                          : { opacity: 0, y: 16 }
+                      }
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.52,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      {hasLive && (
+                        <a
+                          href={details.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-modal-btn project-modal-btn-primary"
+                        >
+                          View Project <ExternalLink size={14} />
+                        </a>
+                      )}
+                      {hasSource && (
+                        <a
+                          href={details.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-modal-btn project-modal-btn-ghost"
+                        >
+                          <Github size={14} /> Source
+                        </a>
+                      )}
+                    </motion.div>
+                  )}
 
                   {/* Highlights */}
                   {details.highlights.length > 0 && (
@@ -417,49 +492,21 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                           ? { opacity: 1, y: 0 }
                           : { opacity: 0, y: 16 }
                       }
-                      transition={{ duration: 0.45, delay: 0.52, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{
+                        duration: 0.45,
+                        delay: 0.52,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                     >
-                      <p className="project-modal-highlights-label">Highlights</p>
+                      <p className="project-modal-highlights-label">
+                        Highlights
+                      </p>
                       <ul>
                         {details.highlights.map((h, i) => (
                           <li key={i}>{h}</li>
                         ))}
                       </ul>
                     </motion.div>
-                  )}
-
-                  {(hasLive || hasSource) && (
-                    <motion.div
-                    className="project-modal-actions"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={
-                      isOpen && !isExiting
-                        ? { opacity: 1, y: 0 }
-                        : { opacity: 0, y: 16 }
-                    }
-                    transition={{ duration: 0.4, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {hasLive && (
-                      <a
-                        href={details.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-modal-btn project-modal-btn-primary"
-                      >
-                        View Live <ExternalLink size={14} />
-                      </a>
-                    )}
-                    {hasSource && (
-                      <a
-                        href={details.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-modal-btn project-modal-btn-ghost"
-                      >
-                        <Github size={14} /> Source
-                      </a>
-                    )}
-                  </motion.div>
                   )}
                 </div>
               </div>

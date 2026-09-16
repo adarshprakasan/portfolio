@@ -60,17 +60,17 @@ const content = {
       },
       {
         dates: "2023 — 2024",
-        role: "Visual Designer",
-        place: "Sample Collective",
+        role: "UI UX & Graphic Designer",
+        place: "MPro Technologies",
         summary:
           "Shaping campaigns, interfaces, and visual systems across culture and technology.",
       },
       {
-        dates: "2022 — 2023",
-        role: "Design Intern",
-        place: "Placeholder Agency",
+        dates: "2020 — 2023",
+        role: "Graphic Designer and Video Editor",
+        place: "IEEE SB CETkr",
         summary:
-          "Supporting brand research, concept development, and production-ready creative work.",
+          "Creating brand identities, visual designs, and video content for a student-led organization.",
       },
     ],
     work: {
@@ -88,18 +88,18 @@ const content = {
         {
           number: "01",
           category: "UI/UX",
-          title: "Strata Dashboard",
+          title: "Illford Digital",
           description:
-            "A modular analytics dashboard built for clarity and speed, with a dark-mode-first design system.",
+            "A modernized website for a Digital Marketing Agency — clean, bold, and easy to navigate.",
           accent: "lilac",
           designCategory: "UI/UX" as const,
         },
         {
           number: "02",
           category: "UI/UX",
-          title: "Bloom App",
+          title: "Designers Hiring Platform",
           description:
-            "Mental wellness app UI — calm, breathable layouts that make daily journaling feel effortless.",
+            "Designers hiring platform connecting creative professionals with opportunities.",
           accent: "coral",
           designCategory: "UI/UX" as const,
         },
