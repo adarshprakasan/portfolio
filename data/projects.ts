@@ -196,28 +196,54 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "07",
+    number: "08",
     category: "3D Works",
-    title: "Villa Studies",
+    title: "Villa Design — Project 01",
     description:
-      "Architectural 3D visualization studies exploring residential spaces, materials, lighting, and composition in Blender.",
+      "A residential villa visualization exploring architectural form, materials, lighting, and spatial composition through 3D design.",
     accent: "blue",
     designCategory: "3D Works",
     longDescription:
-      "A collection of two residential villa visualization projects created in Blender. The work focused on translating architectural concepts into detailed 3D environments while exploring modelling, materials, lighting, camera composition, and overall visual presentation.",
+      "A residential villa design project created in Blender, focusing on translating an architectural concept into a detailed 3D environment. The project involved modelling the villa, developing materials, setting up lighting, and composing the final scenes to create a realistic architectural presentation.",
     tags: [
       "3D Design",
       "Blender",
       "Architectural Visualization",
-      "Modelling",
+      "3D Modelling",
       "Rendering",
     ],
     year: "2021",
     role: "3D Designer",
     highlights: [
-      "Created two residential villa environments from 3D modelling to final presentation",
-      "Worked with materials, lighting, camera composition, and environmental details",
-      "Explored architectural visualization techniques using Blender",
+      "Created the villa model and surrounding architectural environment in Blender",
+      "Worked on materials, lighting, camera composition, and scene presentation",
+      "Developed the project from 3D modelling through final visualization",
+    ],
+  },
+
+  {
+    number: "09",
+    category: "3D Works",
+    title: "Villa Design — Project 02",
+    description:
+      "A second residential 3D visualization project focused on architectural modelling, material exploration, lighting, and realistic presentation.",
+    accent: "lilac",
+    designCategory: "3D Works",
+    longDescription:
+      "An independent villa visualization project created in Blender, exploring a different residential architectural direction from the first project. The work focused on 3D modelling, materials, lighting, composition, and creating a visually detailed presentation of the villa and its surroundings.",
+    tags: [
+      "3D Design",
+      "Blender",
+      "Architectural Visualization",
+      "3D Modelling",
+      "Rendering",
+    ],
+    year: "2021",
+    role: "3D Designer",
+    highlights: [
+      "Designed and modelled the residential villa environment in Blender",
+      "Explored architectural materials, lighting, and environmental details",
+      "Created composed 3D scenes for architectural visualization and presentation",
     ],
   },
 
@@ -238,7 +264,7 @@ export const designerProjects: Project[] = [
       "Composition",
       "Visual Design",
     ],
-    year: "2021–2024",
+    year: "2020–2024",
     role: "Graphic Designer",
     highlights: [
       "Created posters across multiple themes, events, and communication needs",
