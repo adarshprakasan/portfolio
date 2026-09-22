@@ -1,5 +1,13 @@
 export type Accent = "lilac" | "coral" | "blue" | "cyan";
 
+export type ProjectMediaType = "image" | "video" | "pdf";
+
+export type ProjectMedia = {
+  src: string;
+  filename: string;
+  type: ProjectMediaType;
+};
+
 export type Project = {
   number: string;
   category: string;
@@ -19,8 +27,25 @@ export type Project = {
   role: string;
   githubUrl?: string;
   liveUrl?: string;
+  media?: ProjectMedia[];
   highlights: string[];
 };
+
+function mediaTypeFromFilename(filename: string): ProjectMediaType {
+  const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "mp4" || ext === "webm" || ext === "mov") return "video";
+  if (ext === "pdf") return "pdf";
+  return "image";
+}
+
+/** Placeholder public path: `/works/{title}/{filename}` */
+function workMedia(title: string, filenames: string[]): ProjectMedia[] {
+  return filenames.map((filename) => ({
+    src: `/works/${encodeURIComponent(title)}/${encodeURIComponent(filename)}`,
+    filename,
+    type: mediaTypeFromFilename(filename),
+  }));
+}
 
 export const designerProjects: Project[] = [
   {
@@ -92,6 +117,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2023",
     role: "Logo Designer",
+    media: workMedia("Hikari", ["logo.png"]),
     highlights: [
       "Developed the core logo concept and visual direction for the institute",
       "Explored Japanese-inspired forms while maintaining a modern and accessible identity",
@@ -112,6 +138,7 @@ export const designerProjects: Project[] = [
     tags: ["Logo Design", "Brand Identity", "Podcast", "Typography", "IEEE"],
     year: "2021",
     role: "Logo Designer",
+    media: workMedia("Inside Out", ["logo.png"]),
     highlights: [
       "Created the visual identity for an IEEE Student Branch podcast series",
       "Developed a recognizable mark suited for podcast and social media applications",
@@ -137,6 +164,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2024",
     role: "Logo Designer",
+    media: workMedia("MakeATable", ["logo.png"]),
     highlights: [
       "Designed the core logo and visual direction for the upcoming platform",
       "Created an identity intended to scale across the application and digital touchpoints",
@@ -163,6 +191,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2024",
     role: "Logo Designer",
+    media: workMedia("MPro Technologies", ["logo.png"]),
     highlights: [
       "Developed the primary logo and visual direction for the agency",
       "Focused on a professional identity suitable for a technology services company",
@@ -172,7 +201,7 @@ export const designerProjects: Project[] = [
   {
     number: "07",
     category: "Logo Design",
-    title: "Illford Digital Logo",
+    title: "Illford Digital — Brand Identity",
     description:
       "A modern brand identity for a digital marketing agency, combining a bold visual mark with a clean and contemporary digital presence.",
     accent: "blue",
@@ -188,6 +217,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2024",
     role: "Logo Designer",
+    media: workMedia("Illford Digital — Brand Identity", ["logo.png"]),
     highlights: [
       "Designed the primary logo and visual direction for the agency",
       "Developed a distinctive identity suited to a modern digital marketing brand",
@@ -214,6 +244,10 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "3D Designer",
+    media: workMedia("Villa Design — Project 01", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
     highlights: [
       "Created the villa model and surrounding architectural environment in Blender",
       "Worked on materials, lighting, camera composition, and scene presentation",
@@ -240,15 +274,48 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "3D Designer",
+    media: workMedia("Villa Design — Project 02", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
     highlights: [
       "Designed and modelled the residential villa environment in Blender",
       "Explored architectural materials, lighting, and environmental details",
       "Created composed 3D scenes for architectural visualization and presentation",
     ],
   },
+  {
+    number: "10",
+    category: "3D Works",
+    title: "Villa Design — Project 03",
+    description:
+      "A residential 3D visualization exploring architectural form, materials, lighting, and spatial composition through Blender.",
+    accent: "cyan",
+    designCategory: "3D Works",
+    longDescription:
+      "An independent residential villa visualization project created in Blender. The project focused on developing the architectural model and creating a detailed presentation through materials, lighting, camera composition, and environmental elements.",
+    tags: [
+      "3D Design",
+      "Blender",
+      "Architectural Visualization",
+      "3D Modelling",
+      "Rendering",
+    ],
+    year: "2021",
+    role: "3D Designer",
+    media: workMedia("Villa Design — Project 03", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
+    highlights: [
+      "Created and developed the villa model and surrounding environment in Blender",
+      "Worked on materials, lighting, camera composition, and scene details",
+      "Produced final architectural visualization renders for presentation",
+    ],
+  },
 
   {
-    number: "08",
+    number: "11",
     category: "Graphic Design",
     title: "Poster Works",
     description:
@@ -266,6 +333,12 @@ export const designerProjects: Project[] = [
     ],
     year: "2020–2024",
     role: "Graphic Designer",
+    media: workMedia("Poster Works", [
+      "poster-01.png",
+      "poster-02.png",
+      "poster-03.png",
+      "poster-04.png",
+    ]),
     highlights: [
       "Created posters across multiple themes, events, and communication needs",
       "Experimented with typography, imagery, composition, and visual hierarchy",
@@ -274,7 +347,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "09",
+    number: "12",
     category: "Magazines",
     title: "GAZETTE — Glimpse of Glory",
     description:
@@ -292,6 +365,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Editorial Designer",
+    media: workMedia("GAZETTE — Glimpse of Glory", ["gazette.pdf"]),
     highlights: [
       "Designed the visual layout and structure for the IEEE Student Branch newsletter",
       "Organized event highlights, achievements, and student activities into an editorial format",
@@ -300,7 +374,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "10",
+    number: "13",
     category: "Video Editing",
     title: "IEEE Newsletter Announcement",
     description:
@@ -318,6 +392,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
+    media: workMedia("IEEE Newsletter Announcement", ["announcement.mp4"]),
     highlights: [
       "Created a short promotional video for the newsletter launch",
       "Used animated typography and transitions to communicate key information",
@@ -326,7 +401,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "11",
+    number: "14",
     category: "Video Editing",
     title: "Technical Fest Announcement",
     description:
@@ -344,6 +419,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
+    media: workMedia("Technical Fest Announcement", ["announcement.mp4"]),
     highlights: [
       "Edited an event announcement designed to generate interest in the technical fest",
       "Combined typography, transitions, and motion to create an energetic presentation",
