@@ -25,7 +25,12 @@ import {
   Mail,
 } from "lucide-react";
 import LiquidText from "@/components/LiquidText";
-import ProjectModal, { type Project } from "@/components/ProjectModal";
+import ProjectModal from "@/components/ProjectModal";
+import {
+  designerProjects,
+  developerProjects,
+  type Project,
+} from "@/data/projects";
 
 type Mode = "designer" | "developer";
 
@@ -60,17 +65,17 @@ const content = {
       },
       {
         dates: "2023 — 2024",
-        role: "Visual Designer",
-        place: "Sample Collective",
+        role: "UI UX & Graphic Designer",
+        place: "MPro Technologies",
         summary:
           "Shaping campaigns, interfaces, and visual systems across culture and technology.",
       },
       {
-        dates: "2022 — 2023",
-        role: "Design Intern",
-        place: "Placeholder Agency",
+        dates: "2020 — 2023",
+        role: "Graphic Designer and Video Editor",
+        place: "IEEE SB CETkr",
         summary:
-          "Supporting brand research, concept development, and production-ready creative work.",
+          "Creating brand identities, visual designs, and video content for a student-led organization.",
       },
     ],
     work: {
@@ -84,71 +89,7 @@ const content = {
         "Video Editing",
         "Magazines",
       ] as const,
-      projects: [
-        {
-          number: "01",
-          category: "UI/UX",
-          title: "Strata Dashboard",
-          description:
-            "A modular analytics dashboard built for clarity and speed, with a dark-mode-first design system.",
-          accent: "lilac",
-          designCategory: "UI/UX" as const,
-        },
-        {
-          number: "02",
-          category: "UI/UX",
-          title: "Bloom App",
-          description:
-            "Mental wellness app UI — calm, breathable layouts that make daily journaling feel effortless.",
-          accent: "coral",
-          designCategory: "UI/UX" as const,
-        },
-        {
-          number: "03",
-          category: "Graphic Design",
-          title: "Neon Pulse",
-          description:
-            "Event poster series for a music festival — bold type, chromatic aberration, raw energy.",
-          accent: "coral",
-          designCategory: "Graphic Design" as const,
-        },
-        {
-          number: "04",
-          category: "Logo",
-          title: "Aura Studio",
-          description:
-            "Wordmark and symbol system for a creative studio — geometric, memorable, and endlessly scalable.",
-          accent: "lilac",
-          designCategory: "Logo" as const,
-        },
-        {
-          number: "05",
-          category: "3D Works",
-          title: "Void Objects",
-          description:
-            "Abstract 3D sculpture series rendered in Cinema 4D — materiality, light, and negative space.",
-          accent: "blue",
-          designCategory: "3D Works" as const,
-        },
-        {
-          number: "06",
-          category: "Video Editing",
-          title: "Frame Study",
-          description:
-            "Short-form video edits exploring rhythm and visual storytelling through montage and motion.",
-          accent: "cyan",
-          designCategory: "Video Editing" as const,
-        },
-        {
-          number: "07",
-          category: "Magazines",
-          title: "After Hours",
-          description:
-            "A cinematic editorial magazine — dark, moody layouts for a culture-led digital publication.",
-          accent: "coral",
-          designCategory: "Magazines" as const,
-        },
-      ],
+      projects: designerProjects,
     },
   },
   developer: {
@@ -197,23 +138,7 @@ const content = {
     ],
     work: {
       headline: "Products built to solve real problems.",
-      projects: [
-        {
-          number: "01",
-          category: "Full Stack / MERN",
-          title: "HospEasy",
-          description: "Hospital appointment and token management platform.",
-          accent: "blue",
-        },
-        {
-          number: "02",
-          category: "Frontend / SaaS",
-          title: "Flowstate",
-          description:
-            "A focused workspace for turning product ideas into progress.",
-          accent: "cyan",
-        },
-      ],
+      projects: developerProjects,
     },
   },
 } as const;
@@ -298,14 +223,7 @@ export default function Home() {
       w: rect.width,
       h: rect.height,
     });
-    setSelectedProject({
-      number: project.number,
-      category: project.category,
-      title: project.title,
-      description: project.description,
-      accent: project.accent,
-      designCategory: project.designCategory,
-    });
+    setSelectedProject(project);
   }, []);
 
   const closeProject = useCallback(() => {

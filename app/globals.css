@@ -595,6 +595,16 @@ button {
   gap: 9px;
   color: #aaaab3;
   font-size: 12px;
+  transition:
+    color 0.2s ease,
+    font-weight 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  /* font-weight: 700; */
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
 }
 
 .copyright {
@@ -1354,7 +1364,7 @@ select {
   padding: 20px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 36px;
+  margin-bottom: 20px;
 }
 
 .project-modal-role-label {
@@ -1418,15 +1428,21 @@ select {
 
 .project-modal-actions {
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
   gap: 12px;
   flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 36px;
 }
 
 .project-modal-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 14px 26px;
+  min-height: 44px;
+  padding: 12px 20px;
   border-radius: 999px;
   font-size: 12px;
   letter-spacing: 0.12em;
@@ -1438,6 +1454,11 @@ select {
     box-shadow 0.22s ease,
     background 0.22s ease;
   cursor: pointer;
+}
+
+.project-modal-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
 }
 
 .project-modal-btn-primary {
@@ -1497,5 +1518,14 @@ select {
   .project-modal-close {
     top: 18px;
     right: 18px;
+  }
+
+  .project-modal-actions {
+    gap: 10px;
+  }
+
+  .project-modal-btn {
+    flex: 1 1 auto;
+    min-width: 140px;
   }
 }
