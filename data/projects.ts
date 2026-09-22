@@ -429,45 +429,332 @@ export const designerProjects: Project[] = [
 ];
 
 export const developerProjects: Project[] = [
+
   {
     number: "01",
     category: "Full Stack / MERN",
-    title: "HospEasy",
-    description: "Hospital appointment and token management platform.",
+    title: "Hospiq",
+
+    description:
+      "A full-stack healthcare platform for hospital discovery, OPD tokens, queues, doctors, and patient records.",
+
     accent: "blue",
+
     longDescription:
-      "A full-stack hospital appointment and token management platform built on the MERN stack. Reduces patient wait times by up to 60% through intelligent queue management, real-time updates, and a clean, accessible interface designed for both patients and hospital staff.",
-    tags: ["MERN Stack", "Node.js", "MongoDB", "React", "Real-time"],
-    year: "2024",
+      "A full-stack healthcare management platform built with the MERN stack. Hospiq connects patients, doctors, hospital staff, and administrators through hospital and department discovery, OPD token management, queue tracking, doctor scheduling, medical records, authentication, and role-based workflows.",
+
+    tags: [
+      "MERN Stack",
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "REST APIs",
+      "MUI"
+    ],
+
+    year: "2025",
+
     role: "Full Stack Developer",
-    githubUrl: "#",
+
+    githubUrl: "https://github.com/adarshprakasan/Hospiq",
+
     liveUrl: "#",
+
     highlights: [
-      "Real-time token queue with WebSocket integration handling 200+ concurrent users",
-      "JWT-based role auth system for patients, doctors, and admin staff",
-      "Reduced average appointment booking time from 8 minutes to under 90 seconds",
+      "Built role-based workflows for patients, doctors, staff, and administrators",
+      "Implemented OPD token management with queue status and estimated waiting time",
+      "Developed authentication, doctor scheduling, patient profiles, medical records, and QR-based workflows"
     ],
   },
+
   {
     number: "02",
-    category: "Frontend / SaaS",
-    title: "Flowstate",
-    description: "A focused workspace for turning product ideas into progress.",
+    category: "Frontend / TypeScript",
+    title: "Globe Explorer",
+
+    description:
+      "An interactive world exploration application for visualizing countries and global data.",
+
     accent: "cyan",
+
     longDescription:
-      "A focused SaaS workspace that transforms product ideas into actionable progress. Combines a kanban-style task engine with AI-assisted sprint planning, deep-work timer, and built-in retrospectives — all in a distraction-free interface.",
-    tags: ["SaaS", "Next.js", "TypeScript", "AI", "Productivity"],
-    year: "2024",
-    role: "Frontend Engineer",
-    githubUrl: "#",
+      "A React and TypeScript-based interactive world exploration application focused on visualizing countries and global information through an interactive globe interface. Uses Zustand for state management and Tailwind CSS for a responsive, data-driven interface.",
+
+    tags: [
+      "React",
+      "TypeScript",
+      "Zustand",
+      "Tailwind CSS",
+      "Data Visualization"
+    ],
+
+    year: "2026",
+
+    role: "Frontend Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/globe-explorer",
+
     liveUrl: "#",
+
     highlights: [
-      "AI sprint planner that reduces planning sessions from 2 hours to 15 minutes",
-      "Built a custom rich-text editor with slash commands and markdown support",
-      "Optimized bundle to under 80kb gzipped with code-splitting and lazy loading",
+      "Built an interactive globe and country exploration interface with React and TypeScript",
+      "Implemented centralized application state using Zustand",
+      "Created reusable country and nation card components for presenting global data"
     ],
   },
+
+  {
+    number: "03",
+    category: "Full Stack / Web App",
+    title: "Attendance Management System",
+
+    description:
+      "A web-based system for managing attendance, courses, and student records.",
+
+    accent: "blue",
+
+    longDescription:
+      "A full-stack attendance management application designed to simplify attendance tracking and course management. The project combines a React frontend with a Node.js and Express backend, MongoDB data storage, authentication, and QR-based attendance workflows.",
+
+    tags: [
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "REST APIs",
+      "QR"
+    ],
+
+    year: "2025",
+
+    role: "Full Stack Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/attendance-tracking-mern",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built the frontend and backend architecture for attendance management",
+      "Implemented authentication and database-backed application workflows",
+      "Worked with QR-based attendance verification and course management"
+    ],
+  },
+
+  {
+    number: "04",
+    category: "Frontend / React",
+    title: "Kanban",
+
+    description:
+      "A task management interface built around a visual Kanban workflow.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A productivity-focused web application built around the Kanban methodology. The project explores interactive task management, structured workflows, and a clean interface for organizing work across different stages.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "UI/UX"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/kanban-board",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built an interactive Kanban-style task management interface",
+      "Implemented task organization across workflow stages",
+      "Focused on responsive interaction and clear visual hierarchy"
+    ],
+  },
+
+  {
+    number: "05",
+    category: "Frontend / React",
+    title: "Music App",
+
+    description:
+      "A React-based music application with an interactive player experience.",
+
+    accent: "blue",
+
+    longDescription:
+      "A frontend music application built with React, focused on creating an interactive music browsing and playback experience with reusable components and dynamic UI interactions.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "UI/UX"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built the music application interface using React",
+      "Created reusable components for the music experience",
+      "Implemented interactive player-related UI functionality"
+    ],
+  },
+
+  {
+    number: "06",
+    category: "Frontend / API",
+    title: "Weather App",
+
+    description:
+      "A weather application that retrieves and displays live weather information through an API.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A React-based weather application that integrates an external weather API to retrieve and present dynamic weather information through a responsive interface.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "REST API",
+      "API Integration"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Integrated an external weather API",
+      "Built a dynamic interface for displaying weather information",
+      "Handled API-driven data and frontend state updates"
+    ],
+  },
+
+  {
+    number: "07",
+    category: "Frontend / React",
+    title: "To-Do List",
+
+    description:
+      "A simple task management application for creating and organizing daily tasks.",
+
+    accent: "blue",
+
+    longDescription:
+      "A React-based task management application built to practice component-driven development, state management, and interactive CRUD-style task workflows.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "State Management"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built reusable React components for task management",
+      "Implemented interactive task creation and management",
+      "Practiced frontend state management and component-based architecture"
+    ],
+  },
+
+  {
+    number: "08",
+    category: "Python / Computer Vision",
+    title: "Prisoner Face Identification",
+
+    description:
+      "A computer vision project for identifying faces from prisoner records.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A Python-based computer vision project exploring face identification and matching against stored records. The project demonstrates practical use of image processing and facial recognition techniques.",
+
+    tags: [
+      "Python",
+      "Computer Vision",
+      "Face Recognition",
+      "Machine Learning"
+    ],
+
+    year: "2023",
+
+    role: "Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Developed a Python-based facial identification workflow",
+      "Worked with computer vision and facial recognition techniques",
+      "Explored matching captured facial data against stored records"
+    ],
+  },
+
+  {
+    number: "09",
+    category: "Next.js / TypeScript",
+    title: "Developer Portfolio",
+
+    description:
+      "A personal portfolio showcasing my work across software development and design.",
+
+    accent: "blue",
+
+    longDescription:
+      "A custom Next.js portfolio built to present my work as both a developer and designer. The site combines a developer-focused experience with a separate design profile, animated transitions, responsive layouts, project case studies, skills, experience, and contact sections.",
+
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Motion",
+      "Responsive UI"
+    ],
+
+    year: "2026",
+
+    role: "Designer & Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/portfolio",
+
+    liveUrl: "https://adarshprakasan.vercel.app/",
+
+    highlights: [
+      "Designed and developed the portfolio from scratch using Next.js and TypeScript",
+      "Built an interactive Designer × Developer experience with animated transitions",
+      "Implemented responsive layouts, project showcases, navigation, and custom UI interactions"
+    ],
+  },
+
 ];
+
 
 export const allProjects = [...designerProjects, ...developerProjects];
 export const projectIndex = Object.fromEntries(
