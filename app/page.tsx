@@ -386,7 +386,12 @@ export default function Home() {
             ))}
           </div>
           <div className="nav-actions">
-            <a className="resume-link" href="/resume.pdf">
+            <a
+              className="resume-link"
+              href={designer ? "/resume_des.pdf" : "/resume_dev.pdf"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Resume <ArrowUpRight size={13} aria-hidden="true" />
             </a>
             <a className="connect" href="#contact">

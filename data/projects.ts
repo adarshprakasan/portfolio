@@ -1,5 +1,13 @@
 export type Accent = "lilac" | "coral" | "blue" | "cyan";
 
+export type ProjectMediaType = "image" | "video" | "pdf";
+
+export type ProjectMedia = {
+  src: string;
+  filename: string;
+  type: ProjectMediaType;
+};
+
 export type Project = {
   number: string;
   category: string;
@@ -19,8 +27,25 @@ export type Project = {
   role: string;
   githubUrl?: string;
   liveUrl?: string;
+  media?: ProjectMedia[];
   highlights: string[];
 };
+
+function mediaTypeFromFilename(filename: string): ProjectMediaType {
+  const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "mp4" || ext === "webm" || ext === "mov") return "video";
+  if (ext === "pdf") return "pdf";
+  return "image";
+}
+
+/** Placeholder public path: `/works/{title}/{filename}` */
+function workMedia(title: string, filenames: string[]): ProjectMedia[] {
+  return filenames.map((filename) => ({
+    src: `/works/${encodeURIComponent(title)}/${encodeURIComponent(filename)}`,
+    filename,
+    type: mediaTypeFromFilename(filename),
+  }));
+}
 
 export const designerProjects: Project[] = [
   {
@@ -28,187 +53,732 @@ export const designerProjects: Project[] = [
     category: "UI/UX",
     title: "Illford Digital",
     description:
-      "A modernized website for a Digital Marketing Agency — clean, bold, and easy to navigate.",
+      "A modern website experience for a digital marketing agency, designed to communicate services clearly while giving the brand a bold and contemporary identity.",
     accent: "lilac",
     designCategory: "UI/UX",
     longDescription:
-      "A modernized website for a Digital Marketing Agency — clean, bold, and easy to navigate. The design system is built around a dark-mode-first aesthetic, with a modular component library that allows for rapid iteration and consistent branding across the site.",
-    tags: ["UI/UX", "Dashboard", "Design Systems", "Figma", "Dark Mode"],
+      "A complete website UI/UX exploration for Illford Digital, a digital marketing agency. The design combines a bold visual direction with a structured information architecture, making it easier for visitors to understand the agency's services, explore its capabilities, and navigate between key sections. The interface was designed in Figma with reusable components and a consistent visual system.",
+    tags: [
+      "UI/UX",
+      "Web Design",
+      "Design System",
+      "Figma",
+      "Responsive Design",
+    ],
     year: "2024",
-    role: "Lead UI/UX Designer",
+    role: "UI/UX Designer",
     liveUrl:
       "https://www.figma.com/design/aUr1APUeRvqvy7UaHkGUVT/ILLFORD?node-id=0-1&t=IolbrLCidgkrxjmM-1",
     highlights: [
-      "Designed a 60+ component Figma library with auto-layout and variables",
-      "Reduced average task-completion time by 34% through layout restructure",
-      "Built interactive prototypes tested with 12 real users across 3 sessions",
+      "Designed the website structure, layouts, and responsive interface in Figma",
+      "Created reusable components and a consistent visual language for faster design iteration",
+      "Focused on clear information hierarchy, intuitive navigation, and strong visual storytelling",
     ],
   },
+
   {
     number: "02",
     category: "UI/UX",
-    title: "Bloom App",
+    title: "Designer Hiring Platform",
     description:
-      "A mental wellness companion designed around calm, breathable UX and guided reflection.",
+      "A designer hiring platform focused on connecting clients with creative professionals through a clear, intuitive, and portfolio-driven experience.",
     accent: "coral",
     designCategory: "UI/UX",
     longDescription:
-      "A mental wellness companion designed around calm, breathable UX. Daily journaling, mood tracking, and guided sessions live inside layouts that feel as light as the content they hold — intentional whitespace, soft palettes, and micro-interactions that reward reflection.",
-    tags: ["UI/UX", "Mobile App", "Wellness", "Figma", "Prototyping"],
+      "A UI/UX concept for a platform that connects clients with designers and creative professionals. The experience was designed around discovering talent, presenting portfolios, and simplifying the hiring journey. I worked across web and mobile interfaces, creating a consistent design language while exploring ways to make the platform feel approachable, structured, and visually engaging.",
+    tags: ["UI/UX", "Web Design", "Mobile App", "Figma", "Prototyping"],
     year: "2024",
-    role: "Product Designer",
+    role: "UI/UX Designer",
     liveUrl:
       "https://www.figma.com/design/h6sEgAbjYCP78OqTjzmLVc/Designer-Hiring?node-id=258-167&t=IolbrLCidgkrxjmM-1",
     highlights: [
-      "Delivered 80+ mobile screens across iOS and Android breakpoints",
-      "Ran usability tests that cut onboarding drop-off by 48%",
-      "Designed a custom iconography set with 90 wellness-themed glyphs",
+      "Designed web pages and mobile app screens around the designer hiring journey",
+      "Created user flows, interface layouts, and interactive prototypes in Figma",
+      "Developed a custom visual system combining flat UI elements with 3D illustrations",
     ],
   },
+
   {
     number: "03",
-    category: "Graphic Design",
-    title: "Neon Pulse",
+    category: "Logo Design",
+    title: "Hikari",
     description:
-      "Event poster series for a music festival — bold type, chromatic aberration, raw energy.",
+      "A visual identity for a Japanese language learning institute, combining Japanese-inspired simplicity with a contemporary educational brand.",
     accent: "coral",
-    designCategory: "Graphic Design",
+    designCategory: "Logo",
     longDescription:
-      "An event poster series for a multi-day music festival — kinetic, chromatic, and deliberately raw. Each poster pushed typography into territory that feels almost physical: layered halftones, chromatic aberration, and color grades borrowed from underground print culture.",
-    tags: ["Graphic Design", "Print", "Typography", "Poster", "Festival"],
+      "A logo identity created for Hikari, a Japanese language learning institute. The design explores a balance between Japanese visual influence and a modern educational identity, aiming to create a mark that feels approachable, memorable, and relevant across both digital and physical applications.",
+    tags: [
+      "Logo Design",
+      "Brand Identity",
+      "Typography",
+      "Visual Identity",
+      "Illustrator",
+    ],
     year: "2023",
-    role: "Graphic Designer",
+    role: "Logo Designer",
+    media: workMedia("Hikari", ["logo.png"]),
     highlights: [
-      "Produced 18 distinct poster designs across 3 stage themes",
-      "Developed a flexible modular grid that kept all variants on-brand",
-      "Printed at 120×180cm — designed for impact at both scale and screen",
+      "Developed the core logo concept and visual direction for the institute",
+      "Explored Japanese-inspired forms while maintaining a modern and accessible identity",
+      "Designed the mark for flexible use across digital and print applications",
     ],
   },
+
   {
     number: "04",
-    category: "Logo",
-    title: "Aura Studio",
+    category: "Logo Design",
+    title: "Inside Out",
     description:
-      "Wordmark and symbol system for a creative studio — geometric, memorable, and endlessly scalable.",
+      "A distinctive identity for a podcast series created for an IEEE Student Branch, designed to feel conversational, youthful, and technology-focused.",
     accent: "lilac",
     designCategory: "Logo",
     longDescription:
-      "A complete identity system for a creative studio — from the first sketch of the mark to the final brand standards guide. The wordmark balances geometric precision with a sense of open possibility, scaling perfectly from favicon to billboard.",
-    tags: ["Logo", "Brand Identity", "Typography", "Visual Identity"],
-    year: "2023",
-    role: "Identity Designer",
+      "A logo concept developed for Inside Out, a podcast series produced for an IEEE Student Branch. The identity was designed to capture the idea of bringing conversations, ideas, and perspectives from the inside to a wider audience while maintaining a contemporary student-tech aesthetic.",
+    tags: ["Logo Design", "Brand Identity", "Podcast", "Typography", "IEEE"],
+    year: "2021",
+    role: "Logo Designer",
+    media: workMedia("Inside Out", ["logo.png"]),
     highlights: [
-      "Delivered primary mark, wordmark, and 6 lockup variations",
-      "Built a brand standards document covering 48 pages of usage rules",
-      "Designed a full stationery and digital asset suite",
+      "Created the visual identity for an IEEE Student Branch podcast series",
+      "Developed a recognizable mark suited for podcast and social media applications",
+      "Balanced a youthful visual style with a technology-oriented identity",
     ],
   },
+
   {
     number: "05",
-    category: "3D Works",
-    title: "Void Objects",
+    category: "Logo Design",
+    title: "MakeATable",
     description:
-      "Abstract 3D sculpture series rendered in Cinema 4D — materiality, light, and negative space.",
+      "A restaurant table-booking brand identity designed around simplicity, convenience, and the dining experience.",
     accent: "blue",
-    designCategory: "3D Works",
+    designCategory: "Logo",
     longDescription:
-      "A series of abstract 3D sculptures exploring the tension between form and emptiness. Each piece was modelled, lit, and rendered in Cinema 4D — chasing the quality of physical objects: weight, surface memory, and the precise way light catches an edge.",
-    tags: ["3D", "Cinema 4D", "Octane Render", "Sculpture", "Abstract"],
+      "A logo identity created for MakeATable, a restaurant table-booking application currently in production. The visual direction was developed to communicate an easy and convenient way of discovering and booking restaurant tables, with a clean identity designed to work across the future product ecosystem.",
+    tags: [
+      "Logo Design",
+      "Brand Identity",
+      "Food & Hospitality",
+      "App Branding",
+    ],
     year: "2024",
-    role: "3D Artist",
+    role: "Logo Designer",
+    media: workMedia("MakeATable", ["logo.png"]),
     highlights: [
-      "Series of 12 final renders at 4K resolution with Octane",
-      "Each piece built with fully procedural materials and HDRi lighting",
-      "Selected for display in a digital gallery exhibition",
+      "Designed the core logo and visual direction for the upcoming platform",
+      "Created an identity intended to scale across the application and digital touchpoints",
+      "Developed the brand around simplicity, accessibility, and restaurant discovery",
     ],
   },
+
   {
     number: "06",
-    category: "Video Editing",
-    title: "Frame Study",
+    category: "Logo Design",
+    title: "MPro Technologies",
     description:
-      "Short-form video edits exploring rhythm and visual storytelling through montage and motion.",
+      "A professional identity for a web consulting agency providing digital services and technology solutions.",
     accent: "cyan",
-    designCategory: "Video Editing",
+    designCategory: "Logo",
     longDescription:
-      "A collection of short-form video edits that treat film as a compositional instrument. Every cut, colour grade, and sound choice is deliberate — studying how rhythm, pacing, and visual grammar can transform raw footage into something felt rather than just watched.",
+      "A logo identity developed for MPro Technologies, a web consulting and service provider agency. The design focuses on creating a professional and technology-oriented visual presence that can work consistently across the company's website, digital communications, and business materials.",
     tags: [
-      "Video Editing",
-      "Motion",
-      "Premiere Pro",
-      "Color Grading",
-      "Montage",
+      "Logo Design",
+      "Brand Identity",
+      "Technology",
+      "Typography",
+      "Visual Identity",
     ],
     year: "2024",
-    role: "Video Editor & Colorist",
+    role: "Logo Designer",
+    media: workMedia("MPro Technologies", ["logo.png"]),
     highlights: [
-      "6 short films ranging from 45 seconds to 4 minutes",
-      "Developed a signature grade built from custom LUTs in DaVinci Resolve",
-      "Original sound design layered using Adobe Audition",
+      "Developed the primary logo and visual direction for the agency",
+      "Focused on a professional identity suitable for a technology services company",
+      "Designed the mark for use across digital and business communication materials",
     ],
   },
   {
     number: "07",
-    category: "Magazines",
-    title: "After Hours",
+    category: "Logo Design",
+    title: "Illford Digital — Brand Identity",
     description:
-      "A cinematic editorial magazine — dark, moody layouts for a culture-led digital publication.",
+      "A modern brand identity for a digital marketing agency, combining a bold visual mark with a clean and contemporary digital presence.",
+    accent: "blue",
+    designCategory: "Logo",
+    longDescription:
+      "A logo identity developed for Illford Digital, a digital marketing agency. The design was created to establish a distinctive and professional visual identity that reflects the agency's digital-first approach while remaining flexible across its website, social media, and marketing materials.",
+    tags: [
+      "Logo Design",
+      "Brand Identity",
+      "Digital Marketing",
+      "Typography",
+      "Visual Identity",
+    ],
+    year: "2024",
+    role: "Logo Designer",
+    media: workMedia("Illford Digital — Brand Identity", ["logo.png"]),
+    highlights: [
+      "Designed the primary logo and visual direction for the agency",
+      "Developed a distinctive identity suited to a modern digital marketing brand",
+      "Created a flexible mark for use across digital platforms and marketing materials",
+    ],
+  },
+
+  {
+    number: "08",
+    category: "3D Works",
+    title: "Villa Design — Project 01",
+    description:
+      "A residential villa visualization exploring architectural form, materials, lighting, and spatial composition through 3D design.",
+    accent: "blue",
+    designCategory: "3D Works",
+    longDescription:
+      "A residential villa design project created in Blender, focusing on translating an architectural concept into a detailed 3D environment. The project involved modelling the villa, developing materials, setting up lighting, and composing the final scenes to create a realistic architectural presentation.",
+    tags: [
+      "3D Design",
+      "Blender",
+      "Architectural Visualization",
+      "3D Modelling",
+      "Rendering",
+    ],
+    year: "2021",
+    role: "3D Designer",
+    media: workMedia("Villa Design — Project 01", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
+    highlights: [
+      "Created the villa model and surrounding architectural environment in Blender",
+      "Worked on materials, lighting, camera composition, and scene presentation",
+      "Developed the project from 3D modelling through final visualization",
+    ],
+  },
+
+  {
+    number: "09",
+    category: "3D Works",
+    title: "Villa Design — Project 02",
+    description:
+      "A second residential 3D visualization project focused on architectural modelling, material exploration, lighting, and realistic presentation.",
+    accent: "lilac",
+    designCategory: "3D Works",
+    longDescription:
+      "An independent villa visualization project created in Blender, exploring a different residential architectural direction from the first project. The work focused on 3D modelling, materials, lighting, composition, and creating a visually detailed presentation of the villa and its surroundings.",
+    tags: [
+      "3D Design",
+      "Blender",
+      "Architectural Visualization",
+      "3D Modelling",
+      "Rendering",
+    ],
+    year: "2021",
+    role: "3D Designer",
+    media: workMedia("Villa Design — Project 02", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
+    highlights: [
+      "Designed and modelled the residential villa environment in Blender",
+      "Explored architectural materials, lighting, and environmental details",
+      "Created composed 3D scenes for architectural visualization and presentation",
+    ],
+  },
+  {
+    number: "10",
+    category: "3D Works",
+    title: "Villa Design — Project 03",
+    description:
+      "A residential 3D visualization exploring architectural form, materials, lighting, and spatial composition through Blender.",
+    accent: "cyan",
+    designCategory: "3D Works",
+    longDescription:
+      "An independent residential villa visualization project created in Blender. The project focused on developing the architectural model and creating a detailed presentation through materials, lighting, camera composition, and environmental elements.",
+    tags: [
+      "3D Design",
+      "Blender",
+      "Architectural Visualization",
+      "3D Modelling",
+      "Rendering",
+    ],
+    year: "2021",
+    role: "3D Designer",
+    media: workMedia("Villa Design — Project 03", [
+      "render-01.jpg",
+      "render-02.jpg",
+    ]),
+    highlights: [
+      "Created and developed the villa model and surrounding environment in Blender",
+      "Worked on materials, lighting, camera composition, and scene details",
+      "Produced final architectural visualization renders for presentation",
+    ],
+  },
+
+  {
+    number: "11",
+    category: "Graphic Design",
+    title: "Poster Works",
+    description:
+      "A collection of poster designs exploring typography, composition, visual hierarchy, and experimental graphic treatments.",
     accent: "coral",
+    designCategory: "Graphic Design",
+    longDescription:
+      "A selection of poster design work created across different themes and visual directions. The collection explores typography, composition, imagery, colour, and visual hierarchy, with each poster approaching communication from a different graphic perspective.",
+    tags: [
+      "Graphic Design",
+      "Poster Design",
+      "Typography",
+      "Composition",
+      "Visual Design",
+    ],
+    year: "2020–2024",
+    role: "Graphic Designer",
+    media: workMedia("Poster Works", [
+      "poster-01.png",
+            "poster-02.jpg",
+      "poster-03.jpg",
+      "poster-04.jpg",
+      "poster-05.jpg",
+      "poster-06.jpg",
+      "poster-07.jpg",
+      "poster-08.jpg",
+      "poster-09.jpg",
+      "poster-10.png",
+      "poster-11.jpg",
+      "poster-12.jpg",
+      "poster-13.jpg",
+      "poster-14.jpg",
+      "poster-15.jpg",
+      "poster-16.jpg",
+      "poster-17.jpg",
+      "poster-18.jpg",
+      "poster-19.png",
+      "poster-20.jpg",
+      "poster-21.jpg",
+      "poster-22.jpg",
+      "poster-23.jpg",
+      "poster-24.jpg",
+      "poster-25.jpg",
+      "poster-26.png",
+      "poster-27.jpg",
+      "poster-28.png",
+    ]),
+    highlights: [
+      "Created posters across multiple themes, events, and communication needs",
+      "Experimented with typography, imagery, composition, and visual hierarchy",
+      "Adapted visual styles to suit different audiences and event identities",
+    ],
+  },
+
+  {
+    number: "12",
+    category: "Magazines",
+    title: "GAZETTE — Glimpse of Glory",
+    description:
+      "A newsletter-style editorial publication created for an IEEE Student Branch, documenting events, achievements, and student activities.",
+    accent: "lilac",
     designCategory: "Magazines",
     longDescription:
-      "A cinematic editorial magazine built for a culture-led digital publication. Blending editorial photography, immersive layout design, and typographic restraint into something that reads as much as it breathes — dark, moody, deliberate.",
-    tags: ["Magazine", "Editorial", "InDesign", "Typography", "Photography"],
-    year: "2023",
-    role: "Art Director",
-    liveUrl: "#",
+      "GAZETTE — Glimpse of Glory is a newsletter-style publication created for an IEEE Student Branch. The project focused on presenting student activities, events, achievements, and organizational highlights through a structured editorial layout that combines typography, photography, and visual storytelling.",
+    tags: [
+      "Editorial Design",
+      "Newsletter",
+      "Typography",
+      "Layout Design",
+      "IEEE",
+    ],
+    year: "2021",
+    role: "Editorial Designer",
+    media: workMedia("GAZETTE — Glimpse of Glory", ["gazette.pdf"]),
     highlights: [
-      "Designed 12 issues with an average 64-page layout each",
-      "Built a modular editorial grid adaptable across print and PDF",
-      "Directed a photoshoot series with 3 contributing photographers",
+      "Designed the visual layout and structure for the IEEE Student Branch newsletter",
+      "Organized event highlights, achievements, and student activities into an editorial format",
+      "Combined typography, imagery, and structured grids for clear information flow",
+    ],
+  },
+
+  {
+    number: "13",
+    category: "Video Editing",
+    title: "IEEE Newsletter Announcement",
+    description:
+      "A short-form announcement video created to introduce and promote an IEEE Student Branch newsletter.",
+    accent: "cyan",
+    designCategory: "Video Editing",
+    longDescription:
+      "A promotional announcement video created for an IEEE Student Branch to introduce its newsletter. The edit combines motion, typography, pacing, and visual transitions to turn static newsletter content into a concise and engaging announcement.",
+    tags: [
+      "Video Editing",
+      "Motion Graphics",
+      "Typography",
+      "Announcement",
+      "IEEE",
+    ],
+    year: "2021",
+    role: "Video Editor",
+    media: workMedia("IEEE Newsletter Announcement", ["announcement.mp4"]),
+    highlights: [
+      "Created a short promotional video for the newsletter launch",
+      "Used animated typography and transitions to communicate key information",
+      "Focused on pacing and visual rhythm for social-media-friendly viewing",
+    ],
+  },
+
+  {
+    number: "14",
+    category: "Video Editing",
+    title: "Technical Fest Announcement",
+    description:
+      "An energetic event announcement video designed to build awareness and excitement around a college technical festival.",
+    accent: "coral",
+    designCategory: "Video Editing",
+    longDescription:
+      "A promotional announcement video created for a college technical festival. The project focused on communicating event information through energetic editing, typography, motion, and visual pacing while maintaining a strong connection to the technical and student-focused nature of the event.",
+    tags: [
+      "Video Editing",
+      "Motion Graphics",
+      "Event Promotion",
+      "Typography",
+      "Social Media",
+    ],
+    year: "2021",
+    role: "Video Editor",
+    media: workMedia("Technical Fest Announcement", ["announcement.mp4"]),
+    highlights: [
+      "Edited an event announcement designed to generate interest in the technical fest",
+      "Combined typography, transitions, and motion to create an energetic presentation",
+      "Structured the edit around clear event information and visual impact",
     ],
   },
 ];
 
 export const developerProjects: Project[] = [
+
   {
     number: "01",
     category: "Full Stack / MERN",
-    title: "HospEasy",
-    description: "Hospital appointment and token management platform.",
+    title: "Hospiq",
+
+    description:
+      "A full-stack healthcare platform for hospital discovery, OPD tokens, queues, doctors, and patient records.",
+
     accent: "blue",
+
     longDescription:
-      "A full-stack hospital appointment and token management platform built on the MERN stack. Reduces patient wait times by up to 60% through intelligent queue management, real-time updates, and a clean, accessible interface designed for both patients and hospital staff.",
-    tags: ["MERN Stack", "Node.js", "MongoDB", "React", "Real-time"],
-    year: "2024",
+      "A full-stack healthcare management platform built with the MERN stack. Hospiq connects patients, doctors, hospital staff, and administrators through hospital and department discovery, OPD token management, queue tracking, doctor scheduling, medical records, authentication, and role-based workflows.",
+
+    tags: [
+      "MERN Stack",
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "REST APIs",
+      "MUI"
+    ],
+
+    year: "2025",
+
     role: "Full Stack Developer",
-    githubUrl: "#",
+
+    githubUrl: "https://github.com/adarshprakasan/Hospiq",
+
     liveUrl: "#",
+
     highlights: [
-      "Real-time token queue with WebSocket integration handling 200+ concurrent users",
-      "JWT-based role auth system for patients, doctors, and admin staff",
-      "Reduced average appointment booking time from 8 minutes to under 90 seconds",
+      "Built role-based workflows for patients, doctors, staff, and administrators",
+      "Implemented OPD token management with queue status and estimated waiting time",
+      "Developed authentication, doctor scheduling, patient profiles, medical records, and QR-based workflows"
     ],
   },
+
   {
     number: "02",
-    category: "Frontend / SaaS",
-    title: "Flowstate",
-    description: "A focused workspace for turning product ideas into progress.",
+    category: "Frontend / TypeScript",
+    title: "Globe Explorer",
+
+    description:
+      "An interactive world exploration application for visualizing countries and global data.",
+
     accent: "cyan",
+
     longDescription:
-      "A focused SaaS workspace that transforms product ideas into actionable progress. Combines a kanban-style task engine with AI-assisted sprint planning, deep-work timer, and built-in retrospectives — all in a distraction-free interface.",
-    tags: ["SaaS", "Next.js", "TypeScript", "AI", "Productivity"],
-    year: "2024",
-    role: "Frontend Engineer",
-    githubUrl: "#",
+      "A React and TypeScript-based interactive world exploration application focused on visualizing countries and global information through an interactive globe interface. Uses Zustand for state management and Tailwind CSS for a responsive, data-driven interface.",
+
+    tags: [
+      "React",
+      "TypeScript",
+      "Zustand",
+      "Tailwind CSS",
+      "Data Visualization"
+    ],
+
+    year: "2026",
+
+    role: "Frontend Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/globe-explorer",
+
     liveUrl: "#",
+
     highlights: [
-      "AI sprint planner that reduces planning sessions from 2 hours to 15 minutes",
-      "Built a custom rich-text editor with slash commands and markdown support",
-      "Optimized bundle to under 80kb gzipped with code-splitting and lazy loading",
+      "Built an interactive globe and country exploration interface with React and TypeScript",
+      "Implemented centralized application state using Zustand",
+      "Created reusable country and nation card components for presenting global data"
     ],
   },
+
+  {
+    number: "03",
+    category: "Full Stack / Web App",
+    title: "Attendance Management System",
+
+    description:
+      "A web-based system for managing attendance, courses, and student records.",
+
+    accent: "blue",
+
+    longDescription:
+      "A full-stack attendance management application designed to simplify attendance tracking and course management. The project combines a React frontend with a Node.js and Express backend, MongoDB data storage, authentication, and QR-based attendance workflows.",
+
+    tags: [
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "REST APIs",
+      "QR"
+    ],
+
+    year: "2025",
+
+    role: "Full Stack Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/attendance-tracking-mern",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built the frontend and backend architecture for attendance management",
+      "Implemented authentication and database-backed application workflows",
+      "Worked with QR-based attendance verification and course management"
+    ],
+  },
+
+  {
+    number: "04",
+    category: "Frontend / React",
+    title: "Kanban",
+
+    description:
+      "A task management interface built around a visual Kanban workflow.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A productivity-focused web application built around the Kanban methodology. The project explores interactive task management, structured workflows, and a clean interface for organizing work across different stages.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "UI/UX"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/kanban-board",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built an interactive Kanban-style task management interface",
+      "Implemented task organization across workflow stages",
+      "Focused on responsive interaction and clear visual hierarchy"
+    ],
+  },
+
+  {
+    number: "05",
+    category: "Frontend / React",
+    title: "Music App",
+
+    description:
+      "A React-based music application with an interactive player experience.",
+
+    accent: "blue",
+
+    longDescription:
+      "A frontend music application built with React, focused on creating an interactive music browsing and playback experience with reusable components and dynamic UI interactions.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "UI/UX"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built the music application interface using React",
+      "Created reusable components for the music experience",
+      "Implemented interactive player-related UI functionality"
+    ],
+  },
+
+  {
+    number: "06",
+    category: "Frontend / API",
+    title: "Weather App",
+
+    description:
+      "A weather application that retrieves and displays live weather information through an API.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A React-based weather application that integrates an external weather API to retrieve and present dynamic weather information through a responsive interface.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "REST API",
+      "API Integration"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Integrated an external weather API",
+      "Built a dynamic interface for displaying weather information",
+      "Handled API-driven data and frontend state updates"
+    ],
+  },
+
+  {
+    number: "07",
+    category: "Frontend / React",
+    title: "To-Do List",
+
+    description:
+      "A simple task management application for creating and organizing daily tasks.",
+
+    accent: "blue",
+
+    longDescription:
+      "A React-based task management application built to practice component-driven development, state management, and interactive CRUD-style task workflows.",
+
+    tags: [
+      "React",
+      "JavaScript",
+      "Frontend",
+      "State Management"
+    ],
+
+    year: "2024",
+
+    role: "Frontend Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built reusable React components for task management",
+      "Implemented interactive task creation and management",
+      "Practiced frontend state management and component-based architecture"
+    ],
+  },
+
+  {
+    number: "08",
+    category: "Python / Computer Vision",
+    title: "Prisoner Face Identification",
+
+    description:
+      "A computer vision project for identifying faces from prisoner records.",
+
+    accent: "cyan",
+
+    longDescription:
+      "A Python-based computer vision project exploring face identification and matching against stored records. The project demonstrates practical use of image processing and facial recognition techniques.",
+
+    tags: [
+      "Python",
+      "Computer Vision",
+      "Face Recognition",
+      "Machine Learning"
+    ],
+
+    year: "2023",
+
+    role: "Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Developed a Python-based facial identification workflow",
+      "Worked with computer vision and facial recognition techniques",
+      "Explored matching captured facial data against stored records"
+    ],
+  },
+
+  {
+    number: "09",
+    category: "Next.js / TypeScript",
+    title: "Developer Portfolio",
+
+    description:
+      "A personal portfolio showcasing my work across software development and design.",
+
+    accent: "blue",
+
+    longDescription:
+      "A custom Next.js portfolio built to present my work as both a developer and designer. The site combines a developer-focused experience with a separate design profile, animated transitions, responsive layouts, project case studies, skills, experience, and contact sections.",
+
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Motion",
+      "Responsive UI"
+    ],
+
+    year: "2026",
+
+    role: "Designer & Developer",
+
+    githubUrl: "https://github.com/adarshprakasan/portfolio",
+
+    liveUrl: "https://adarshprakasan.vercel.app/",
+
+    highlights: [
+      "Designed and developed the portfolio from scratch using Next.js and TypeScript",
+      "Built an interactive Designer × Developer experience with animated transitions",
+      "Implemented responsive layouts, project showcases, navigation, and custom UI interactions"
+    ],
+  },
+
 ];
+
 
 export const allProjects = [...designerProjects, ...developerProjects];
 export const projectIndex = Object.fromEntries(

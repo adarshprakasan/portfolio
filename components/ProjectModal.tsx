@@ -2,8 +2,18 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { X, Github, ExternalLink } from "lucide-react";
-import { projectIndex, type Project } from "@/data/projects";
+import {
+  X,
+  Github,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import {
+  projectIndex,
+  type Project,
+  type ProjectMedia,
+} from "@/data/projects";
 
 const accentMap: Record<string, { primary: string; glow: string; bg: string }> =
   {
@@ -37,21 +47,96 @@ type Props = {
   onClose: () => void;
 };
 
+function ProjectMediaFrame({
+  item,
+  title,
+}: {
+  item: ProjectMedia;
+  title: string;
+}) {
+  const [status, setStatus] = useState<"loading" | "ready" | "missing">(
+    "loading",
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    setStatus("loading");
+    fetch(item.src, { method: "HEAD" })
+      .then((res) => {
+        if (!cancelled) setStatus(res.ok ? "ready" : "missing");
+      })
+      .catch(() => {
+        if (!cancelled) setStatus("missing");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [item.src]);
+
+  if (status !== "ready") {
+    return (
+      <div className="project-media-placeholder" aria-live="polite">
+        <span className="project-media-placeholder-title">{title}</span>
+        <span className="project-media-placeholder-file">{item.filename}</span>
+        {status === "loading" && (
+          <span className="project-media-placeholder-hint">Loading…</span>
+        )}
+      </div>
+    );
+  }
+
+  if (item.type === "video") {
+    return (
+      <video
+        className="project-media-asset"
+        src={item.src}
+        controls
+        playsInline
+        preload="metadata"
+      />
+    );
+  }
+
+  if (item.type === "pdf") {
+    return (
+      <iframe
+        className="project-media-asset project-media-pdf"
+        src={item.src}
+        title={`${title} — ${item.filename}`}
+      />
+    );
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className="project-media-asset"
+      src={item.src}
+      alt={`${title} — ${item.filename}`}
+    />
+  );
+}
+
 export default function ProjectModal({ project, originRect, onClose }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<number | null>(null);
   const [phase, setPhase] = useState<"idle" | "entering" | "open" | "exiting">(
     "idle",
   );
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [mediaIndex, setMediaIndex] = useState(0);
 
   useEffect(() => {
     if (project) {
       document.body.style.overflow = "hidden";
+      setViewerOpen(false);
+      setMediaIndex(0);
       setPhase("entering");
       const t = window.setTimeout(() => setPhase("open"), 20);
       return () => window.clearTimeout(t);
     }
     document.body.style.overflow = "";
+    setViewerOpen(false);
     setPhase("idle");
   }, [project]);
 
@@ -68,14 +153,45 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
     };
   }, []);
 
+  const media = project?.media ?? [];
+
+  const showPrevMedia = useCallback(() => {
+    setMediaIndex((index) =>
+      media.length === 0 ? 0 : (index - 1 + media.length) % media.length,
+    );
+  }, [media.length]);
+
+  const showNextMedia = useCallback(() => {
+    setMediaIndex((index) =>
+      media.length === 0 ? 0 : (index + 1) % media.length,
+    );
+  }, [media.length]);
+
   useEffect(() => {
     if (!project) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
+      if (e.key === "Escape") {
+        if (viewerOpen) {
+          setViewerOpen(false);
+          return;
+        }
+        handleClose();
+        return;
+      }
+      if (!viewerOpen || media.length < 2) return;
+      if (e.key === "ArrowLeft") showPrevMedia();
+      if (e.key === "ArrowRight") showNextMedia();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [handleClose, project]);
+  }, [
+    handleClose,
+    media.length,
+    project,
+    showNextMedia,
+    showPrevMedia,
+    viewerOpen,
+  ]);
 
   if (!project) return null;
 
@@ -83,6 +199,8 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
   const colors = accentMap[project.accent] ?? accentMap.lilac;
   const hasLive = Boolean(details.liveUrl && details.liveUrl !== "#");
   const hasSource = Boolean(details.githubUrl && details.githubUrl !== "#");
+  const hasMedia = media.length > 0;
+  const activeMedia = media[mediaIndex];
 
   // Build clip-path origin for the liquid morph
   const vw = typeof window !== "undefined" ? window.innerWidth : 1440;
@@ -294,7 +412,7 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                     </span>
                   </motion.div>
 
-                  {(hasLive || hasSource) && (
+                  {(hasLive || hasSource || hasMedia) && (
                     <motion.div
                       className="project-modal-actions"
                       initial={{ opacity: 0, y: 16 }}
@@ -318,6 +436,18 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
                         >
                           View Project <ExternalLink size={14} />
                         </a>
+                      )}
+                      {!hasLive && hasMedia && (
+                        <button
+                          type="button"
+                          className="project-modal-btn project-modal-btn-primary"
+                          onClick={() => {
+                            setMediaIndex(0);
+                            setViewerOpen(true);
+                          }}
+                        >
+                          View Project <ExternalLink size={14} />
+                        </button>
                       )}
                       {hasSource && (
                         <a
@@ -362,6 +492,90 @@ export default function ProjectModal({ project, originRect, onClose }: Props) {
               </div>
             </div>
           </motion.div>
+
+          <AnimatePresence>
+            {viewerOpen && activeMedia && (
+              <motion.div
+                className="project-media-viewer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22 }}
+                role="dialog"
+                aria-modal="true"
+                aria-label={`${project.title} work`}
+              >
+                <button
+                  type="button"
+                  className="project-media-viewer-backdrop"
+                  aria-label="Close work viewer"
+                  onClick={() => setViewerOpen(false)}
+                />
+                <div className="project-media-viewer-panel">
+                  <div className="project-media-viewer-bar">
+                    <div className="project-media-viewer-meta">
+                      <span>{project.title}</span>
+                      <span>{activeMedia.filename}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="project-modal-close project-media-viewer-close"
+                      onClick={() => setViewerOpen(false)}
+                      aria-label="Close work viewer"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                  <div className="project-media-stage">
+                    {media.length > 1 && (
+                      <button
+                        type="button"
+                        className="project-media-nav project-media-nav-prev"
+                        onClick={showPrevMedia}
+                        aria-label="Previous file"
+                      >
+                        <ChevronLeft size={22} />
+                      </button>
+                    )}
+                    <ProjectMediaFrame
+                      item={activeMedia}
+                      title={project.title}
+                    />
+                    {media.length > 1 && (
+                      <button
+                        type="button"
+                        className="project-media-nav project-media-nav-next"
+                        onClick={showNextMedia}
+                        aria-label="Next file"
+                      >
+                        <ChevronRight size={22} />
+                      </button>
+                    )}
+                  </div>
+                  {media.length > 1 && (
+                    <div className="project-media-thumbs" role="tablist">
+                      {media.map((item, index) => (
+                        <button
+                          key={item.src}
+                          type="button"
+                          role="tab"
+                          aria-selected={index === mediaIndex}
+                          className={`project-media-thumb${
+                            index === mediaIndex
+                              ? " project-media-thumb--active"
+                              : ""
+                          }`}
+                          onClick={() => setMediaIndex(index)}
+                        >
+                          {item.filename}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>
