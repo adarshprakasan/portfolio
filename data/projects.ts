@@ -334,34 +334,34 @@ export const designerProjects: Project[] = [
     year: "2020–2024",
     role: "Graphic Designer",
     media: workMedia("Poster Works", [
-      "poster-01.png",
-            "poster-02.jpg",
-      "poster-03.jpg",
-      "poster-04.jpg",
-      "poster-05.jpg",
-      "poster-06.jpg",
-      "poster-07.jpg",
-      "poster-08.jpg",
-      "poster-09.jpg",
-      "poster-10.png",
-      "poster-11.jpg",
-      "poster-12.jpg",
-      "poster-13.jpg",
-      "poster-14.jpg",
-      "poster-15.jpg",
-      "poster-16.jpg",
-      "poster-17.jpg",
-      "poster-18.jpg",
-      "poster-19.png",
-      "poster-20.jpg",
-      "poster-21.jpg",
-      "poster-22.jpg",
-      "poster-23.jpg",
-      "poster-24.jpg",
-      "poster-25.jpg",
-      "poster-26.png",
-      "poster-27.jpg",
-      "poster-28.png",
+      "Poster-01.png",
+      "Poster-02.jpg",
+      "Poster-03.jpg",
+      "Poster-04.jpg",
+      "Poster-05.jpg",
+      "Poster-06.jpg",
+      "Poster-07.jpg",
+      "Poster-08.jpg",
+      "Poster-09.jpg",
+      "Poster-10.png",
+      "Poster-11.jpg",
+      "Poster-12.jpg",
+      "Poster-13.jpg",
+      "Poster-14.jpg",
+      "Poster-15.jpg",
+      "Poster-16.jpg",
+      "Poster-17.jpg",
+      "Poster-18.jpg",
+      "Poster-19.png",
+      "Poster-20.jpg",
+      "Poster-21.jpg",
+      "Poster-22.jpg",
+      "Poster-23.jpg",
+      "Poster-24.jpg",
+      "Poster-25.jpg",
+      "Poster-26.png",
+      "Poster-27.jpg",
+      "Poster-28.png",
     ]),
     highlights: [
       "Created posters across multiple themes, events, and communication needs",
@@ -453,7 +453,6 @@ export const designerProjects: Project[] = [
 ];
 
 export const developerProjects: Project[] = [
-
   {
     number: "01",
     category: "Full Stack / MERN",
@@ -474,7 +473,7 @@ export const developerProjects: Project[] = [
       "Express.js",
       "MongoDB",
       "REST APIs",
-      "MUI"
+      "MUI",
     ],
 
     year: "2025",
@@ -488,7 +487,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built role-based workflows for patients, doctors, staff, and administrators",
       "Implemented OPD token management with queue status and estimated waiting time",
-      "Developed authentication, doctor scheduling, patient profiles, medical records, and QR-based workflows"
+      "Developed authentication, doctor scheduling, patient profiles, medical records, and QR-based workflows",
     ],
   },
 
@@ -510,7 +509,7 @@ export const developerProjects: Project[] = [
       "TypeScript",
       "Zustand",
       "Tailwind CSS",
-      "Data Visualization"
+      "Data Visualization",
     ],
 
     year: "2026",
@@ -524,7 +523,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built an interactive globe and country exploration interface with React and TypeScript",
       "Implemented centralized application state using Zustand",
-      "Created reusable country and nation card components for presenting global data"
+      "Created reusable country and nation card components for presenting global data",
     ],
   },
 
@@ -541,14 +540,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A full-stack attendance management application designed to simplify attendance tracking and course management. The project combines a React frontend with a Node.js and Express backend, MongoDB data storage, authentication, and QR-based attendance workflows.",
 
-    tags: [
-      "React",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "REST APIs",
-      "QR"
-    ],
+    tags: ["React", "Node.js", "Express.js", "MongoDB", "REST APIs", "QR"],
 
     year: "2025",
 
@@ -561,7 +553,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built the frontend and backend architecture for attendance management",
       "Implemented authentication and database-backed application workflows",
-      "Worked with QR-based attendance verification and course management"
+      "Worked with QR-based attendance verification and course management",
     ],
   },
 
@@ -578,12 +570,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A productivity-focused web application built around the Kanban methodology. The project explores interactive task management, structured workflows, and a clean interface for organizing work across different stages.",
 
-    tags: [
-      "React",
-      "JavaScript",
-      "Frontend",
-      "UI/UX"
-    ],
+    tags: ["React", "JavaScript", "Frontend", "UI/UX"],
 
     year: "2024",
 
@@ -596,7 +583,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built an interactive Kanban-style task management interface",
       "Implemented task organization across workflow stages",
-      "Focused on responsive interaction and clear visual hierarchy"
+      "Focused on responsive interaction and clear visual hierarchy",
     ],
   },
 
@@ -613,12 +600,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A frontend music application built with React, focused on creating an interactive music browsing and playback experience with reusable components and dynamic UI interactions.",
 
-    tags: [
-      "React",
-      "JavaScript",
-      "Frontend",
-      "UI/UX"
-    ],
+    tags: ["React", "JavaScript", "Frontend", "UI/UX"],
 
     year: "2024",
 
@@ -631,7 +613,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built the music application interface using React",
       "Created reusable components for the music experience",
-      "Implemented interactive player-related UI functionality"
+      "Implemented interactive player-related UI functionality",
     ],
   },
 
@@ -648,12 +630,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A React-based weather application that integrates an external weather API to retrieve and present dynamic weather information through a responsive interface.",
 
-    tags: [
-      "React",
-      "JavaScript",
-      "REST API",
-      "API Integration"
-    ],
+    tags: ["React", "JavaScript", "REST API", "API Integration"],
 
     year: "2024",
 
@@ -666,7 +643,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Integrated an external weather API",
       "Built a dynamic interface for displaying weather information",
-      "Handled API-driven data and frontend state updates"
+      "Handled API-driven data and frontend state updates",
     ],
   },
 
@@ -683,12 +660,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A React-based task management application built to practice component-driven development, state management, and interactive CRUD-style task workflows.",
 
-    tags: [
-      "React",
-      "JavaScript",
-      "Frontend",
-      "State Management"
-    ],
+    tags: ["React", "JavaScript", "Frontend", "State Management"],
 
     year: "2024",
 
@@ -701,7 +673,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Built reusable React components for task management",
       "Implemented interactive task creation and management",
-      "Practiced frontend state management and component-based architecture"
+      "Practiced frontend state management and component-based architecture",
     ],
   },
 
@@ -718,12 +690,7 @@ export const developerProjects: Project[] = [
     longDescription:
       "A Python-based computer vision project exploring face identification and matching against stored records. The project demonstrates practical use of image processing and facial recognition techniques.",
 
-    tags: [
-      "Python",
-      "Computer Vision",
-      "Face Recognition",
-      "Machine Learning"
-    ],
+    tags: ["Python", "Computer Vision", "Face Recognition", "Machine Learning"],
 
     year: "2023",
 
@@ -736,7 +703,7 @@ export const developerProjects: Project[] = [
     highlights: [
       "Developed a Python-based facial identification workflow",
       "Worked with computer vision and facial recognition techniques",
-      "Explored matching captured facial data against stored records"
+      "Explored matching captured facial data against stored records",
     ],
   },
 
@@ -759,7 +726,7 @@ export const developerProjects: Project[] = [
       "TypeScript",
       "Tailwind CSS",
       "Motion",
-      "Responsive UI"
+      "Responsive UI",
     ],
 
     year: "2026",
@@ -773,12 +740,10 @@ export const developerProjects: Project[] = [
     highlights: [
       "Designed and developed the portfolio from scratch using Next.js and TypeScript",
       "Built an interactive Designer × Developer experience with animated transitions",
-      "Implemented responsive layouts, project showcases, navigation, and custom UI interactions"
+      "Implemented responsive layouts, project showcases, navigation, and custom UI interactions",
     ],
   },
-
 ];
-
 
 export const allProjects = [...designerProjects, ...developerProjects];
 export const projectIndex = Object.fromEntries(
