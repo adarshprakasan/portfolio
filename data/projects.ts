@@ -443,8 +443,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
-    media: workMedia("Technical Fest Announcement", ["announcement.mp4"]),
-    highlights: [
+        highlights: [
       "Edited an event announcement designed to generate interest in the technical fest",
       "Combined typography, transitions, and motion to create an energetic presentation",
       "Structured the edit around clear event information and visual impact",
@@ -749,3 +748,8 @@ export const allProjects = [...designerProjects, ...developerProjects];
 export const projectIndex = Object.fromEntries(
   allProjects.map((project) => [project.title, project]),
 ) as Record<string, Project>;
+
+/** First image of a project, used as its cover tile. */
+export function coverOf(project: Project): string | undefined {
+  return project.media?.find((m) => m.type === "image")?.src;
+}

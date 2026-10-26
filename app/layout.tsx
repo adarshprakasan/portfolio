@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomCursor from "../components/CustomCursor";
 
 export const metadata: Metadata = {
-  title: "Adarsh Prakasan — Designer × Developer",
+  title: "Adarsh Prakasan — Designer & Developer",
   description:
-    "Portfolio of Adarsh Prakasan — graphic designer, UI/UX designer and full-stack developer.",
+    "Portfolio of Adarsh Prakasan — UI/UX and graphic designer, and full-stack (MERN) developer based in Dubai.",
 };
 
 export default function RootLayout({
@@ -13,10 +12,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
-        <CustomCursor />
-        {children}
-      </body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;800&family=DM+Mono:wght@400;500&display=swap"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
