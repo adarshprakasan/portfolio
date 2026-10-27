@@ -96,9 +96,9 @@ export function hwfHex(hex: string) {
   const h =
     m[1].length === 3
       ? m[1]
-          .split("")
-          .map((c) => c + c)
-          .join("")
+        .split("")
+        .map((c) => c + c)
+        .join("")
       : m[1];
   return [
     parseInt(h.slice(0, 2), 16),
@@ -198,8 +198,8 @@ const HWF_CSS = `
 
 export default function HalftoneWordmarkFooter({
   wordmark = "halden",
-  label = "Halden Studio",
-  meta = "©2026 · Oslo / Lisbon",
+  // label = "Halden Studio",
+  // meta = "©2026 · Oslo / Lisbon",
   columns = DEFAULT_COLUMNS,
   backToTop = true,
   preset = "night",
@@ -409,12 +409,12 @@ export default function HalftoneWordmarkFooter({
         ctx.fillStyle =
           k > 0.02
             ? "rgb(" +
-              Math.round(ink[0] + (warm[0] - ink[0]) * k) +
-              "," +
-              Math.round(ink[1] + (warm[1] - ink[1]) * k) +
-              "," +
-              Math.round(ink[2] + (warm[2] - ink[2]) * k) +
-              ")"
+            Math.round(ink[0] + (warm[0] - ink[0]) * k) +
+            "," +
+            Math.round(ink[1] + (warm[1] - ink[1]) * k) +
+            "," +
+            Math.round(ink[2] + (warm[2] - ink[2]) * k) +
+            ")"
             : o.colors.ink;
         ctx.beginPath();
         ctx.arc(x, y, dots[j + 6], 0, 6.2832);
@@ -530,10 +530,10 @@ export default function HalftoneWordmarkFooter({
       <canvas ref={canvasRef} aria-hidden="true" />
       <span className="hwf-sr">{wordmark}</span>
       <div className="hwf-top">
-        <div className="hwf-brand">
+        {/* <div className="hwf-brand">
           <strong>{label}</strong>
           <span>{meta}</span>
-        </div>
+        </div> */}
         {columns.map((col) => (
           <nav className="hwf-col" key={col.title} aria-label={col.title}>
             <h3>{col.title}</h3>

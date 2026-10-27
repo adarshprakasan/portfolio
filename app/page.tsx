@@ -10,7 +10,7 @@ import {
   Mail,
 } from "lucide-react";
 import Character from "@/components/Character";
-import PosterWall from "@/components/PosterWall";
+import PosterCarousel from "@/components/PosterCarousel";
 import FolderShelf from "@/components/FolderShelf";
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import ProjectModal from "@/components/ProjectModal";
@@ -304,8 +304,8 @@ export default function Home() {
                   </div>
                 </div>
               </Reveal>
-              <PosterWall />
             </div>
+            <PosterCarousel />
           </section>
         )}
 
@@ -396,27 +396,27 @@ export default function Home() {
       </main>
 
       {/* ---------------- CONTACT ---------------- */}
-      <section id="contact" className="foot">
+      <section id="contact" className="foot contact-foot" style={{ background: "#1a1a17", color: "#f5f2ea" }}>
         <div className="wrap">
           <Reveal>
-            <span className="label">Available for opportunities</span>
-            <h2 className="display">
+            <span className="label" style={{ color: "#f5f2ea" }}>Available for opportunities</span>
+            <h2 className="display" style={{ color: "#f5f2ea" }}>
               Let&apos;s make something <em>worth remembering.</em>
             </h2>
-            <a className="mail" href="mailto:adarshp2911@gmail.com">
+            <a className="mail" href="mailto:adarshp2911@gmail.com" style={{ color: "#f5f2ea" }}>
               adarshp2911@gmail.com
             </a>
             <div className="socials">
-              <a className="btn btn-ghost" href="https://github.com/adarshprakasan" target="_blank" rel="noopener noreferrer">
+              <a className="btn btn-ghost" href="https://github.com/adarshprakasan" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
                 <Github size={15} /> GitHub
               </a>
-              <a className="btn btn-ghost" href="https://www.linkedin.com/in/adarshprakasan/" target="_blank" rel="noopener noreferrer">
+              <a className="btn btn-ghost" href="https://www.linkedin.com/in/adarshprakasan/" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
                 <Linkedin size={15} /> LinkedIn
               </a>
-              <a className="btn btn-ghost" href="https://www.instagram.com/adarsh.prakasan/" target="_blank" rel="noopener noreferrer">
+              <a className="btn btn-ghost" href="https://www.instagram.com/adarsh.prakasan/" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
                 <Instagram size={15} /> Instagram
               </a>
-              <a className="btn btn-solid" href="mailto:adarshp2911@gmail.com">
+              <a className="btn btn-solid contact-cta" href="mailto:adarshp2911@gmail.com" style={{ background: "#f5f2ea", color: "#1a1a17" }}>
                 <Mail size={15} /> Say hello
               </a>
             </div>
@@ -431,32 +431,8 @@ export default function Home() {
         palette={{ background: "#1a1a17", ink: "#f5f2ea", warm: "#e2573a" }}
         fontFamily={'"Inter", "Helvetica Neue", Arial, system-ui, sans-serif'}
         monoFamily={'"DM Mono", ui-monospace, Menlo, Consolas, monospace'}
-        height="clamp(400px, 44vw, 640px)"
-        columns={[
-          {
-            title: "Index",
-            links: [
-              { label: "Work", href: "#work" },
-              { label: "About", href: "#about" },
-              { label: "Experience", href: "#experience" },
-              { label: "Contact", href: "#contact" },
-            ],
-          },
-          {
-            title: "Elsewhere",
-            links: [
-              { label: "GitHub", href: "https://github.com/adarshprakasan", external: true },
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/adarshprakasan/", external: true },
-              { label: "Instagram", href: "https://www.instagram.com/adarsh.prakasan/", external: true },
-            ],
-          },
-          {
-            title: "Contact",
-            links: [
-              { label: "adarshp2911@gmail.com", href: "mailto:adarshp2911@gmail.com" },
-            ],
-          },
-        ]}
+        height="clamp(300px, 34vw, 500px)"
+        columns={[]}
       />
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />
