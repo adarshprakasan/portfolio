@@ -1,885 +1,504 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  AnimatePresence,
-  motion,
-  useSpring,
-  useMotionValue,
-  type Transition,
-  type Variants,
-} from "motion/react";
-import {
-  ArrowUp,
-  ArrowUpRight,
-  ChevronDown,
-  Github,
-  Instagram,
-  Linkedin,
-  Mail,
-} from "lucide-react";
-import LiquidText from "@/components/LiquidText";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
+import Character from "@/components/Character";
+import PosterCarousel from "@/components/PosterCarousel";
+import FolderShelf from "@/components/FolderShelf";
+import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import ProjectModal from "@/components/ProjectModal";
-import {
-  designerProjects,
-  developerProjects,
-  type Project,
-} from "@/data/projects";
+import Reveal from "@/components/Reveal";
+import { type Project } from "@/data/projects";
 
 type Mode = "designer" | "developer";
 
-const content = {
+const copy = {
   designer: {
-    eyebrow: "DESIGNING EXPERIENCES.",
-    description:
-      "Visual storyteller crafting identities, interfaces and memorable digital experiences.",
-    switchDescription: "Visual storyteller",
-    skills: ["Branding", "UI/UX", "Illustration", "3D & Motion", "Photography"],
-    toolset: [
-      {
-        label: "Identity",
-        tools: ["Brand strategy", "Art direction", "Visual systems"],
-      },
-      {
-        label: "Experience",
-        tools: ["UX research", "Interface design", "Prototyping"],
-      },
-      {
-        label: "Expression",
-        tools: ["Illustration", "3D & motion", "Photography"],
-      },
+    sub: (
+      <>
+        I craft <b>brand identities, interfaces and visual stories</b> —
+        thoughtful, minimal and made to be remembered.
+      </>
+    ),
+    headline: (
+      <>
+        A visual language <em>with purpose.</em>
+      </>
+    ),
+    marquee: [
+      "Brand Identity",
+      "UI / UX Design",
+      "Poster Design",
+      "Editorial",
+      "3D Visualisation",
+      "Motion & Video",
+      "Photography",
     ],
-    experience: [
-      {
-        dates: "2024 — NOW",
-        role: "Independent Designer",
-        place: "Freelance",
-        summary:
-          "Building distinct identities and digital experiences for ideas in motion.",
-      },
-      {
-        dates: "2023 — 2024",
-        role: "UI UX & Graphic Designer",
-        place: "MPro Technologies",
-        summary:
-          "Shaping campaigns, interfaces, and visual systems across culture and technology.",
-      },
-      {
-        dates: "2020 — 2023",
-        role: "Graphic Designer and Video Editor",
-        place: "IEEE SB CETkr",
-        summary:
-          "Creating brand identities, visual designs, and video content for a student-led organization.",
-      },
-    ],
-    work: {
-      headline: "A visual language with purpose.",
-      categories: [
-        "All",
-        "UI/UX",
-        "Graphic Design",
-        "Logo",
-        "3D Works",
-        "Video Editing",
-        "Magazines",
-      ] as const,
-      projects: designerProjects,
-    },
   },
   developer: {
-    eyebrow: "BUILDING DIGITAL PRODUCTS.",
-    description:
-      "Frontend & full-stack developer turning thoughtful design into fast, scalable digital products.",
-    switchDescription: "Problem solver",
-    skills: [
+    sub: (
+      <>
+        I build <b>fast, full-stack products</b> with React, Next.js and the
+        MERN stack — from the first component to the last endpoint.
+      </>
+    ),
+    headline: (
+      <>
+        Products built to <em>solve real problems.</em>
+      </>
+    ),
+    marquee: [
+      "React",
       "Next.js",
       "TypeScript",
-      "React",
       "Node.js",
-      "APIs",
-      "Performance",
+      "Express",
+      "MongoDB",
+      "REST APIs",
     ],
-    toolset: [
-      { label: "Frontend", tools: ["Next.js", "React", "TypeScript"] },
-      { label: "Backend", tools: ["Node.js", "REST APIs", "MongoDB"] },
-      {
-        label: "Quality",
-        tools: ["Accessibility", "Performance", "Responsive UI"],
-      },
-    ],
-    experience: [
-      {
-        dates: "2024 — NOW",
-        role: "Independent Developer",
-        place: "Example Studio",
-        summary:
-          "Creating fast, thoughtful web products from interface through implementation.",
-      },
-      {
-        dates: "2023 — 2024",
-        role: "Frontend Developer",
-        place: "Sample Product Team",
-        summary:
-          "Developing responsive product experiences with reusable systems and clean code.",
-      },
-      {
-        dates: "2022 — 2023",
-        role: "Developer Intern",
-        place: "Placeholder Lab",
-        summary:
-          "Contributing to interface builds, integrations, and the details that improve usability.",
-      },
-    ],
-    work: {
-      headline: "Products built to solve real problems.",
-      projects: developerProjects,
-    },
   },
 } as const;
 
-const transition: Transition = { duration: 0.38, ease: [0.22, 1, 0.36, 1] };
+const principles = [
+  [
+    "See the whole picture",
+    "Brand, interface and product thinking — the details that make an experience feel considered.",
+  ],
+  [
+    "Make it real",
+    "Responsive, accessible interfaces, wired to real back-ends and built to perform.",
+  ],
+  [
+    "Keep it human",
+    "Technology is the medium. Clarity, character and usefulness are the point.",
+  ],
+];
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+const experience = [
+  {
+    when: "2025",
+    role: "MERN Full Stack Training",
+    place: "JSpiders",
+    text: "Intensive full-stack program that led to Hospiq and the attendance management system.",
+  },
+  {
+    when: "Jul 2023 — Jan 2024",
+    role: "UI/UX Developer Intern",
+    place: "MPro Technologies",
+    text: "Designed and built interfaces for a web consulting agency, and created its logo identity.",
+  },
+  {
+    when: "Jan 2019 — Jul 2023",
+    role: "Freelance Designer",
+    place: "Independent",
+    text: "Brand identities, posters, 3D visualisation and video for clients and student communities.",
+  },
+  {
+    when: "3 years",
+    role: "Design Team Lead",
+    place: "IEEE SB CETkr",
+    text: "Led the IEEE design team and served as Webmaster and Electronic Communication Coordinator.",
+  },
+  {
+    when: "2019 — 2023",
+    role: "B.Tech, Computer Science & Engineering",
+    place: "APJ Abdul Kalam Technological University",
+    text: "Where design and code first met. Also took part in IEEE Xtreme 15.0.",
+  },
+];
 
-function lerp(start: number, end: number, progress: number) {
-  return start + (end - start) * progress;
-}
-
-const reveal: Variants = {
-  initial: { opacity: 0, y: 14, filter: "blur(5px)" },
-  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-  exit: { opacity: 0, y: -10, filter: "blur(4px)" },
-};
-
-function getBentoSize(index: number, total: number): string {
-  if (total === 1) return "hero";
-  if (total === 2) return "large";
-  if (total === 3) return ["large", "tall", "tall"][index] ?? "small";
-  const pattern = [
-    "large",
-    "tall",
-    "small",
-    "small",
-    "wide",
-    "medium",
-    "medium",
-    "small",
-  ];
-  return pattern[index % pattern.length] ?? "small";
-}
+const skills = [
+  {
+    title: "Design",
+    accent: "coral",
+    items: [
+      "Figma",
+      "Adobe XD",
+      "Illustrator",
+      "Photoshop",
+      "Brand identity",
+      "Poster & editorial",
+      "Video editing",
+      "Photography",
+    ],
+  },
+  {
+    title: "Develop",
+    accent: "blue",
+    items: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "REST APIs",
+      "Tailwind CSS",
+      "MUI",
+    ],
+  },
+  {
+    title: "Explore",
+    accent: "cyan",
+    items: [
+      "Blender 3D",
+      "AI-assisted design",
+      "Motion",
+      "Python",
+      "Computer vision",
+    ],
+  },
+];
 
 export default function Home() {
   const [mode, setMode] = useState<Mode>("designer");
-  const [isAtBottom, setIsAtBottom] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [switchPlaced, setSwitchPlaced] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [originRect, setOriginRect] = useState<{
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  } | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [activeSection, setActiveSection] = useState("home");
-  const switchSlotRef = useRef<HTMLDivElement>(null);
-  const switchX = useSpring(useMotionValue(0), {
-    stiffness: 320,
-    damping: 32,
-    mass: 0.55,
-  });
-  const switchY = useMotionValue(0);
-  const switchWidth = useSpring(useMotionValue(368), {
-    stiffness: 280,
-    damping: 30,
-    mass: 0.5,
-  });
-  const switchHeight = useSpring(useMotionValue(84), {
-    stiffness: 280,
-    damping: 30,
-    mass: 0.5,
-  });
+  const [selected, setSelected] = useState<Project | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("home");
+
   const designer = mode === "designer";
-  const active = content[mode];
-
-  // Reset category filter when switching modes
-  useEffect(() => {
-    setActiveCategory("All");
-  }, [mode]);
-
-  const openProject = useCallback((project: Project, target: HTMLElement) => {
-    const rect = target.getBoundingClientRect();
-    setOriginRect({
-      x: rect.left,
-      y: rect.top,
-      w: rect.width,
-      h: rect.height,
-    });
-    setSelectedProject(project);
-  }, []);
-
-  const closeProject = useCallback(() => {
-    setSelectedProject(null);
-    setOriginRect(null);
-  }, []);
-
-  // Filtered projects for designer mode
-  const designerWork = content.designer.work;
-  const filteredProjects = designer
-    ? activeCategory === "All"
-      ? designerWork.projects
-      : designerWork.projects.filter((p) => p.designCategory === activeCategory)
-    : active.work.projects;
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight;
-
-      // Hide indicator when within 100px of the page bottom
-      if (windowHeight + scrollY >= documentHeight - 100) {
-        setIsAtBottom(true);
-      } else {
-        setIsAtBottom(false);
-      }
-
-      // Show scroll to top button after scrolling down 300px
-      if (scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const ids = ["home", "about", "work", "skills", "experience"];
-    const observer = new IntersectionObserver(
+    const ids = ["home", "work", "about", "experience", "contact"];
+    const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target.id) setActiveSection(visible.target.id);
+        const v = entries.find((e) => e.isIntersecting);
+        if (v) setActive(v.target.id);
       },
-      { rootMargin: "-35% 0px -45% 0px", threshold: [0.15, 0.4, 0.7] },
+      { rootMargin: "-40% 0px -50% 0px" },
     );
-
     ids.forEach((id) => {
-      const section = document.getElementById(id);
-      if (section) observer.observe(section);
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
     });
-
-    return () => observer.disconnect();
+    return () => io.disconnect();
   }, []);
 
-  useLayoutEffect(() => {
-    const slot = switchSlotRef.current;
-    if (!slot) return;
+  const showPosters = designer;
 
-    let frame = 0;
-
-    const updateSwitch = () => {
-      const rect = slot.getBoundingClientRect();
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      const documentTop = rect.top + window.scrollY;
-
-      const compactWidth = Math.min(
-        228,
-        Math.max(168, window.innerWidth - (window.innerWidth <= 520 ? 30 : 56)),
-      );
-      const compactHeight = window.innerWidth <= 520 ? 44 : 48;
-      const gutter = window.innerWidth <= 520 ? 15 : 28;
-      const navWidth = Math.min(1420, window.innerWidth - gutter * 2);
-      const navLeft = (window.innerWidth - navWidth) / 2;
-      const endX = navLeft + navWidth - compactWidth;
-      const dockY = Math.max(10, (90 - compactHeight) / 2);
-      const travel = Math.max(0, documentTop - dockY);
-      const dockRange = Math.min(180, Math.max(120, window.innerHeight * 0.16));
-      const dockProgress = reducedMotion
-        ? window.scrollY > travel
-          ? 1
-          : 0
-        : clamp((window.scrollY - travel) / dockRange, 0, 1);
-      const easedDockProgress = 1 - (1 - dockProgress) ** 3;
-      const naturalY = documentTop - window.scrollY;
-      const currentWidth = lerp(rect.width, compactWidth, easedDockProgress);
-      const currentHeight = lerp(rect.height, compactHeight, easedDockProgress);
-
-      switchX.set(lerp(rect.left, endX, easedDockProgress));
-      switchY.set(dockProgress > 0 ? dockY : naturalY);
-      switchWidth.set(currentWidth);
-      switchHeight.set(currentHeight);
-      const site = slot.closest(".site");
-      if (site instanceof HTMLElement) {
-        site.style.setProperty("--switch-dock", String(easedDockProgress));
-      }
-    };
-
-    const requestUpdate = () => {
-      if (!frame) {
-        frame = window.requestAnimationFrame(() => {
-          try {
-            updateSwitch();
-          } finally {
-            frame = 0;
-          }
-        });
-      }
-    };
-
-    updateSwitch();
-    setSwitchPlaced(true);
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    const observer = new ResizeObserver(requestUpdate);
-    observer.observe(slot);
-
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      observer.disconnect();
-    };
-  }, [switchHeight, switchWidth, switchX, switchY]);
+  const switchMode = (m: Mode) => {
+    setMode(m);
+  };
 
   return (
     <>
-      <main className={`site mode-${mode}`}>
-        <div className="ambient ambient-left" />
-        <div className="ambient ambient-right" />
-        <div className="atmosphere-ring" />
-        <div className="grid-floor" />
-
-        <nav className="nav">
-          <a className="monogram" href="#home" aria-label="Go to home">
-            AP
+      <header className={`nav${scrolled ? " scrolled" : ""}`}>
+        <div className="wrap nav-in">
+          <a href="#home" className="mono-mark" aria-label="Home">
+            Adarsh
+            <i />
           </a>
-          <div className="nav-links">
-            {["Work", "About", "Experience"].map((item) => (
-              <a
-                key={`nav-${item}`}
-                className={activeSection === item.toLowerCase() ? "active" : ""}
-                href={`#${item.toLowerCase()}`}
-              >
-                {item}
+          <nav className="nav-links" aria-label="Primary">
+            {["work", "about", "experience", "contact"].map((id) => (
+              <a key={id} href={`#${id}`} className={active === id ? "on" : ""}>
+                {id[0].toUpperCase() + id.slice(1)}
               </a>
             ))}
-          </div>
-          <div className="nav-actions">
+          </nav>
+          <div className="nav-cta">
             <a
-              className="resume-link"
+              className="btn btn-ghost"
               href={designer ? "/resume_des.pdf" : "/resume_dev.pdf"}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Resume <ArrowUpRight size={13} aria-hidden="true" />
+              Resume <ArrowUpRight size={14} />
             </a>
-            <a className="connect" href="#contact">
-              Let&apos;s talk <ArrowUpRight size={15} aria-hidden="true" />
+            <a className="btn btn-solid" href="#contact">
+              Let&apos;s talk
             </a>
           </div>
-        </nav>
+        </div>
+      </header>
 
+      <main>
+        {/* ---------------- HERO ---------------- */}
         <section id="home" className="hero">
-          <div className="side-rail left-rail" aria-label={`${mode} skills`}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`rail-${mode}`}
-                className="rail-list"
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                variants={reveal}
-                transition={transition}
+          <div className="wrap hero-grid">
+            <div>
+              <motion.span
+                className="status"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                {active.skills.map((skill, index) => (
-                  <motion.div
-                    key={`${mode}-skill-${index}`}
-                    className="rail-item"
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ ...transition, delay: index * 0.055 }}
-                  >
-                    <span className="rail-dot">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span>{skill}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                <span className="pulse" /> Available now · Dubai, UAE
+              </motion.span>
 
-          <div className="hero-copy">
-            <div className="identity">
-              <span className="designer-text">Designer</span>
-              <span className="cross">×</span>
-              <span className="developer-text">Developer</span>
-            </div>
-            <motion.h1 layout transition={transition}>
-              <LiquidText>ADARSH</LiquidText>
-              <br />
-              <LiquidText>PRAKASAN</LiquidText>
-            </motion.h1>
-            {/* <AnimatePresence mode="wait">
-            <motion.p
-              key={`eyebrow-${mode}`}
-              className="eyebrow"
-              variants={reveal}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-            >
-              {active.eyebrow}
-            </motion.p>
-          </AnimatePresence> */}
-
-            <div
-              className="availability"
-              aria-label="Available for opportunities"
-            >
-              <span className="availability-dot" aria-hidden="true" />
-              Available for opportunities
-            </div>
-
-            <div className="switch-slot" ref={switchSlotRef}>
-              <motion.section
-                className={`switch-wrap${switchPlaced ? " is-floating" : ""}`}
-                aria-label="Profile mode switch"
-                style={
-                  switchPlaced
-                    ? {
-                        x: switchX,
-                        y: switchY,
-                        width: switchWidth,
-                        height: switchHeight,
-                      }
-                    : undefined
-                }
-              >
-                <div
-                  className="mode-switch"
-                  role="tablist"
-                  aria-label="Choose portfolio view"
-                >
-                  <motion.div
-                    className="switch-knob"
-                    animate={{ x: designer ? "0%" : "100%" }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 310,
-                      damping: 28,
-                      mass: 0.75,
+              <h1 className="display">
+                {["Adarsh", "Prakasan"].map((w, i) => (
+                  <motion.span
+                    key={w}
+                    style={{
+                      display: "block",
+                      fontStyle: i ? "italic" : "normal",
                     }}
-                    aria-hidden="true"
-                  />
-                  {(["designer", "developer"] as const).map((option) => {
-                    const selected = mode === option;
-                    return (
-                      <button
-                        key={`mode-${option}`}
-                        type="button"
-                        role="tab"
-                        aria-selected={selected}
-                        aria-controls="mode-preview"
-                        className={
-                          selected ? `selected ${option}-selected` : ""
-                        }
-                        onClick={() => setMode(option)}
-                      >
-                        <strong>{option.toUpperCase()}</strong>
-                        <span>{content[option].switchDescription}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                {/* <p className="switch-hint">Switch between worlds</p> */}
-              </motion.section>
-            </div>
-
-            {/* <AnimatePresence mode="wait">
-            <motion.p
-              key={`description-${mode}`}
-              className="subcopy"
-              variants={reveal}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-            >
-              {active.description}
-            </motion.p>
-          </AnimatePresence> */}
-          </div>
-
-          <div className="visual-card" id="mode-preview" role="tabpanel">
-            <motion.div
-              className="orb"
-              animate={{
-                rotate: designer ? 360 : -360,
-                scale: designer ? 1 : 1.12,
-              }}
-              transition={{
-                rotate: { duration: 18, repeat: Infinity, ease: "linear" },
-                scale: transition,
-              }}
-            />
-            <AnimatePresence mode="wait">
-              {designer ? (
-                <motion.div
-                  key="designer-visual"
-                  className="visual-scene designer-scene"
-                  initial={{ opacity: 0, scale: 0.92, rotate: -3 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 1.05, rotate: 3 }}
-                  transition={transition}
-                >
-                  <div className="poster">
-                    <span>
-                      BEYOND
-                      <br />
-                      DESIGN.
-                    </span>
-                    <small>
-                      We don&apos;t just make it look good.
-                      <br />
-                      We make it meaningful.
-                    </small>
-                  </div>
-                  <div className="brush" />
-                  <div className="a-mark">A</div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="developer-visual"
-                  className="visual-scene developer-scene"
-                  initial={{ opacity: 0, scale: 0.94, x: 20 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, x: -20 }}
-                  transition={transition}
-                >
-                  <div className="code-window">
-                    <div className="window-bar">
-                      <i />
-                      <i />
-                      <i />
-                      <span>adarsh.tsx</span>
-                    </div>
-                    <pre>{`const Adarsh = {\n  role: "Designer × Developer",\n  focus: ["UX", "React", "Next.js"],\n  mindset: "Build beautifully."\n};`}</pre>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </section>
-
-        <section id="work" className="bento-section">
-          <div className="bento-header">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`work-heading-${mode}`}
-                variants={reveal}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={transition}
-              >
-                <p className="section-label">SELECTED WORKS</p>
-                <h2 className="bento-headline">{active.work.headline}</h2>
-              </motion.div>
-            </AnimatePresence>
-
-            {designer && (
-              <div className="work-category-bar">
-                {designerWork.categories.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    aria-pressed={activeCategory === cat}
-                    className={`work-cat-btn${activeCategory === cat ? " work-cat-btn--active" : ""}`}
-                    onClick={() => setActiveCategory(cat)}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.1 + i * 0.12,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
-                    {cat}
+                    {w}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={mode}
+                  className="hero-sub"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {copy[mode].sub}
+                </motion.p>
+              </AnimatePresence>
+
+              <div
+                className="toggle"
+                data-mode={mode}
+                role="tablist"
+                aria-label="Choose a view"
+              >
+                <span className="knob" aria-hidden="true" />
+                {(["designer", "developer"] as const).map((m) => (
+                  <button
+                    key={m}
+                    role="tab"
+                    aria-selected={mode === m}
+                    className={mode === m ? "on" : ""}
+                    onClick={() => switchMode(m)}
+                  >
+                    {m === "designer" ? "Designer" : "Developer"}
                   </button>
                 ))}
               </div>
-            )}
+            </div>
+
+            <div className="arch" data-mode={mode}>
+              <Character mode={mode} />
+            </div>
           </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`bento-${mode}-${activeCategory}`}
-              className="bento-grid"
-              variants={reveal}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-            >
-              {filteredProjects.length === 0 && (
-                <p className="bento-empty">No projects in this category yet.</p>
-              )}
-              {filteredProjects.map((project, index) => {
-                const size = getBentoSize(index, filteredProjects.length);
-                return (
-                  <motion.article
-                    key={`${mode}-bento-${project.number}`}
-                    className={`bento-tile bento-${size} project-${project.accent}`}
-                    data-cursor
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Open ${project.title}`}
-                    initial={{ opacity: 0, scale: 0.94, y: 14 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ ...transition, delay: index * 0.06 }}
-                    onClick={(e) => openProject(project, e.currentTarget)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        openProject(project, e.currentTarget);
-                      }
-                    }}
-                  >
-                    {/* Decorative background orb */}
-                    <div className="bento-orb" aria-hidden="true" />
-
-                    {/* Large faded watermark glyph */}
-                    <b className="bento-glyph" aria-hidden="true">
-                      {project.title.split(" ")[0]}
-                    </b>
-
-                    {/* Number badge */}
-                    <span className="bento-num">{project.number}</span>
-
-                    {/* Arrow icon */}
-                    <div className="bento-arrow" aria-hidden="true">
-                      <ArrowUpRight size={13} />
-                    </div>
-
-                    {/* Bottom info strip */}
-                    <div className="bento-info">
-                      <span className="bento-cat-tag">{project.category}</span>
-                      <h3 className="bento-title">{project.title}</h3>
-                    </div>
-                  </motion.article>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
         </section>
 
-        <section id="about" className="about-section">
-          <div className="about-intro">
-            <p className="section-label">THE HYBRID ADVANTAGE</p>
-            <h2>
-              Designed with feeling.
-              <br />
-              Built with intention.
-            </h2>
-            <p>
-              I bring a designer&apos;s eye and a developer&apos;s discipline to
-              the same table—so the idea stays intact from the first sketch to
-              the final interaction.
-            </p>
-          </div>
-          <div className="about-details">
+        {/* ---------------- MARQUEE ---------------- */}
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-track">
             {[
-              [
-                "01",
-                "See the whole picture",
-                "Strategy, visual identity, product thinking, and the details that make an experience feel considered.",
-              ],
-              [
-                "02",
-                "Make it real",
-                "Production-ready interfaces that are responsive, accessible, and built to perform.",
-              ],
-              [
-                "03",
-                "Keep it human",
-                "Technology is the medium. Clarity, character, and a useful experience are the point.",
-              ],
-            ].map(([number, title, description]) => (
-              <article key={`principle-${number}`} className="principle">
-                <span>{number}</span>
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+            ].map((t, i) => (
+              <span key={i}>{t}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* ---------------- WORK ---------------- */}
+        <section id="work" className="block">
+          <div className="wrap">
+            <Reveal>
+              <div className="sec-head">
                 <div>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
+                  <span className="label">
+                    Selected work ·{" "}
+                    {designer ? "five folders" : "three folders"}
+                  </span>
+                  <h2 className="display">{copy[mode].headline}</h2>
                 </div>
-              </article>
+                <p className="label" style={{ maxWidth: 240 }}>
+                  {/* Hover to lean · click a folder to open · pick a file to dive in */}
+                </p>
+              </div>
+            </Reveal>
+            <FolderShelf mode={mode} onSelect={setSelected} />
+          </div>
+        </section>
+
+        {/* ---------------- POSTERS ---------------- */}
+        {showPosters && (
+          <section className="block poster-sec" aria-labelledby="posters-h">
+            <div className="wrap">
+              <Reveal>
+                <div className="sec-head">
+                  <div>
+                    <span className="label">Poster works · 2020–2024</span>
+                    <h2 id="posters-h" className="display">
+                      Type, colour <em>& composition.</em>
+                    </h2>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+            <div className="poster-stage">
+              <PosterCarousel />
+            </div>
+          </section>
+        )}
+
+        {/* ---------------- ABOUT ---------------- */}
+        <section id="about" className="block about" style={{ marginTop: 20 }}>
+          <div className="wrap about-grid">
+            <Reveal>
+              <span className="label">The hybrid advantage</span>
+              <h2 className="display">
+                Designed with feeling. <em>Built with intention.</em>
+              </h2>
+              <p className="lead">
+                I&apos;m a designer with a computer science degree. I bring a
+                designer&apos;s eye and a developer&apos;s discipline to the
+                same table — so an idea stays intact from the first sketch to
+                the final interaction.
+              </p>
+              <div className="facts">
+                <span>Dubai, UAE</span>
+                <span>English · Malayalam · Hindi</span>
+                <span>Open to on-site / hybrid</span>
+              </div>
+            </Reveal>
+            <div>
+              {principles.map(([t, d], i) => (
+                <Reveal key={t} delay={i * 0.08}>
+                  <article className="principle">
+                    <span className="n">0{i + 1}</span>
+                    <div>
+                      <h3>{t}</h3>
+                      <p>{d}</p>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- EXPERIENCE ---------------- */}
+        <section id="experience" className="block">
+          <div className="wrap">
+            <Reveal>
+              <div className="sec-head">
+                <div>
+                  <span className="label">Experience & education</span>
+                  <h2 className="display">
+                    Good work <em>leaves a trace.</em>
+                  </h2>
+                </div>
+              </div>
+            </Reveal>
+            {experience.map((e, i) => (
+              <Reveal key={e.role} delay={i * 0.05}>
+                <article className="row">
+                  <span className="when">{e.when}</span>
+                  <h3>
+                    {e.role}
+                    <small>{e.place}</small>
+                  </h3>
+                  <p>{e.text}</p>
+                </article>
+              </Reveal>
             ))}
           </div>
         </section>
 
-        <section id="experience" className="experience-section">
-          <div className="experience-heading">
-            <p className="section-label">SELECTED EXPERIENCE</p>
-            <h2>
-              Good work leaves
-              <br />a trace.
-            </h2>
-            <span>
-              Placeholder entries — replace with your real experience.
-            </span>
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`experience-${mode}`}
-              className="experience-list"
-              variants={reveal}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-            >
-              {active.experience.map((entry, index) => (
-                <motion.article
-                  key={`${mode}-experience-${index}`}
-                  className="experience-item"
-                  initial={{ opacity: 0, x: 18 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ ...transition, delay: index * 0.09 }}
-                >
-                  <span className="experience-date">{entry.dates}</span>
-                  <div>
-                    <h3>{entry.role}</h3>
-                    <p className="experience-place">{entry.place}</p>
-                    <p>{entry.summary}</p>
-                  </div>
-                  <ArrowUpRight size={17} aria-hidden="true" />
-                </motion.article>
+        {/* ---------------- SKILLS ---------------- */}
+        <section className="block" style={{ paddingTop: 0 }}>
+          <div className="wrap">
+            <div className="skill-cols">
+              {skills.map((s, i) => (
+                <Reveal key={s.title} delay={i * 0.08}>
+                  <article className={`skill t-${s.accent}`}>
+                    <span className="label">0{i + 1}</span>
+                    <h3>{s.title}</h3>
+                    <ul>
+                      {s.items.map((it) => (
+                        <li key={it}>{it}</li>
+                      ))}
+                    </ul>
+                  </article>
+                </Reveal>
               ))}
-            </motion.div>
-          </AnimatePresence>
+            </div>
+          </div>
         </section>
-
-        <section id="skills" className="skills-section">
-          <div className="skills-heading">
-            <p className="section-label">SKILLS &amp; TOOLS</p>
-            <h2>
-              Two disciplines.
-              <br />
-              One standard.
-            </h2>
-            <p>
-              Every skill is in service of making the final experience more
-              clear, useful, and memorable.
-            </p>
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`toolset-${mode}`}
-              className="toolset"
-              variants={reveal}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={transition}
-            >
-              {active.toolset.map((group, index) => (
-                <article
-                  key={`${mode}-tool-group-${group.label}`}
-                  className="tool-group"
-                >
-                  <div className="tool-group-label">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <h3>{group.label}</h3>
-                  </div>
-                  <ul>
-                    {group.tools.map((tool) => (
-                      <li key={`${mode}-${group.label}-${tool}`}>{tool}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        </section>
-
-        <footer id="contact" className="footer">
-          <div>
-            <span className="section-label">AVAILABLE FOR OPPORTUNITIES</span>
-            <h2>
-              {/* Let&apos;s build something */}
-              Building something
-              <br />
-              worth remembering.
-            </h2>
-          </div>
-          <div className="footer-links">
-            <a href="mailto:adarshp2911@gmail.com">
-              <Mail size={17} /> Email me
-            </a>
-            <a href="https://github.com/adarshprakasan">
-              <Github size={17} /> GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/adarshprakasan/">
-              <Linkedin size={17} /> LinkedIn
-            </a>
-            <a href="https://www.instagram.com/adarsh.prakasan/">
-              <Instagram size={17} /> Instagram
-            </a>
-          </div>
-          <p className="copyright">
-            © 2026 Adarsh Prakasan. All rights reserved.
-          </p>
-        </footer>
-        <AnimatePresence>
-          {!isAtBottom && (
-            <motion.div
-              className="scroll"
-              initial={{ opacity: 0, x: "-50%", y: 10 }}
-              animate={{ opacity: 1, x: "-50%", y: 0 }}
-              exit={{ opacity: 0, x: "-50%", y: 10 }}
-              transition={{ duration: 0.25 }}
-            >
-              <span>SCROLL TO EXPLORE</span>
-              <ChevronDown size={16} />
-            </motion.div>
-          )}
-          {showScrollTop && (
-            <motion.button
-              type="button"
-              className="scroll-top-btn"
-              onClick={scrollToTop}
-              aria-label="Scroll to top"
-              initial={{ opacity: 0, scale: 0.7, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.7, y: 12 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <ArrowUp size={20} />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
-        <ProjectModal
-          project={selectedProject}
-          originRect={originRect}
-          onClose={closeProject}
-        />
       </main>
+
+      {/* ---------------- CONTACT ---------------- */}
+      <section id="contact" className="foot">
+        <div className="wrap">
+          <Reveal>
+            <span className="label">Available for opportunities</span>
+            <h2 className="display">
+              Let&apos;s make something <em>worth remembering.</em>
+            </h2>
+            <a className="mail" href="mailto:adarshp2911@gmail.com">
+              adarshp2911@gmail.com
+            </a>
+            <div className="socials">
+              <a
+                className="pill"
+                style={{ "--tint": "var(--lilac)" } as React.CSSProperties}
+                href="https://github.com/adarshprakasan"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github size={15} /> GitHub{" "}
+                <ArrowUpRight className="arr" size={14} />
+              </a>
+              <a
+                className="pill"
+                style={{ "--tint": "var(--blue)" } as React.CSSProperties}
+                href="https://www.linkedin.com/in/adarshprakasan/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin size={15} /> LinkedIn{" "}
+                <ArrowUpRight className="arr" size={14} />
+              </a>
+              <a
+                className="pill"
+                style={{ "--tint": "var(--cyan)" } as React.CSSProperties}
+                href="https://www.instagram.com/adarsh.prakasan/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Instagram size={15} /> Instagram{" "}
+                <ArrowUpRight className="arr" size={14} />
+              </a>
+              <a
+                className="pill solid"
+                style={{ "--tint": "var(--coral)" } as React.CSSProperties}
+                href="mailto:adarshp2911@gmail.com"
+              >
+                <Mail size={15} /> Say hello{" "}
+                <ArrowUpRight className="arr" size={14} />
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <HalftoneWordmarkFooter
+        wordmark="adarsh"
+        palette={{ background: "#1a1a17", ink: "#f5f2ea", warm: "#e2573a" }}
+        fontFamily={'"Inter", "Helvetica Neue", Arial, system-ui, sans-serif'}
+        monoFamily={'"DM Mono", ui-monospace, Menlo, Consolas, monospace'}
+        height="clamp(360px, 34vw, 500px)"
+      />
+
+      <ProjectModal project={selected} onClose={() => setSelected(null)} />
     </>
   );
 }
