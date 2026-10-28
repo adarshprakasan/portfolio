@@ -894,8 +894,39 @@ section.block {
   border-color: var(--accent);
   opacity: 1;
 }
+.thumb-nav-btn {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  opacity: 0.65;
+  transition: opacity 0.2s, color 0.2s;
+}
+.thumb-nav-btn:hover:not(:disabled) {
+  color: var(--accent);
+  opacity: 1;
+}
+.thumb-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
 .info {
   padding: clamp(24px, 3vw, 44px);
+}
+.stage-tags {
+  margin: 20px auto 0;
+  width: min(100%, 560px);
+}
+.stage-tags h4 {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 .info h2 {
   font-size: clamp(36px, 4.4vw, 56px);

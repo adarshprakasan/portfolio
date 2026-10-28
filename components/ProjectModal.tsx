@@ -36,7 +36,10 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
   const media = project.media ?? [];
   const current = media[index];
   const hasLive = project.liveUrl && project.liveUrl !== "#";
+  const hasFigma = hasLive && project.liveUrl!.includes("figma.com");
   const hasGit = project.githubUrl && project.githubUrl !== "#";
+  const thumbnailStart = Math.max(0, Math.min(index - 1, media.length - 3));
+  const visibleThumbnails = media.slice(thumbnailStart, thumbnailStart + 3);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -134,23 +137,18 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                   position: "relative",
                   display: "flex",
                   alignItems: "center",
-                  width: "100%",
-                  maxWidth: "var(--stage-width, fit-content)",
+                  width: "min(100%, 320px)",
                   margin: "0 auto",
                 }}
               >
                 <button
-                  className="lb-btn"
-                  style={{
-                    left: 0,
-                    position: "absolute",
-                    zIndex: 10,
-                    opacity: index === 0 ? 0.5 : 1,
-                  }}
+                  type="button"
+                  className="thumb-nav-btn"
+                  aria-label="Previous image"
                   onClick={() => setIndex((i) => Math.max(0, i - 1))}
                   disabled={index === 0}
                 >
-                  <ChevronLeft size={20} />
+                  <ChevronLeft size={16} aria-hidden="true" />
                 </button>
                 <div
                   className="thumbs"
@@ -160,16 +158,18 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                     justifyContent: "center",
                     gap: "8px",
                     flex: 1,
-                    padding: "0 40px",
                   }}
                 >
-                  {media.map((m, i) => (
+                  {visibleThumbnails.map((m, i) => (
                     <button
                       key={m.src}
-                      className={i === index ? "on" : ""}
-                      onClick={() => setIndex(i)}
-                      aria-label={`Show item ${i + 1}`}
-                      style={{ flexShrink: 0, opacity: i === index ? 1 : 0.6 }}
+                      className={thumbnailStart + i === index ? "on" : ""}
+                      onClick={() => setIndex(thumbnailStart + i)}
+                      aria-label={`Show item ${thumbnailStart + i + 1}`}
+                      style={{
+                        flexShrink: 0,
+                        opacity: thumbnailStart + i === index ? 1 : 0.6,
+                      }}
                     >
                       {m.type === "image" ? (
                         <Image
@@ -188,20 +188,37 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                   ))}
                 </div>
                 <button
-                  className="lb-btn"
-                  style={{
-                    right: 0,
-                    position: "absolute",
-                    zIndex: 10,
-                    opacity: index === media.length - 1 ? 0.5 : 1,
-                  }}
+                  type="button"
+                  className="thumb-nav-btn"
+                  aria-label="Next image"
                   onClick={() =>
                     setIndex((i) => Math.min(media.length - 1, i + 1))
                   }
                   disabled={index === media.length - 1}
                 >
-                  <ChevronRight size={20} />
+                  <ChevronRight size={16} aria-hidden="true" />
                 </button>
+              </div>
+            )}
+
+            <div className="stage-tags">
+              <h4>Tools &amp; tags</h4>
+              <div className="tags">
+                {project.tags.map((t) => (
+                  <span key={t}>{t}</span>
+                ))}
+              </div>
+            </div>
+            {hasFigma && (
+              <div className="actions stage-actions">
+                <a
+                  className="btn btn-solid"
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View in Figma <ArrowUpRight size={15} />
+                </a>
               </div>
             )}
           </div>
@@ -231,26 +248,16 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
               ))}
             </ul>
 
-            <h4>Tools & tags</h4>
-            <div className="tags">
-              {project.tags.map((t) => (
-                <span key={t}>{t}</span>
-              ))}
-            </div>
-
-            {(hasLive || hasGit) && (
+            {((hasLive && !hasFigma) || hasGit) && (
               <div className="actions">
-                {hasLive && (
+                {hasLive && !hasFigma && (
                   <a
                     className="btn btn-solid"
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {project.liveUrl!.includes("figma.com")
-                      ? "View in Figma"
-                      : "Live site"}
-                    <ArrowUpRight size={15} />
+                    Live site <ArrowUpRight size={15} />
                   </a>
                 )}
                 {hasGit && (
