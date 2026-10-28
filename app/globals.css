@@ -351,39 +351,7 @@ video {
   }
 }
 
-/* ---------- marquee ---------- */
-.marquee {
-  border-block: 1px solid var(--line);
-  overflow: hidden;
-  padding: 20px 0;
-  background: var(--paper);
-}
-.marquee-track {
-  display: flex;
-  gap: 48px;
-  width: max-content;
-  animation: slide 38s linear infinite;
-}
-.marquee span {
-  font-family: var(--serif);
-  font-size: clamp(26px, 3.4vw, 42px);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 48px;
-}
-.marquee span::after {
-  content: "✦";
-  color: var(--accent);
-  font-size: 0.55em;
-}
-@keyframes slide {
-  to {
-    transform: translateX(-50%);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track,
   .float,
   .bob,
   .blink,
@@ -436,6 +404,17 @@ section.block {
 }
 
 /* work grid */
+#work .sec-head {
+  margin-bottom: 12px;
+}
+#work .shelf {
+  padding-top: 36px;
+}
+@media (max-width: 700px) {
+  #work .shelf {
+    padding-top: 32px;
+  }
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -1026,14 +1005,6 @@ section.block {
     gap: 110px 0;
     padding-top: 80px;
   }
-}
-
-/* poster carousel */
-.poster-sec {
-  padding-bottom: clamp(40px, 6vw, 90px);
-}
-.poster-stage {
-  height: clamp(520px, 82vh, 780px);
 }
 
 /* contact pills: ink outline, pastel fill sweeps in on hover */

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import Character from "@/components/Character";
-import PosterCarousel from "@/components/PosterCarousel";
 import FolderShelf from "@/components/FolderShelf";
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import ProjectModal from "@/components/ProjectModal";
@@ -26,15 +25,6 @@ const copy = {
         A visual language <em>with purpose.</em>
       </>
     ),
-    marquee: [
-      "Brand Identity",
-      "UI / UX Design",
-      "Poster Design",
-      "Editorial",
-      "3D Visualisation",
-      "Motion & Video",
-      "Photography",
-    ],
   },
   developer: {
     sub: (
@@ -48,15 +38,6 @@ const copy = {
         Products built to <em>solve real problems.</em>
       </>
     ),
-    marquee: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "Express",
-      "MongoDB",
-      "REST APIs",
-    ],
   },
 } as const;
 
@@ -182,8 +163,6 @@ export default function Home() {
     return () => io.disconnect();
   }, []);
 
-  const showPosters = designer;
-
   const switchMode = (m: Mode) => {
     setMode(m);
   };
@@ -293,61 +272,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------- MARQUEE ---------------- */}
-        <div className="marquee" aria-hidden="true">
-          <div className="marquee-track">
-            {[
-              ...copy[mode].marquee,
-              ...copy[mode].marquee,
-              ...copy[mode].marquee,
-              ...copy[mode].marquee,
-            ].map((t, i) => (
-              <span key={i}>{t}</span>
-            ))}
-          </div>
-        </div>
-
         {/* ---------------- WORK ---------------- */}
         <section id="work" className="block">
           <div className="wrap">
             <Reveal>
               <div className="sec-head">
                 <div>
-                  <span className="label">
-                    Selected work ·{" "}
-                    {designer ? "five folders" : "three folders"}
-                  </span>
-                  <h2 className="display">{copy[mode].headline}</h2>
+                  <span className="label">Selected works</span>
                 </div>
-                <p className="label" style={{ maxWidth: 240 }}>
-                  {/* Hover to lean · click a folder to open · pick a file to dive in */}
-                </p>
               </div>
             </Reveal>
             <FolderShelf mode={mode} onSelect={setSelected} />
           </div>
         </section>
-
-        {/* ---------------- POSTERS ---------------- */}
-        {showPosters && (
-          <section className="block poster-sec" aria-labelledby="posters-h">
-            <div className="wrap">
-              <Reveal>
-                <div className="sec-head">
-                  <div>
-                    <span className="label">Poster works · 2020–2024</span>
-                    <h2 id="posters-h" className="display">
-                      Type, colour <em>& composition.</em>
-                    </h2>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-            <div className="poster-stage">
-              <PosterCarousel />
-            </div>
-          </section>
-        )}
 
         {/* ---------------- ABOUT ---------------- */}
         <section id="about" className="block about" style={{ marginTop: 20 }}>
