@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, FileText, Github, Play, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Github,
+  Play,
+  X,
+} from "lucide-react";
 import { type Project } from "@/data/projects";
 import ProjectGlyph from "./ProjectGlyph";
 
@@ -16,7 +24,9 @@ export default function ProjectModal({
 }) {
   return (
     <AnimatePresence>
-      {project && <Body key={project.title} project={project} onClose={onClose} />}
+      {project && (
+        <Body key={project.title} project={project} onClose={onClose} />
+      )}
     </AnimatePresence>
   );
 }
@@ -31,7 +41,8 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setIndex((i) => Math.min(i + 1, media.length - 1));
+      if (e.key === "ArrowRight")
+        setIndex((i) => Math.min(i + 1, media.length - 1));
       if (e.key === "ArrowLeft") setIndex((i) => Math.max(i - 1, 0));
     };
     const prev = document.body.style.overflow;
@@ -72,7 +83,8 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
               className={`stage-view t-${project.accent}`}
               id="stage-view-canvas"
               style={{
-                aspectRatio: project.designCategory === "Graphic Design" ? "3/4" : "16/10",
+                aspectRatio:
+                  project.designCategory === "Graphic Design" ? "3/4" : "16/10",
                 maxHeight: "min(75vh, 800px)",
                 width: "fit-content",
                 margin: "0 auto",
@@ -87,68 +99,111 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                 <img
                   src={current.src}
                   alt={`${project.title} — ${current.filename}`}
-                  style={{ width: "auto", height: "100%", maxHeight: "100%", display: "block" }}
+                  style={{
+                    width: "auto",
+                    height: "100%",
+                    maxHeight: "100%",
+                    display: "block",
+                  }}
                 />
               )}
               {current?.type === "video" && (
-                <video src={current.src} controls playsInline preload="metadata" />
+                <video
+                  src={current.src}
+                  controls
+                  playsInline
+                  preload="metadata"
+                />
               )}
               {current?.type === "pdf" && (
-                <a className="btn btn-solid" href={current.src} target="_blank" rel="noopener noreferrer">
+                <a
+                  className="btn btn-solid"
+                  href={current.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <FileText size={16} /> Open the PDF <ArrowUpRight size={15} />
                 </a>
               )}
             </div>
 
-              {media.length > 1 && (
-                <div
-                  className="thumbs-wrapper"
+            {media.length > 1 && (
+              <div
+                className="thumbs-wrapper"
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  maxWidth: "var(--stage-width, fit-content)",
+                  margin: "0 auto",
+                }}
+              >
+                <button
+                  className="lb-btn"
                   style={{
-                    position: "relative",
+                    left: 0,
+                    position: "absolute",
+                    zIndex: 10,
+                    opacity: index === 0 ? 0.5 : 1,
+                  }}
+                  onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                  disabled={index === 0}
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <div
+                  className="thumbs"
+                  style={{
+                    overflowX: "hidden",
                     display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    maxWidth: "var(--stage-width, fit-content)",
-                    margin: "0 auto"
+                    justifyContent: "center",
+                    gap: "8px",
+                    flex: 1,
+                    padding: "0 40px",
                   }}
                 >
-                  <button
-                    className="lb-btn"
-                    style={{ left: 0, position: "absolute", zIndex: 10, opacity: index === 0 ? 0.5 : 1 }}
-                    onClick={() => setIndex((i) => Math.max(0, i - 1))}
-                    disabled={index === 0}
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                  <div className="thumbs" style={{ overflowX: "hidden", display: "flex", justifyContent: "center", gap: "8px", flex: 1, padding: "0 40px" }}>
-                    {media.map((m, i) => (
-                      <button
-                        key={m.src}
-                        className={i === index ? "on" : ""}
-                        onClick={() => setIndex(i)}
-                        aria-label={`Show item ${i + 1}`}
-                        style={{ flexShrink: 0, opacity: i === index ? 1 : 0.6 }}
-                      >
-                        {m.type === "image" ? (
-                          <Image src={m.src} alt="" fill sizes="72px" style={{ objectFit: "cover" }} />
-                        ) : m.type === "video" ? (
-                          <Play size={16} />
-                        ) : (
-                          <FileText size={16} />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    className="lb-btn"
-                    style={{ right: 0, position: "absolute", zIndex: 10, opacity: index === media.length - 1 ? 0.5 : 1 }}
-                    onClick={() => setIndex((i) => Math.min(media.length - 1, i + 1))}
-                    disabled={index === media.length - 1}
-                  >
-                    <ChevronRight size={20} />
-                  </button>
+                  {media.map((m, i) => (
+                    <button
+                      key={m.src}
+                      className={i === index ? "on" : ""}
+                      onClick={() => setIndex(i)}
+                      aria-label={`Show item ${i + 1}`}
+                      style={{ flexShrink: 0, opacity: i === index ? 1 : 0.6 }}
+                    >
+                      {m.type === "image" ? (
+                        <Image
+                          src={m.src}
+                          alt=""
+                          fill
+                          sizes="72px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      ) : m.type === "video" ? (
+                        <Play size={16} />
+                      ) : (
+                        <FileText size={16} />
+                      )}
+                    </button>
+                  ))}
                 </div>
-              )}
+                <button
+                  className="lb-btn"
+                  style={{
+                    right: 0,
+                    position: "absolute",
+                    zIndex: 10,
+                    opacity: index === media.length - 1 ? 0.5 : 1,
+                  }}
+                  onClick={() =>
+                    setIndex((i) => Math.min(media.length - 1, i + 1))
+                  }
+                  disabled={index === media.length - 1}
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="info">
@@ -159,8 +214,14 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
             <p>{project.longDescription}</p>
 
             <div className="facts-row">
-              <div><span className="label">Year</span><b>{project.year}</b></div>
-              <div><span className="label">Role</span><b>{project.role}</b></div>
+              <div>
+                <span className="label">Year</span>
+                <b>{project.year}</b>
+              </div>
+              <div>
+                <span className="label">Role</span>
+                <b>{project.role}</b>
+              </div>
             </div>
 
             <h4>Highlights</h4>
@@ -180,13 +241,25 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
             {(hasLive || hasGit) && (
               <div className="actions">
                 {hasLive && (
-                  <a className="btn btn-solid" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    {project.liveUrl!.includes("figma.com") ? "View in Figma" : "Live site"}
+                  <a
+                    className="btn btn-solid"
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {project.liveUrl!.includes("figma.com")
+                      ? "View in Figma"
+                      : "Live site"}
                     <ArrowUpRight size={15} />
                   </a>
                 )}
                 {hasGit && (
-                  <a className="btn btn-ghost" href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    className="btn btn-ghost"
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Github size={15} /> Source
                   </a>
                 )}

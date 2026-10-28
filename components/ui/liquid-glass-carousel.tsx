@@ -62,14 +62,46 @@ const photo = (id: string) =>
   `https://images.unsplash.com/photo-${id}?w=900&h=1200&q=85&auto=format&fit=crop`;
 
 export const liquidGlassCarouselDefaultItems: LiquidGlassCarouselItem[] = [
-  { title: "Project One", src: photo("1600585154340-be6161a56a0c"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Two", src: photo("1514906689926-25ba6dcb584b"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Three", src: photo("1568557412756-7d219873dd11"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Four", src: photo("1581892805885-73bdd91beff0"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Five", src: photo("1482938289607-e9573fc25ebb"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Six", src: photo("1610846202780-b4d9837371ea"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Seven", src: photo("1527630941-4a229fd674ab"), aspect: PORTRAIT_ASPECT },
-  { title: "Project Eight", src: photo("1603786420263-ad59136a7409"), aspect: PORTRAIT_ASPECT },
+  {
+    title: "Project One",
+    src: photo("1600585154340-be6161a56a0c"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Two",
+    src: photo("1514906689926-25ba6dcb584b"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Three",
+    src: photo("1568557412756-7d219873dd11"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Four",
+    src: photo("1581892805885-73bdd91beff0"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Five",
+    src: photo("1482938289607-e9573fc25ebb"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Six",
+    src: photo("1610846202780-b4d9837371ea"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Seven",
+    src: photo("1527630941-4a229fd674ab"),
+    aspect: PORTRAIT_ASPECT,
+  },
+  {
+    title: "Project Eight",
+    src: photo("1603786420263-ad59136a7409"),
+    aspect: PORTRAIT_ASPECT,
+  },
 ];
 
 const LENS_DEFAULTS = {
@@ -375,7 +407,11 @@ function prefersReducedMotion() {
 function hexToRgb01(background: string): [number, number, number] {
   const value = background.trim();
   let hex = value.startsWith("#") ? value.slice(1) : "ffffff";
-  if (hex.length === 3) hex = hex.split("").map((c) => c + c).join("");
+  if (hex.length === 3)
+    hex = hex
+      .split("")
+      .map((c) => c + c)
+      .join("");
   const n = /^[0-9a-f]{6}$/i.test(hex) ? Number.parseInt(hex, 16) : 0xffffff;
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
@@ -432,7 +468,10 @@ function createCarousel(
   renderer.setPixelRatio(dpr);
   renderer.setSize(W, H);
   const bg = hexToRgb01(options.background);
-  renderer.setClearColor(new THREE.Color().setRGB(bg[0], bg[1], bg[2], THREE.LinearSRGBColorSpace), 1);
+  renderer.setClearColor(
+    new THREE.Color().setRGB(bg[0], bg[1], bg[2], THREE.LinearSRGBColorSpace),
+    1,
+  );
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";
@@ -444,7 +483,14 @@ function createCarousel(
   mount.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(-W / 2, W / 2, H / 2, -H / 2, -100, 100);
+  const camera = new THREE.OrthographicCamera(
+    -W / 2,
+    W / 2,
+    H / 2,
+    -H / 2,
+    -100,
+    100,
+  );
   camera.position.z = 10;
 
   const loader = new THREE.TextureLoader();
@@ -544,7 +590,12 @@ function createCarousel(
     for (let i = 0; i < sources.length; i++) {
       const mat = new THREE.MeshBasicMaterial({ transparent: true });
       // placeholder while a texture loads: a touch darker than the background
-      mat.color.setRGB(bg[0] * 0.93, bg[1] * 0.93, bg[2] * 0.93, THREE.LinearSRGBColorSpace);
+      mat.color.setRGB(
+        bg[0] * 0.93,
+        bg[1] * 0.93,
+        bg[2] * 0.93,
+        THREE.LinearSRGBColorSpace,
+      );
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), mat);
       mesh.visible = false;
       scene.add(mesh);
@@ -607,7 +658,12 @@ function createCarousel(
     uTint: {
       value: (() => {
         const t = hexToRgb01(options.glassTint);
-        return new THREE.Color().setRGB(t[0], t[1], t[2], THREE.LinearSRGBColorSpace);
+        return new THREE.Color().setRGB(
+          t[0],
+          t[1],
+          t[2],
+          THREE.LinearSRGBColorSpace,
+        );
       })(),
     },
   };
@@ -628,7 +684,9 @@ function createCarousel(
   };
   const drop = new Array(REPEATS * sources.length).fill(0);
   let focusScale = 1;
-  const lastCenterX: Array<number | undefined> = new Array(REPEATS * sources.length);
+  const lastCenterX: Array<number | undefined> = new Array(
+    REPEATS * sources.length,
+  );
   const pEntry = new Array(REPEATS * sources.length).fill(entryOn ? 0 : 1);
   let entryActive = entryOn;
   let entrySettled = false;
@@ -735,14 +793,20 @@ function createCarousel(
             const sa = (((cSrc + k) % N) + N) % N;
             const sb = (((cSrc + k + 1) % N) + N) % N;
             off +=
-              (at(sources, sa).aspect * slotH(sa) + at(sources, sb).aspect * slotH(sb)) / 2 + GAP;
+              (at(sources, sa).aspect * slotH(sa) +
+                at(sources, sb).aspect * slotH(sb)) /
+                2 +
+              GAP;
           }
         } else if (di < 0) {
           for (let k = 0; k < -di; k++) {
             const sa = (((cSrc - k) % N) + N) % N;
             const sb = (((cSrc - k - 1) % N) + N) % N;
             off -=
-              (at(sources, sa).aspect * slotH(sa) + at(sources, sb).aspect * slotH(sb)) / 2 + GAP;
+              (at(sources, sa).aspect * slotH(sa) +
+                at(sources, sb).aspect * slotH(sb)) /
+                2 +
+              GAP;
           }
         }
         finalX = off;
@@ -806,7 +870,12 @@ function createCarousel(
   let lastPointerType = "mouse";
 
   if (cursorElement) {
-    gsap.set(cursorElement, { xPercent: 20, yPercent: 30, scale: 0, autoAlpha: 0 });
+    gsap.set(cursorElement, {
+      xPercent: 20,
+      yPercent: 30,
+      scale: 0,
+      autoAlpha: 0,
+    });
   }
   const moveX = cursorElement
     ? gsap.quickTo(cursorElement, "x", { duration: 0.5, ease: "power3.out" })
@@ -871,7 +940,10 @@ function createCarousel(
 
   function onWheel(e: WheelEvent) {
     // `horizontal`: leave vertical wheel gestures to the page.
-    if (options.wheelMode === "horizontal" && Math.abs(e.deltaX) <= Math.abs(e.deltaY)) {
+    if (
+      options.wheelMode === "horizontal" &&
+      Math.abs(e.deltaX) <= Math.abs(e.deltaY)
+    ) {
       return;
     }
     e.preventDefault();
@@ -954,7 +1026,8 @@ function createCarousel(
     dragVel = 0;
     lastInput = performance.now();
     snapped = false;
-    suppressClick = dragDist > (dragPointerType === "mouse" ? CLICK_SLOP : TOUCH_CLICK_SLOP);
+    suppressClick =
+      dragDist > (dragPointerType === "mouse" ? CLICK_SLOP : TOUCH_CLICK_SLOP);
     if (dragPointerType === "mouse") {
       setHover(panelAtPointer(lastPointerX, lastPointerY) !== null);
     } else {
@@ -1026,7 +1099,11 @@ function createCarousel(
     if (focusState.anim) focusState.anim.kill();
     const scaleProxy = { v: focusScale };
     const tl = gsap.timeline();
-    tl.to(focusState, { lensFx: 0, duration: FOCUS.lensFade, ease: "power3.out" }, 0);
+    tl.to(
+      focusState,
+      { lensFx: 0, duration: FOCUS.lensFade, ease: "power3.out" },
+      0,
+    );
     tl.to(
       scaleProxy,
       {
@@ -1079,7 +1156,11 @@ function createCarousel(
         updateCursor();
       },
     });
-    tl.to(focusState, { lensFx: 1, duration: FOCUS.lensFade * 0.8, ease: "power3.inOut" }, 0);
+    tl.to(
+      focusState,
+      { lensFx: 1, duration: FOCUS.lensFade * 0.8, ease: "power3.inOut" },
+      0,
+    );
     tl.to(
       scaleProxy,
       {
@@ -1095,7 +1176,11 @@ function createCarousel(
     ranked.forEach((o) => {
       tl.to(
         drop,
-        { [o.idx]: 0, duration: FOCUS.cardDuration * 0.85, ease: FOCUS.cardEase },
+        {
+          [o.idx]: 0,
+          duration: FOCUS.cardDuration * 0.85,
+          ease: FOCUS.cardEase,
+        },
         o.rank * FOCUS.stagger * 0.7,
       );
     });
@@ -1129,7 +1214,11 @@ function createCarousel(
     visible.forEach((idx) => {
       const at = Math.random() * spread;
       lastRiseEnd = Math.max(lastRiseEnd, at + ENTRY.riseDuration);
-      tl.to(pEntry, { [idx]: 1, duration: ENTRY.riseDuration, ease: ENTRY.riseEase }, at);
+      tl.to(
+        pEntry,
+        { [idx]: 1, duration: ENTRY.riseDuration, ease: ENTRY.riseEase },
+        at,
+      );
     });
     tl.call(
       () => {
@@ -1154,7 +1243,10 @@ function createCarousel(
       maxRank = Math.max(maxRank, r);
       growList.push({ idx: k, rank: r });
     }
-    const growRanked = growList.map((v) => ({ idx: v.idx, rank: maxRank - v.rank }));
+    const growRanked = growList.map((v) => ({
+      idx: v.idx,
+      rank: maxRank - v.rank,
+    }));
     const growStart = lastRiseEnd + ENTRY.growDelay;
     let growEnd = growStart;
     tl.to(
@@ -1165,7 +1257,11 @@ function createCarousel(
     growRanked.forEach((o) => {
       const at = growStart + o.rank * ENTRY.growStagger;
       growEnd = Math.max(growEnd, at + ENTRY.growDuration);
-      tl.to(growArr, { [o.idx]: 1, duration: ENTRY.growDuration, ease: ENTRY.growEase }, at);
+      tl.to(
+        growArr,
+        { [o.idx]: 1, duration: ENTRY.growDuration, ease: ENTRY.growEase },
+        at,
+      );
     });
     tl.call(
       () => {
@@ -1213,7 +1309,11 @@ function createCarousel(
       target += velocity;
       velocity *= FRICTION;
       if (Math.abs(velocity) < 0.05) velocity = 0;
-      if (!snapped && !focusState.active && performance.now() - lastInput > SNAP_IDLE_MS) {
+      if (
+        !snapped &&
+        !focusState.active &&
+        performance.now() - lastInput > SNAP_IDLE_MS
+      ) {
         target = centerForIndex(nearestIndex(scroll));
         snapped = true;
       }
@@ -1496,9 +1596,21 @@ export function LiquidGlassCarousel({
             aria-label="Previous project"
             onClick={() => engineRef.current?.previous()}
             className={cn(ARROW_CLASS, "left-[4%]")}
-            style={{ opacity: arrowsOn ? 1 : 0, pointerEvents: arrowsOn ? "auto" : "none" }}
+            style={{
+              opacity: arrowsOn ? 1 : 0,
+              pointerEvents: arrowsOn ? "auto" : "none",
+            }}
           >
-            <svg viewBox="0 0 24 24" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              className="size-[18px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M15 5l-7 7 7 7" />
             </svg>
           </button>
@@ -1507,9 +1619,21 @@ export function LiquidGlassCarousel({
             aria-label="Next project"
             onClick={() => engineRef.current?.next()}
             className={cn(ARROW_CLASS, "right-[4%]")}
-            style={{ opacity: arrowsOn ? 1 : 0, pointerEvents: arrowsOn ? "auto" : "none" }}
+            style={{
+              opacity: arrowsOn ? 1 : 0,
+              pointerEvents: arrowsOn ? "auto" : "none",
+            }}
           >
-            <svg viewBox="0 0 24 24" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              className="size-[18px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M9 5l7 7-7 7" />
             </svg>
           </button>

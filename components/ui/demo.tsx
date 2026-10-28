@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import GlassFolder from "@/components/ui/glass-folder-cards"
+import GlassFolder from "@/components/ui/glass-folder-cards";
 
 /**
  * Three folders on a dotted desk: milk glass over a long-exposure print with a
@@ -17,7 +17,8 @@ export default function GlassFolderCardsDemo() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 text-foreground opacity-[0.13]"
         style={{
-          backgroundImage: "radial-gradient(currentColor 1.1px, transparent 1.4px)",
+          backgroundImage:
+            "radial-gradient(currentColor 1.1px, transparent 1.4px)",
           backgroundSize: "22px 22px",
         }}
       />
@@ -35,7 +36,11 @@ export default function GlassFolderCardsDemo() {
             { name: "Shoot — Lisbon", meta: "RAW · 2.1 GB", art: "ember" },
             { name: "Contract.pdf", meta: "PDF · 320 KB" },
           ]}
-          menu={[{ label: "Rename" }, { label: "Share…" }, { label: "Move to Trash", danger: true }]}
+          menu={[
+            { label: "Rename" },
+            { label: "Share…" },
+            { label: "Move to Trash", danger: true },
+          ]}
         />
         <GlassFolder
           label="My Files"
@@ -57,5 +62,5 @@ export default function GlassFolderCardsDemo() {
         Hover to lean · Click to open · + to add
       </p>
     </div>
-  )
+  );
 }

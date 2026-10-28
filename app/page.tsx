@@ -414,7 +414,7 @@ export default function Home() {
         </section>
 
         {/* ---------------- SKILLS ---------------- */}
-        <section className="block" style={{ paddingTop: 0 }}>
+        {/* <section className="block" style={{ paddingTop: 0 }}>
           <div className="wrap">
             <div className="skill-cols">
               {skills.map((s, i) => (
@@ -432,7 +432,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
 
       {/* ---------------- CONTACT ---------------- */}
