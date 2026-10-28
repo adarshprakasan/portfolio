@@ -32,6 +32,13 @@ export interface LiquidGlassCarouselProps {
   background?: string;
   /** Text and arrow colour. Defaults to near-black. */
   ink?: string;
+  /**
+   * Colour of the lens's glow and rim highlight (originally pure white). Set it to
+   * your background so the lens melts into the page instead of lighting it up.
+   */
+  glassTint?: string;
+  /** Overrides for any value in `LENS_DEFAULTS` (glow, ring colour, dispersion…). */
+  lens?: Partial<typeof LENS_DEFAULTS>;
   /** Play the rise-and-grow intro. Ignored when the user prefers reduced motion. */
   entry?: boolean;
   /**
@@ -65,7 +72,7 @@ export const liquidGlassCarouselDefaultItems: LiquidGlassCarouselItem[] = [
   { title: "Project Eight", src: photo("1603786420263-ad59136a7409"), aspect: PORTRAIT_ASPECT },
 ];
 
-const LENS = {
+const LENS_DEFAULTS = {
   sizeX: 0.565,
   sizeY: 1,
   posX: 0.5,
@@ -97,6 +104,12 @@ const LENS = {
   vignette: 0,
   vignetteSize: 0.3,
   samples: 16,
+  /** Centre darkening of the lens, 1 = none. */
+  dim: 0.91,
+  /** 0–1. Fades glow, ring and rim over bright pixels so a light page doesn't wash out. 0 = original. */
+  adapt: 0,
+  /** 0–1. Soft darkening along the ring, so the lens edge still reads on a light page. 0 = none. */
+  edgeShade: 0,
 };
 
 const FOCUS = {
@@ -169,6 +182,10 @@ uniform float uShape;
 uniform float uSquareRound;
 uniform float uRotation;
 uniform int uSamples;
+uniform float uDim;
+uniform float uAdapt;
+uniform float uEdgeShade;
+uniform vec3 uTint;
 
 const int MAX_SAMPLES = 16;
 
@@ -250,13 +267,16 @@ vec3 discLens(vec2 center, float aspectCorrect, out float outA) {
     col = mix(bcol / btw, col, rimMask);
   }
 
-  col *= mix(0.91, 1.0, smoothstep(0.0, 0.38, shapeND));
+  col *= mix(uDim, 1.0, smoothstep(0.0, 0.38, shapeND));
+
+  float lum = dot(col, vec3(0.299, 0.587, 0.114));
+  float room = mix(1.0, mix(0.08, 1.0, clamp(1.0 - lum, 0.0, 1.0)), uAdapt);
 
   float r2 = shapeND * shapeND * 0.25;
   float gs = max(uNovaSize * uGlow * 0.003, 0.004);
   float nova = exp(-r2 / gs) + exp(-r2 / (gs * 7.0)) * 0.18;
   nova *= uWhiteGlow * (uGlow / 17.0) * 1.15;
-  col += vec3(nova);
+  col += uTint * nova * room;
 
   float dC = shapeND * 0.5;
   float tR = clamp(uRingRadius, 0.1, 0.49);
@@ -265,8 +285,9 @@ vec3 discLens(vec2 center, float aspectCorrect, out float outA) {
   ring *= uBlueRing * (uGlow / 17.0) * 1.8;
   if (uShimmer > 0.5) ring *= sin(angle * uShimmerFreq + uTime * uShimmerSpeed) * uShimmerDepth + (1.0 - uShimmerDepth);
   float ringAura = exp(-pow((dC - tR) / (rW * 6.0), 2.0)) * 0.28 * uBlueRing * (uGlow / 17.0);
-  col += uBlueColor * (ring + ringAura);
-  col += vec3(exp(-pow((dC - uRimLinePos) / max(uRimLineWidth, 0.0001), 2.0)) * uRimLine);
+  col *= 1.0 - uEdgeShade * exp(-pow((dC - tR) / (rW * 2.5), 2.0));
+  col += uBlueColor * (ring + ringAura) * room;
+  col += uTint * (exp(-pow((dC - uRimLinePos) / max(uRimLineWidth, 0.0001), 2.0)) * uRimLine) * room;
 
   outA = smoothstep(1.0, 0.93, maskND);
   return col;
@@ -369,11 +390,14 @@ function createCarousel(
     background: string;
     entry: boolean;
     wheelMode: "capture" | "horizontal";
+    glassTint: string;
+    lens?: Partial<typeof LENS_DEFAULTS>;
     onActiveChange: (index: number) => void;
     onFocusChange: (open: boolean) => void;
     onEntryDone: (done: boolean) => void;
   },
 ): LiquidGlassCarouselHandle | null {
+  const LENS = { ...LENS_DEFAULTS, ...(options.lens ?? {}) };
   const reduced = prefersReducedMotion();
   const entryOn = options.entry && !reduced;
   const items = options.items;
@@ -577,6 +601,15 @@ function createCarousel(
     uVignette: { value: LENS.vignette },
     uVignetteSize: { value: LENS.vignetteSize },
     uSamples: { value: LENS.samples },
+    uDim: { value: LENS.dim },
+    uAdapt: { value: LENS.adapt },
+    uEdgeShade: { value: LENS.edgeShade },
+    uTint: {
+      value: (() => {
+        const t = hexToRgb01(options.glassTint);
+        return new THREE.Color().setRGB(t[0], t[1], t[2], THREE.LinearSRGBColorSpace);
+      })(),
+    },
   };
   const lensMat = new THREE.ShaderMaterial({
     uniforms: lensUniforms as unknown as THREE.ShaderMaterial["uniforms"],
@@ -1335,6 +1368,8 @@ export function LiquidGlassCarousel({
   gap = 12,
   background = "#ffffff",
   ink = "#111111",
+  glassTint = "#ffffff",
+  lens,
   entry = true,
   wheelMode = "capture",
   showArrows = false,
@@ -1369,6 +1404,8 @@ export function LiquidGlassCarousel({
       background,
       entry,
       wheelMode,
+      glassTint,
+      lens,
       onActiveChange: (index) => {
         setActive(index);
         onActiveChangeRef.current?.(index);
@@ -1388,7 +1425,7 @@ export function LiquidGlassCarousel({
       engine.destroy();
       engineRef.current = null;
     };
-  }, [items, panelHeight, gap, background, entry, wheelMode]);
+  }, [items, panelHeight, gap, background, entry, wheelMode, glassTint, lens]);
 
   const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     if (event.key === "ArrowRight") {

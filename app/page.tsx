@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  ArrowUpRight,
-  Github,
-  Instagram,
-  Linkedin,
-  Mail,
-} from "lucide-react";
+import { ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import Character from "@/components/Character";
 import PosterCarousel from "@/components/PosterCarousel";
 import FolderShelf from "@/components/FolderShelf";
@@ -118,17 +112,42 @@ const skills = [
   {
     title: "Design",
     accent: "coral",
-    items: ["Figma", "Adobe XD", "Illustrator", "Photoshop", "Brand identity", "Poster & editorial", "Video editing", "Photography"],
+    items: [
+      "Figma",
+      "Adobe XD",
+      "Illustrator",
+      "Photoshop",
+      "Brand identity",
+      "Poster & editorial",
+      "Video editing",
+      "Photography",
+    ],
   },
   {
     title: "Develop",
     accent: "blue",
-    items: ["React", "Next.js", "TypeScript", "Node.js", "Express", "MongoDB", "REST APIs", "Tailwind CSS", "MUI"],
+    items: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "REST APIs",
+      "Tailwind CSS",
+      "MUI",
+    ],
   },
   {
     title: "Explore",
     accent: "cyan",
-    items: ["Blender 3D", "AI-assisted design", "Motion", "Python", "Computer vision"],
+    items: [
+      "Blender 3D",
+      "AI-assisted design",
+      "Motion",
+      "Python",
+      "Computer vision",
+    ],
   },
 ];
 
@@ -174,7 +193,8 @@ export default function Home() {
       <header className={`nav${scrolled ? " scrolled" : ""}`}>
         <div className="wrap nav-in">
           <a href="#home" className="mono-mark" aria-label="Home">
-            Adarsh<i />
+            Adarsh
+            <i />
           </a>
           <nav className="nav-links" aria-label="Primary">
             {["work", "about", "experience", "contact"].map((id) => (
@@ -216,10 +236,17 @@ export default function Home() {
                 {["Adarsh", "Prakasan"].map((w, i) => (
                   <motion.span
                     key={w}
-                    style={{ display: "block", fontStyle: i ? "italic" : "normal" }}
+                    style={{
+                      display: "block",
+                      fontStyle: i ? "italic" : "normal",
+                    }}
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.1 + i * 0.12,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {w}
                   </motion.span>
@@ -239,7 +266,12 @@ export default function Home() {
                 </motion.p>
               </AnimatePresence>
 
-              <div className="toggle" data-mode={mode} role="tablist" aria-label="Choose a view">
+              <div
+                className="toggle"
+                data-mode={mode}
+                role="tablist"
+                aria-label="Choose a view"
+              >
                 <span className="knob" aria-hidden="true" />
                 {(["designer", "developer"] as const).map((m) => (
                   <button
@@ -264,11 +296,14 @@ export default function Home() {
         {/* ---------------- MARQUEE ---------------- */}
         <div className="marquee" aria-hidden="true">
           <div className="marquee-track">
-            {[...copy[mode].marquee, ...copy[mode].marquee, ...copy[mode].marquee, ...copy[mode].marquee].map(
-              (t, i) => (
-                <span key={i}>{t}</span>
-              ),
-            )}
+            {[
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+              ...copy[mode].marquee,
+            ].map((t, i) => (
+              <span key={i}>{t}</span>
+            ))}
           </div>
         </div>
 
@@ -278,7 +313,10 @@ export default function Home() {
             <Reveal>
               <div className="sec-head">
                 <div>
-                  <span className="label">Selected work · {designer ? "five folders" : "three folders"}</span>
+                  <span className="label">
+                    Selected work ·{" "}
+                    {designer ? "five folders" : "three folders"}
+                  </span>
                   <h2 className="display">{copy[mode].headline}</h2>
                 </div>
                 <p className="label" style={{ maxWidth: 240 }}>
@@ -302,9 +340,6 @@ export default function Home() {
                       Type, colour <em>& composition.</em>
                     </h2>
                   </div>
-                  <p className="label" style={{ maxWidth: 240 }}>
-                    Drag, use the arrows · click the centre poster to focus
-                  </p>
                 </div>
               </Reveal>
             </div>
@@ -412,17 +447,43 @@ export default function Home() {
               adarshp2911@gmail.com
             </a>
             <div className="socials">
-              <a className="pill" style={{ "--tint": "var(--lilac)" } as React.CSSProperties} href="https://github.com/adarshprakasan" target="_blank" rel="noopener noreferrer">
-                <Github size={15} /> GitHub <ArrowUpRight className="arr" size={14} />
+              <a
+                className="pill"
+                style={{ "--tint": "var(--lilac)" } as React.CSSProperties}
+                href="https://github.com/adarshprakasan"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github size={15} /> GitHub{" "}
+                <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="pill" style={{ "--tint": "var(--blue)" } as React.CSSProperties} href="https://www.linkedin.com/in/adarshprakasan/" target="_blank" rel="noopener noreferrer">
-                <Linkedin size={15} /> LinkedIn <ArrowUpRight className="arr" size={14} />
+              <a
+                className="pill"
+                style={{ "--tint": "var(--blue)" } as React.CSSProperties}
+                href="https://www.linkedin.com/in/adarshprakasan/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin size={15} /> LinkedIn{" "}
+                <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="pill" style={{ "--tint": "var(--cyan)" } as React.CSSProperties} href="https://www.instagram.com/adarsh.prakasan/" target="_blank" rel="noopener noreferrer">
-                <Instagram size={15} /> Instagram <ArrowUpRight className="arr" size={14} />
+              <a
+                className="pill"
+                style={{ "--tint": "var(--cyan)" } as React.CSSProperties}
+                href="https://www.instagram.com/adarsh.prakasan/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Instagram size={15} /> Instagram{" "}
+                <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="pill solid" style={{ "--tint": "var(--coral)" } as React.CSSProperties} href="mailto:adarshp2911@gmail.com">
-                <Mail size={15} /> Say hello <ArrowUpRight className="arr" size={14} />
+              <a
+                className="pill solid"
+                style={{ "--tint": "var(--coral)" } as React.CSSProperties}
+                href="mailto:adarshp2911@gmail.com"
+              >
+                <Mail size={15} /> Say hello{" "}
+                <ArrowUpRight className="arr" size={14} />
               </a>
             </div>
           </Reveal>
@@ -431,37 +492,10 @@ export default function Home() {
 
       <HalftoneWordmarkFooter
         wordmark="adarsh"
-        label="Adarsh Prakasan"
-        meta="©2026 · Dubai, UAE"
         palette={{ background: "#1a1a17", ink: "#f5f2ea", warm: "#e2573a" }}
         fontFamily={'"Inter", "Helvetica Neue", Arial, system-ui, sans-serif'}
         monoFamily={'"DM Mono", ui-monospace, Menlo, Consolas, monospace'}
         height="clamp(360px, 34vw, 500px)"
-        columns={[
-          {
-            title: "Index",
-            links: [
-              { label: "Work", href: "#work" },
-              { label: "About", href: "#about" },
-              { label: "Experience", href: "#experience" },
-              { label: "Contact", href: "#contact" },
-            ],
-          },
-          {
-            title: "Elsewhere",
-            links: [
-              { label: "GitHub", href: "https://github.com/adarshprakasan", external: true },
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/adarshprakasan/", external: true },
-              { label: "Instagram", href: "https://www.instagram.com/adarsh.prakasan/", external: true },
-            ],
-          },
-          {
-            title: "Contact",
-            links: [
-              { label: "adarshp2911@gmail.com", href: "mailto:adarshp2911@gmail.com" },
-            ],
-          },
-        ]}
       />
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />
