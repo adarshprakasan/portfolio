@@ -11,6 +11,7 @@ import {
 } from "react";
 import * as THREE from "three";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   WebGLErrorBoundary,
   WebGLFallback,
@@ -29,8 +30,19 @@ export interface LiquidGlassCarouselProps {
   panelHeight?: number;
   gap?: number;
   background?: string;
+  /** Text and arrow colour. Defaults to near-black. */
+  ink?: string;
   /** Play the rise-and-grow intro. Ignored when the user prefers reduced motion. */
   entry?: boolean;
+  /**
+   * `capture` (original): the mouse wheel always scrolls the carousel.
+   * `horizontal`: only sideways wheel/trackpad gestures scroll it, and touch can
+   * still scroll the page vertically, so the carousel can sit inside a long page
+   * without trapping the scroll.
+   */
+  wheelMode?: "capture" | "horizontal";
+  /** Previous / next buttons, for people without a trackpad. */
+  showArrows?: boolean;
   className?: string;
   style?: CSSProperties;
   onActiveChange?: (index: number) => void;
@@ -43,46 +55,14 @@ const photo = (id: string) =>
   `https://images.unsplash.com/photo-${id}?w=900&h=1200&q=85&auto=format&fit=crop`;
 
 export const liquidGlassCarouselDefaultItems: LiquidGlassCarouselItem[] = [
-  {
-    title: "Project One",
-    src: photo("1600585154340-be6161a56a0c"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Two",
-    src: photo("1514906689926-25ba6dcb584b"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Three",
-    src: photo("1568557412756-7d219873dd11"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Four",
-    src: photo("1581892805885-73bdd91beff0"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Five",
-    src: photo("1482938289607-e9573fc25ebb"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Six",
-    src: photo("1610846202780-b4d9837371ea"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Seven",
-    src: photo("1527630941-4a229fd674ab"),
-    aspect: PORTRAIT_ASPECT,
-  },
-  {
-    title: "Project Eight",
-    src: photo("1603786420263-ad59136a7409"),
-    aspect: PORTRAIT_ASPECT,
-  },
+  { title: "Project One", src: photo("1600585154340-be6161a56a0c"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Two", src: photo("1514906689926-25ba6dcb584b"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Three", src: photo("1568557412756-7d219873dd11"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Four", src: photo("1581892805885-73bdd91beff0"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Five", src: photo("1482938289607-e9573fc25ebb"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Six", src: photo("1610846202780-b4d9837371ea"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Seven", src: photo("1527630941-4a229fd674ab"), aspect: PORTRAIT_ASPECT },
+  { title: "Project Eight", src: photo("1603786420263-ad59136a7409"), aspect: PORTRAIT_ASPECT },
 ];
 
 const LENS = {
@@ -369,27 +349,14 @@ function prefersReducedMotion() {
   );
 }
 
-function hexToNumber(background: string, mount: HTMLElement) {
+/** Hex to raw 0–1 channels. The pipeline here is display-referred (the lens shader
+ * writes straight to the screen), so colours are used as-is, never linearised. */
+function hexToRgb01(background: string): [number, number, number] {
   const value = background.trim();
-  if (value.startsWith("#") && (value.length === 7 || value.length === 4)) {
-    const hex =
-      value.length === 4
-        ? `#${value[1]}${value[1]}${value[2]}${value[2]}${value[3]}${value[3]}`
-        : value;
-    const parsed = Number.parseInt(hex.slice(1), 16);
-    return Number.isFinite(parsed) ? parsed : 0xffffff;
-  }
-
-  const resolved = getComputedStyle(
-    mount.parentElement ?? mount,
-  ).backgroundColor;
-  const channels = resolved
-    .match(/[\d.]+/g)
-    ?.slice(0, 3)
-    .map(Number);
-  if (!channels || channels.length < 3) return 0xffffff;
-  const [red = 255, green = 255, blue = 255] = channels;
-  return (red << 16) | (green << 8) | blue;
+  let hex = value.startsWith("#") ? value.slice(1) : "ffffff";
+  if (hex.length === 3) hex = hex.split("").map((c) => c + c).join("");
+  const n = /^[0-9a-f]{6}$/i.test(hex) ? Number.parseInt(hex, 16) : 0xffffff;
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
 
 function createCarousel(
@@ -401,6 +368,7 @@ function createCarousel(
     gap: number;
     background: string;
     entry: boolean;
+    wheelMode: "capture" | "horizontal";
     onActiveChange: (index: number) => void;
     onFocusChange: (open: boolean) => void;
     onEntryDone: (done: boolean) => void;
@@ -439,24 +407,20 @@ function createCarousel(
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   renderer.setPixelRatio(dpr);
   renderer.setSize(W, H);
-  renderer.setClearColor(hexToNumber(options.background, mount), 1);
+  const bg = hexToRgb01(options.background);
+  renderer.setClearColor(new THREE.Color().setRGB(bg[0], bg[1], bg[2], THREE.LinearSRGBColorSpace), 1);
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";
-  renderer.domElement.style.touchAction = "none";
+  // In `horizontal` mode a vertical swipe still scrolls the page.
+  renderer.domElement.style.touchAction =
+    options.wheelMode === "horizontal" ? "pan-y" : "none";
   renderer.domElement.style.userSelect = "none";
   renderer.domElement.setAttribute("aria-hidden", "true");
   mount.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(
-    -W / 2,
-    W / 2,
-    H / 2,
-    -H / 2,
-    -100,
-    100,
-  );
+  const camera = new THREE.OrthographicCamera(-W / 2, W / 2, H / 2, -H / 2, -100, 100);
   camera.position.z = 10;
 
   const loader = new THREE.TextureLoader();
@@ -474,7 +438,7 @@ function createCarousel(
         tex.magFilter = THREE.LinearFilter;
         tex.generateMipmaps = true;
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.colorSpace = THREE.NoColorSpace; // raw values, to match the display-referred lens pass
         if (!s.locked && tex.image) {
           s.aspect = tex.image.width / tex.image.height;
         }
@@ -554,10 +518,9 @@ function createCarousel(
   const pool: PoolItem[] = [];
   for (let r = 0; r < REPEATS; r++) {
     for (let i = 0; i < sources.length; i++) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: 0xdddddd,
-        transparent: true,
-      });
+      const mat = new THREE.MeshBasicMaterial({ transparent: true });
+      // placeholder while a texture loads: a touch darker than the background
+      mat.color.setRGB(bg[0] * 0.93, bg[1] * 0.93, bg[2] * 0.93, THREE.LinearSRGBColorSpace);
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), mat);
       mesh.visible = false;
       scene.add(mesh);
@@ -632,9 +595,7 @@ function createCarousel(
   };
   const drop = new Array(REPEATS * sources.length).fill(0);
   let focusScale = 1;
-  const lastCenterX: Array<number | undefined> = new Array(
-    REPEATS * sources.length,
-  );
+  const lastCenterX: Array<number | undefined> = new Array(REPEATS * sources.length);
   const pEntry = new Array(REPEATS * sources.length).fill(entryOn ? 0 : 1);
   let entryActive = entryOn;
   let entrySettled = false;
@@ -691,7 +652,7 @@ function createCarousel(
 
       if (src.tex && !p.bound) {
         p.mat.map = src.tex;
-        p.mat.color.set(0xffffff);
+        p.mat.color.setRGB(1, 1, 1, THREE.LinearSRGBColorSpace);
         p.mat.needsUpdate = true;
         p.bound = true;
       }
@@ -741,20 +702,14 @@ function createCarousel(
             const sa = (((cSrc + k) % N) + N) % N;
             const sb = (((cSrc + k + 1) % N) + N) % N;
             off +=
-              (at(sources, sa).aspect * slotH(sa) +
-                at(sources, sb).aspect * slotH(sb)) /
-                2 +
-              GAP;
+              (at(sources, sa).aspect * slotH(sa) + at(sources, sb).aspect * slotH(sb)) / 2 + GAP;
           }
         } else if (di < 0) {
           for (let k = 0; k < -di; k++) {
             const sa = (((cSrc - k) % N) + N) % N;
             const sb = (((cSrc - k - 1) % N) + N) % N;
             off -=
-              (at(sources, sa).aspect * slotH(sa) +
-                at(sources, sb).aspect * slotH(sb)) /
-                2 +
-              GAP;
+              (at(sources, sa).aspect * slotH(sa) + at(sources, sb).aspect * slotH(sb)) / 2 + GAP;
           }
         }
         finalX = off;
@@ -818,12 +773,7 @@ function createCarousel(
   let lastPointerType = "mouse";
 
   if (cursorElement) {
-    gsap.set(cursorElement, {
-      xPercent: 20,
-      yPercent: 30,
-      scale: 0,
-      autoAlpha: 0,
-    });
+    gsap.set(cursorElement, { xPercent: 20, yPercent: 30, scale: 0, autoAlpha: 0 });
   }
   const moveX = cursorElement
     ? gsap.quickTo(cursorElement, "x", { duration: 0.5, ease: "power3.out" })
@@ -887,11 +837,15 @@ function createCarousel(
   }
 
   function onWheel(e: WheelEvent) {
+    // `horizontal`: leave vertical wheel gestures to the page.
+    if (options.wheelMode === "horizontal" && Math.abs(e.deltaX) <= Math.abs(e.deltaY)) {
+      return;
+    }
     e.preventDefault();
     if (inputLocked()) return;
     userInteracted = true;
     pendingFocus = null;
-    target += (e.deltaY || e.deltaX) * WHEEL;
+    target += (e.deltaX || e.deltaY) * WHEEL;
     lastInput = performance.now();
     snapped = false;
   }
@@ -967,8 +921,7 @@ function createCarousel(
     dragVel = 0;
     lastInput = performance.now();
     snapped = false;
-    suppressClick =
-      dragDist > (dragPointerType === "mouse" ? CLICK_SLOP : TOUCH_CLICK_SLOP);
+    suppressClick = dragDist > (dragPointerType === "mouse" ? CLICK_SLOP : TOUCH_CLICK_SLOP);
     if (dragPointerType === "mouse") {
       setHover(panelAtPointer(lastPointerX, lastPointerY) !== null);
     } else {
@@ -1040,11 +993,7 @@ function createCarousel(
     if (focusState.anim) focusState.anim.kill();
     const scaleProxy = { v: focusScale };
     const tl = gsap.timeline();
-    tl.to(
-      focusState,
-      { lensFx: 0, duration: FOCUS.lensFade, ease: "power3.out" },
-      0,
-    );
+    tl.to(focusState, { lensFx: 0, duration: FOCUS.lensFade, ease: "power3.out" }, 0);
     tl.to(
       scaleProxy,
       {
@@ -1097,11 +1046,7 @@ function createCarousel(
         updateCursor();
       },
     });
-    tl.to(
-      focusState,
-      { lensFx: 1, duration: FOCUS.lensFade * 0.8, ease: "power3.inOut" },
-      0,
-    );
+    tl.to(focusState, { lensFx: 1, duration: FOCUS.lensFade * 0.8, ease: "power3.inOut" }, 0);
     tl.to(
       scaleProxy,
       {
@@ -1117,11 +1062,7 @@ function createCarousel(
     ranked.forEach((o) => {
       tl.to(
         drop,
-        {
-          [o.idx]: 0,
-          duration: FOCUS.cardDuration * 0.85,
-          ease: FOCUS.cardEase,
-        },
+        { [o.idx]: 0, duration: FOCUS.cardDuration * 0.85, ease: FOCUS.cardEase },
         o.rank * FOCUS.stagger * 0.7,
       );
     });
@@ -1155,11 +1096,7 @@ function createCarousel(
     visible.forEach((idx) => {
       const at = Math.random() * spread;
       lastRiseEnd = Math.max(lastRiseEnd, at + ENTRY.riseDuration);
-      tl.to(
-        pEntry,
-        { [idx]: 1, duration: ENTRY.riseDuration, ease: ENTRY.riseEase },
-        at,
-      );
+      tl.to(pEntry, { [idx]: 1, duration: ENTRY.riseDuration, ease: ENTRY.riseEase }, at);
     });
     tl.call(
       () => {
@@ -1184,10 +1121,7 @@ function createCarousel(
       maxRank = Math.max(maxRank, r);
       growList.push({ idx: k, rank: r });
     }
-    const growRanked = growList.map((v) => ({
-      idx: v.idx,
-      rank: maxRank - v.rank,
-    }));
+    const growRanked = growList.map((v) => ({ idx: v.idx, rank: maxRank - v.rank }));
     const growStart = lastRiseEnd + ENTRY.growDelay;
     let growEnd = growStart;
     tl.to(
@@ -1198,11 +1132,7 @@ function createCarousel(
     growRanked.forEach((o) => {
       const at = growStart + o.rank * ENTRY.growStagger;
       growEnd = Math.max(growEnd, at + ENTRY.growDuration);
-      tl.to(
-        growArr,
-        { [o.idx]: 1, duration: ENTRY.growDuration, ease: ENTRY.growEase },
-        at,
-      );
+      tl.to(growArr, { [o.idx]: 1, duration: ENTRY.growDuration, ease: ENTRY.growEase }, at);
     });
     tl.call(
       () => {
@@ -1250,11 +1180,7 @@ function createCarousel(
       target += velocity;
       velocity *= FRICTION;
       if (Math.abs(velocity) < 0.05) velocity = 0;
-      if (
-        !snapped &&
-        !focusState.active &&
-        performance.now() - lastInput > SNAP_IDLE_MS
-      ) {
+      if (!snapped && !focusState.active && performance.now() - lastInput > SNAP_IDLE_MS) {
         target = centerForIndex(nearestIndex(scroll));
         snapped = true;
       }
@@ -1399,13 +1325,19 @@ function pad(value: number) {
   return String(value).padStart(2, "0");
 }
 
+const ARROW_CLASS =
+  "absolute bottom-[4.5%] z-20 grid size-10 place-items-center rounded-full border border-current/20 bg-transparent transition-[background-color,opacity,transform] duration-300 hover:bg-[var(--lgc-arrow-hover,#f6d3c4)] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2";
+
 /** Infinite image row with a liquid-glass WebGL lens. Give the container an explicit height. */
 export function LiquidGlassCarousel({
   items = liquidGlassCarouselDefaultItems,
   panelHeight = 450,
   gap = 12,
   background = "#ffffff",
+  ink = "#111111",
   entry = true,
+  wheelMode = "capture",
+  showArrows = false,
   className,
   style,
   onActiveChange,
@@ -1414,9 +1346,6 @@ export function LiquidGlassCarousel({
   const mountRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<LiquidGlassCarouselHandle | null>(null);
-  const titleRef = useRef<HTMLParagraphElement>(null);
-  const counterRef = useRef<HTMLParagraphElement>(null);
-  const revealPlayedRef = useRef(false);
   const [active, setActive] = useState(0);
   const [focused, setFocused] = useState(false);
   const [entryDone, setEntryDone] = useState(!entry);
@@ -1439,6 +1368,7 @@ export function LiquidGlassCarousel({
       gap,
       background,
       entry,
+      wheelMode,
       onActiveChange: (index) => {
         setActive(index);
         onActiveChangeRef.current?.(index);
@@ -1458,55 +1388,7 @@ export function LiquidGlassCarousel({
       engine.destroy();
       engineRef.current = null;
     };
-  }, [items, panelHeight, gap, background, entry]);
-
-  useEffect(() => {
-    const title = titleRef.current;
-    const counter = counterRef.current;
-    if (!title || !counter) return;
-    const reduced = prefersReducedMotion();
-    gsap.set(title, { xPercent: -50 });
-    gsap.set(counter, { xPercent: -50 });
-
-    if (!entryDone && entry && !reduced) {
-      gsap.set([title, counter], { autoAlpha: 0 });
-      revealPlayedRef.current = false;
-      return;
-    }
-
-    const y = focused ? window.innerHeight * -0.05 : 0;
-    if (entryDone && !focused && !revealPlayedRef.current) {
-      revealPlayedRef.current = true;
-      gsap.fromTo(
-        title,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: reduced ? 0 : 1.6, ease: "power2.out" },
-      );
-      gsap.fromTo(
-        counter,
-        { autoAlpha: 0 },
-        {
-          autoAlpha: 1,
-          duration: reduced ? 0 : 1.6,
-          ease: "power2.out",
-          delay: reduced ? 0 : 0.18,
-        },
-      );
-      return;
-    }
-
-    gsap.to(title, {
-      y,
-      autoAlpha: 1,
-      duration: reduced ? 0 : 0.4,
-      ease: "power3.out",
-    });
-    gsap.to(counter, {
-      autoAlpha: focused ? 0 : 1,
-      duration: reduced ? 0 : 0.4,
-      ease: "power3.out",
-    });
-  }, [focused, entryDone, entry]);
+  }, [items, panelHeight, gap, background, entry, wheelMode]);
 
   const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     if (event.key === "ArrowRight") {
@@ -1521,10 +1403,15 @@ export function LiquidGlassCarousel({
     }
   };
 
+  const arrowsOn = showArrows && entryDone && !focused;
+
   return (
     <div
-      className={`relative h-full min-h-[420px] w-full overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-black/20${className ? ` ${className}` : ""}`}
-      style={{ background, color: "#111111", ...style }}
+      className={cn(
+        "relative h-full min-h-[420px] w-full overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-black/20",
+        className,
+      )}
+      style={{ background, color: ink, ...style }}
       tabIndex={0}
       role="region"
       aria-roledescription="carousel"
@@ -1557,25 +1444,40 @@ export function LiquidGlassCarousel({
         )}
       </WebGLErrorBoundary>
 
-      <p
-        ref={titleRef}
-        className="pointer-events-none absolute left-1/2 top-[4.5%] z-10 m-0 text-center text-[15px] font-medium tracking-[-0.02em] text-black opacity-0 sm:text-[17px]"
-      >
-        {current?.title}
-      </p>
-      <p
-        ref={counterRef}
-        className="pointer-events-none absolute bottom-[6%] left-1/2 z-10 m-0 text-center text-[13px] font-medium tabular-nums tracking-[-0.02em] text-black opacity-0 sm:text-[15px]"
-      >
-        {pad(active + 1)}/{pad(items.length)}
-      </p>
-
       <div
         ref={cursorRef}
-        className="pointer-events-none absolute left-0 top-0 z-20 text-[13px] font-medium text-black mix-blend-exclusion"
+        className="pointer-events-none absolute left-0 top-0 z-20 text-[13px] font-medium mix-blend-exclusion"
+        style={{ color: ink }}
       >
         View
       </div>
+
+      {showArrows ? (
+        <>
+          <button
+            type="button"
+            aria-label="Previous project"
+            onClick={() => engineRef.current?.previous()}
+            className={cn(ARROW_CLASS, "left-[4%]")}
+            style={{ opacity: arrowsOn ? 1 : 0, pointerEvents: arrowsOn ? "auto" : "none" }}
+          >
+            <svg viewBox="0 0 24 24" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Next project"
+            onClick={() => engineRef.current?.next()}
+            className={cn(ARROW_CLASS, "right-[4%]")}
+            style={{ opacity: arrowsOn ? 1 : 0, pointerEvents: arrowsOn ? "auto" : "none" }}
+          >
+            <svg viewBox="0 0 24 24" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </>
+      ) : null}
 
       <button
         type="button"
@@ -1583,7 +1485,7 @@ export function LiquidGlassCarousel({
         aria-label="Close focused project"
         aria-hidden={!focused}
         tabIndex={focused ? 0 : -1}
-        className="absolute right-[clamp(20px,5vw,72px)] top-5 z-30 inline-flex items-center gap-2 rounded-full border border-[#f5f2ea]/25 bg-[#1a1a17] px-4 py-2 text-[13px] font-medium text-[#f5f2ea] shadow-sm transition-[opacity,background-color] duration-300 hover:bg-[#f5f2ea] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e2573a]"
+        className="absolute right-[clamp(20px,5vw,72px)] top-5 z-30 inline-flex items-center gap-2 rounded-full bg-[#1a1a17] px-4 py-2 text-[13px] font-medium text-[#f5f2ea] shadow-sm transition-[opacity,background-color] duration-300 hover:bg-[#f5f2ea] hover:text-[#1a1a17] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e2573a]"
         style={{
           opacity: focused ? 1 : 0,
           pointerEvents: focused ? "auto" : "none",

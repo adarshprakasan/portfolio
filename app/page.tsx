@@ -292,7 +292,7 @@ export default function Home() {
 
         {/* ---------------- POSTERS ---------------- */}
         {showPosters && (
-          <section className="block" style={{ paddingTop: 0 }} aria-labelledby="posters-h">
+          <section className="block poster-sec" aria-labelledby="posters-h">
             <div className="wrap">
               <Reveal>
                 <div className="sec-head">
@@ -302,10 +302,15 @@ export default function Home() {
                       Type, colour <em>& composition.</em>
                     </h2>
                   </div>
+                  <p className="label" style={{ maxWidth: 240 }}>
+                    Drag, use the arrows · click the centre poster to focus
+                  </p>
                 </div>
               </Reveal>
             </div>
-            <PosterCarousel />
+            <div className="poster-stage">
+              <PosterCarousel />
+            </div>
           </section>
         )}
 
@@ -396,28 +401,28 @@ export default function Home() {
       </main>
 
       {/* ---------------- CONTACT ---------------- */}
-      <section id="contact" className="foot contact-foot" style={{ background: "#1a1a17", color: "#f5f2ea" }}>
+      <section id="contact" className="foot">
         <div className="wrap">
           <Reveal>
-            <span className="label" style={{ color: "#f5f2ea" }}>Available for opportunities</span>
-            <h2 className="display" style={{ color: "#f5f2ea" }}>
+            <span className="label">Available for opportunities</span>
+            <h2 className="display">
               Let&apos;s make something <em>worth remembering.</em>
             </h2>
-            <a className="mail" href="mailto:adarshp2911@gmail.com" style={{ color: "#f5f2ea" }}>
+            <a className="mail" href="mailto:adarshp2911@gmail.com">
               adarshp2911@gmail.com
             </a>
             <div className="socials">
-              <a className="btn btn-ghost" href="https://github.com/adarshprakasan" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
-                <Github size={15} /> GitHub
+              <a className="pill" style={{ "--tint": "var(--lilac)" } as React.CSSProperties} href="https://github.com/adarshprakasan" target="_blank" rel="noopener noreferrer">
+                <Github size={15} /> GitHub <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="btn btn-ghost" href="https://www.linkedin.com/in/adarshprakasan/" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
-                <Linkedin size={15} /> LinkedIn
+              <a className="pill" style={{ "--tint": "var(--blue)" } as React.CSSProperties} href="https://www.linkedin.com/in/adarshprakasan/" target="_blank" rel="noopener noreferrer">
+                <Linkedin size={15} /> LinkedIn <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="btn btn-ghost" href="https://www.instagram.com/adarsh.prakasan/" target="_blank" rel="noopener noreferrer" style={{ color: "#f5f2ea", borderColor: "#f5f2ea" }}>
-                <Instagram size={15} /> Instagram
+              <a className="pill" style={{ "--tint": "var(--cyan)" } as React.CSSProperties} href="https://www.instagram.com/adarsh.prakasan/" target="_blank" rel="noopener noreferrer">
+                <Instagram size={15} /> Instagram <ArrowUpRight className="arr" size={14} />
               </a>
-              <a className="btn btn-solid contact-cta" href="mailto:adarshp2911@gmail.com" style={{ background: "#f5f2ea", color: "#1a1a17" }}>
-                <Mail size={15} /> Say hello
+              <a className="pill solid" style={{ "--tint": "var(--coral)" } as React.CSSProperties} href="mailto:adarshp2911@gmail.com">
+                <Mail size={15} /> Say hello <ArrowUpRight className="arr" size={14} />
               </a>
             </div>
           </Reveal>
@@ -431,8 +436,32 @@ export default function Home() {
         palette={{ background: "#1a1a17", ink: "#f5f2ea", warm: "#e2573a" }}
         fontFamily={'"Inter", "Helvetica Neue", Arial, system-ui, sans-serif'}
         monoFamily={'"DM Mono", ui-monospace, Menlo, Consolas, monospace'}
-        height="clamp(300px, 34vw, 500px)"
-        columns={[]}
+        height="clamp(360px, 34vw, 500px)"
+        columns={[
+          {
+            title: "Index",
+            links: [
+              { label: "Work", href: "#work" },
+              { label: "About", href: "#about" },
+              { label: "Experience", href: "#experience" },
+              { label: "Contact", href: "#contact" },
+            ],
+          },
+          {
+            title: "Elsewhere",
+            links: [
+              { label: "GitHub", href: "https://github.com/adarshprakasan", external: true },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/adarshprakasan/", external: true },
+              { label: "Instagram", href: "https://www.instagram.com/adarsh.prakasan/", external: true },
+            ],
+          },
+          {
+            title: "Contact",
+            links: [
+              { label: "adarshp2911@gmail.com", href: "mailto:adarshp2911@gmail.com" },
+            ],
+          },
+        ]}
       />
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />

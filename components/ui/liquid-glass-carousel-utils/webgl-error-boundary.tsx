@@ -1,19 +1,21 @@
 "use client";
 
-import { Component, type ErrorInfo, type ReactNode } from "react";
+import { Component, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-type BoundaryProps = { children: ReactNode; fallback: ReactNode };
-type BoundaryState = { failed: boolean };
+/** Catches a render-time failure in the WebGL subtree and shows `fallback` instead. */
+export class WebGLErrorBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
 
-export class WebGLErrorBoundary extends Component<BoundaryProps, BoundaryState> {
-  state: BoundaryState = { failed: false };
-
-  static getDerivedStateFromError(): BoundaryState {
+  static getDerivedStateFromError() {
     return { failed: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("Liquid glass carousel failed to render.", error, info);
+  componentDidCatch(error: unknown) {
+    console.error("WebGL carousel failed:", error);
   }
 
   render() {
@@ -21,8 +23,9 @@ export class WebGLErrorBoundary extends Component<BoundaryProps, BoundaryState> 
   }
 }
 
+/** Calm, on-brand message for browsers without WebGL. */
 export function WebGLFallback({
-  className = "",
+  className,
   message,
 }: {
   className?: string;
@@ -30,11 +33,10 @@ export function WebGLFallback({
 }) {
   return (
     <div
-      className={`grid place-items-center px-6 text-center text-sm text-[#6d695f] ${className}`}
-      style={{ background: "var(--paper)" }}
       role="status"
+      className={cn("grid place-items-center p-8 text-center", className)}
     >
-      {message}
+      <p className="max-w-xs text-sm text-black/60">{message}</p>
     </div>
   );
 }
