@@ -15,7 +15,12 @@ import {
   developerFolders,
   type FolderDef,
 } from "@/data/folders";
-import { allProjects, type Project } from "@/data/projects";
+import {
+  allProjects,
+  designerProjects,
+  developerProjects,
+  type Project,
+} from "@/data/projects";
 import { folderContents } from "@/lib/folder-file";
 
 const CARD = 340;
@@ -35,6 +40,7 @@ export default function WorkRail({
   const [openId, setOpenId] = useState<string | null>(null);
 
   const defs = mode === "designer" ? designerFolders : developerFolders;
+  const projects = mode === "designer" ? designerProjects : developerProjects;
 
   const folders = useMemo(
     () =>
@@ -79,9 +85,17 @@ export default function WorkRail({
           ? CARD
           : Math.round(Math.min(CARD, Math.max(240, window.innerWidth * 0.78))),
       );
-      setDistance(
-        isPinned && el ? Math.max(0, el.scrollWidth - window.innerWidth) : 0,
-      );
+
+      // scrollWidth drops a flex container's trailing padding, so measure the
+      // last panel's edge and add the padding back.
+      if (!isPinned || !el || !el.lastElementChild) {
+        setDistance(0);
+        return;
+      }
+      const left = el.getBoundingClientRect().left;
+      const right = el.lastElementChild.getBoundingClientRect().right - left;
+      const pad = parseFloat(getComputedStyle(el).paddingRight) || 0;
+      setDistance(Math.max(0, Math.round(right + pad - window.innerWidth)));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -111,7 +125,7 @@ export default function WorkRail({
         </h2>
 
         <motion.div ref={track} className="work-track" style={{ x }}>
-          {folders.map(({ def, projects, files }, i) => (
+          {folders.map(({ def, projects: rows, files }, i) => (
             <div
               key={`${mode}-${def.id}`}
               className="rail-item"
@@ -119,7 +133,7 @@ export default function WorkRail({
             >
               <GlassFolder
                 label={def.label}
-                meta={`${projects.length} ${def.noun}`}
+                meta={`${rows.length} ${def.noun}`}
                 tone={def.tone ?? "light"}
                 art={ART[def.accent]}
                 seed={def.seed}
@@ -132,7 +146,7 @@ export default function WorkRail({
                 onOpenChange={(o) =>
                   setOpenId((cur) => (o ? def.id : cur === def.id ? null : cur))
                 }
-                onFileSelect={(_, idx) => onSelect(projects[idx])}
+                onFileSelect={(_, idx) => onSelect(rows[idx])}
                 labelPlacement={i % 2 ? "top-left" : "bottom-left"}
                 style={
                   {
@@ -155,6 +169,25 @@ export default function WorkRail({
               />
             </div>
           ))}
+
+          <div className="rail-index">
+            <h3>Index</h3>
+            <ol>
+              {projects.map((p, i) => (
+                <li key={p.title}>
+                  <button
+                    type="button"
+                    onClick={() => onSelect(p)}
+                    data-cursor="View"
+                  >
+                    <span className="ix">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="tt">{p.title}</span>
+                    <span className="yr">{p.year}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
         </motion.div>
 
         <div className="work-foot">

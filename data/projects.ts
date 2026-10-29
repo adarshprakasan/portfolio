@@ -191,7 +191,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2024",
     role: "Logo Designer",
-    media: workMedia("MPro Technologies", ["logo.png"]),
+    media: workMedia("MPro Technologies", ["logo.jpg"]),
     highlights: [
       "Developed the primary logo and visual direction for the agency",
       "Focused on a professional identity suitable for a technology services company",
