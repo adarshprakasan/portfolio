@@ -2,72 +2,94 @@
    sections
    ============================================================ */
 
-/* ---------- custom cursor: an ink dot with weight ---------- */
+/* ---------- custom cursor: crop marks that lock on ---------- */
 html.cx-on,
 html.cx-on * {
   cursor: none !important;
+}
+.cx,
+.cx * {
+  pointer-events: none !important;
 }
 .cx {
   position: fixed;
   left: 0;
   top: 0;
   z-index: 120;
-  pointer-events: none;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
 }
 .cx[data-live="true"] {
   opacity: 1;
 }
 
-/* the dot sits exactly on the pointer and is deformed by its own speed */
+/* four corner ticks, framing the point */
+.cx-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  transition: none;
+  will-change: transform, width, height;
+}
+.cx[data-lock="true"] .cx-frame {
+  transition:
+    transform 0.42s var(--ease),
+    width 0.42s var(--ease),
+    height 0.42s var(--ease);
+}
+.cx-frame i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transition: border-color 0.3s ease;
+}
+.cx-frame i:nth-child(1) {
+  left: 0;
+  top: 0;
+  border-left: 1.5px solid var(--ink);
+  border-top: 1.5px solid var(--ink);
+}
+.cx-frame i:nth-child(2) {
+  right: 0;
+  top: 0;
+  border-right: 1.5px solid var(--ink);
+  border-top: 1.5px solid var(--ink);
+}
+.cx-frame i:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  border-right: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+}
+.cx-frame i:nth-child(4) {
+  left: 0;
+  bottom: 0;
+  border-left: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+}
+
+/* the pointer itself, so precision is never lost */
 .cx-dot {
   position: absolute;
   left: 0;
   top: 0;
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: var(--ink);
   transition: background 0.3s ease;
   will-change: transform;
 }
 
-/* the aura trails behind and gives the dot a little gravity */
-.cx-aura {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-}
-.cx-disc {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.6);
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(26, 26, 23, 0.16),
-    rgba(26, 26, 23, 0.07) 52%,
-    rgba(26, 26, 23, 0) 70%
-  );
-  transition:
-    transform 0.55s var(--ease),
-    opacity 0.3s ease,
-    background 0.3s ease;
-}
+/* the tag hangs off the frame, not the pointer */
 .cx-label {
   position: absolute;
   left: 0;
-  top: 0;
-  transform: translate(-50%, 24px) scale(0.92);
-  padding: 6px 9px 5px;
-  border-radius: 4px;
+  top: calc(100% + 8px);
+  padding: 5px 8px 4px;
+  border-radius: 3px;
   background: var(--ink);
   color: var(--paper);
   font-family: var(--mono);
@@ -75,37 +97,24 @@ html.cx-on * {
   line-height: 1;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0;
-  transition:
-    opacity 0.2s ease,
-    transform 0.32s var(--ease);
   white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.35s var(--ease);
 }
-
-.cx[data-state="link"] .cx-disc {
+.cx[data-label="true"][data-state="locked"] .cx-label {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1.9);
-}
-.cx[data-state="label"] .cx-disc {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(2.4);
-}
-.cx[data-state="label"] .cx-label {
-  opacity: 1;
-  transform: translate(-50%, 24px) scale(1);
+  transform: none;
 }
 
 /* over the dark chapters it turns to paper */
+.cx[data-tone="dark"] .cx-frame i {
+  border-color: var(--paper);
+}
 .cx[data-tone="dark"] .cx-dot {
   background: var(--paper);
-}
-.cx[data-tone="dark"] .cx-disc {
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(245, 242, 234, 0.2),
-    rgba(245, 242, 234, 0.08) 52%,
-    rgba(245, 242, 234, 0) 70%
-  );
 }
 .cx[data-tone="dark"] .cx-label {
   background: var(--paper);

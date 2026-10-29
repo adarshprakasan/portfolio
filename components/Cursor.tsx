@@ -2,63 +2,87 @@
 
 import { useEffect, useRef } from "react";
 
+const FREE = 26; // resting frame, px
+const PAD = 6; // breathing room around a locked element
+const MAX_W = 280; // only link-sized things get framed; big objects keep the tag
+const MAX_H = 92;
+
+// one cursor, one listener set, even across StrictMode double-mounts
+let teardown: (() => void) | null = null;
+
 /**
- * An ink dot: exact to the pointer, stretched by its own velocity, with a soft
- * aura lagging behind it. Over things you can act on it opens into a label.
- * No blend modes, no ring — just weight.
+ * Crop marks for a cursor: four corner ticks that frame the point, breathe with
+ * speed, then travel out to lock around whatever you are about to click.
+ * The dot stays exact so precision never suffers.
  */
 export default function Cursor() {
   const root = useRef<HTMLDivElement>(null);
   const dot = useRef<HTMLDivElement>(null);
-  const aura = useRef<HTMLDivElement>(null);
-  const disc = useRef<HTMLSpanElement>(null);
+  const frame = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     // reduced motion keeps the real pointer rather than a slower imitation
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const el = root.current;
     const dotEl = dot.current;
-    const auraEl = aura.current;
-    const discEl = disc.current;
-    if (!el || !dotEl || !auraEl || !discEl) return;
+    const frameEl = frame.current;
+    if (!el || !dotEl || !frameEl) return;
+
+    teardown?.();
 
     const rootEl = document.documentElement;
     rootEl.classList.add("cx-on");
 
     let x = -100;
     let y = -100;
-    let ax = x;
-    let ay = y;
-    let angle = 0;
-    let stretch = 0;
-    let raf = 0;
-    let running = false;
-    let live = false;
+    let speed = 0;
     let pressed = false;
+    let live = false;
+    let running = false;
+    let raf = 0;
     let state = "";
     let tone = "";
-    let grow = 1;
+    let locked: HTMLElement | null = null;
 
     const paintDot = () => {
-      const sx = 1 + stretch * 0.85;
-      const sy = 1 - stretch * 0.4;
-      const press = pressed ? 0.82 : 1;
-      const s = grow * press;
+      const s = pressed ? 0.72 : 1;
       dotEl.style.transform =
-        `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) ` +
-        `rotate(${angle}deg) scale(${sx * s}, ${sy * s})`;
+        `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${s})`;
+    };
+
+    const paintFree = () => {
+      if (locked) return; // a locked frame only moves with its element
+      const s = 1 + speed * 0.1;
+      frameEl.style.width = `${FREE}px`;
+      frameEl.style.height = `${FREE}px`;
+      frameEl.style.transform =
+        `translate3d(${x - FREE / 2}px, ${y - FREE / 2}px, 0) scale(${s})`;
+    };
+
+    const paintLocked = (target: HTMLElement) => {
+      const r = target.getBoundingClientRect();
+      if (r.width > MAX_W || r.height > MAX_H) {
+        locked = null;
+        el.dataset.lock = "false";
+        paintFree();
+        return;
+      }
+      frameEl.style.width = `${r.width + PAD * 2}px`;
+      frameEl.style.height = `${r.height + PAD * 2}px`;
+      frameEl.style.transform = `translate3d(${r.left - PAD}px, ${r.top - PAD}px, 0) scale(1)`;
     };
 
     const setState = (next: string, text = "") => {
-      if (next !== state) {
-        state = next;
-        el.dataset.state = next;
-        if (label.current) label.current.textContent = text;
-        grow = next === "link" ? 1.55 : next === "label" ? 1.15 : 1;
-        paintDot();
+      if (label.current && label.current.textContent !== text) {
+        label.current.textContent = text;
       }
+      el.dataset.label = text ? "true" : "false";
+      if (next === state) return;
+      state = next;
+      el.dataset.state = next;
     };
 
     const setTone = (next: string) => {
@@ -67,56 +91,52 @@ export default function Cursor() {
       el.dataset.tone = next;
     };
 
-    const frame = () => {
-      ax += (x - ax) * 0.16;
-      ay += (y - ay) * 0.16;
-      auraEl.style.transform = `translate3d(${ax.toFixed(2)}px, ${ay.toFixed(2)}px, 0)`;
-
-      if (stretch > 0.002) {
-        stretch *= 0.88;
-        paintDot();
-      } else if (stretch !== 0) {
-        stretch = 0;
-        paintDot();
+    const lock = (target: HTMLElement | null, text = "") => {
+      if (target === locked) return;
+      locked = target;
+      const r = target?.getBoundingClientRect();
+      const framed = !!target && !!r && r.width <= MAX_W && r.height <= MAX_H;
+      if (target && framed) {
+        paintLocked(target!);
+      } else {
+        locked = null;
+        paintFree();
       }
+      el.dataset.lock = framed ? "true" : "false";
+      setState(target ? "locked" : "", text);
+    };
 
-      const settled =
-        Math.abs(x - ax) < 0.1 && Math.abs(y - ay) < 0.1 && stretch === 0;
-      if (settled) {
+    const tick = () => {
+      speed *= 0.86;
+      if (speed > 0.001 && !locked) paintFree();
+      if (!locked && speed < 0.001 && !pressed) {
         running = false;
         return;
       }
-      raf = requestAnimationFrame(frame);
+      raf = requestAnimationFrame(tick);
     };
 
     const start = () => {
       if (running) return;
       running = true;
-      raf = requestAnimationFrame(frame);
+      raf = requestAnimationFrame(tick);
     };
 
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
-      const nx = e.clientX;
-      const ny = e.clientY;
-      const dx = nx - x;
-      const dy = ny - y;
-      const d = Math.hypot(dx, dy);
-
-      if (d > 0.6) {
-        angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-        stretch = Math.min(0.62, d / 46);
-      }
-      x = nx;
-      y = ny;
+      const dx = e.clientX - x;
+      const dy = e.clientY - y;
+      x = e.clientX;
+      y = e.clientY;
 
       if (!live) {
         live = true;
-        ax = x;
-        ay = y;
         el.dataset.live = "true";
-        auraEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        paintFree();
       }
+
+      speed = Math.min(1, Math.max(speed, Math.hypot(dx, dy) / 40));
+      if (!locked) paintFree();
       paintDot();
       start();
     };
@@ -128,13 +148,14 @@ export default function Cursor() {
 
       const tagged = target.closest<HTMLElement>("[data-cursor]");
       if (tagged) {
-        setState("label", tagged.dataset.cursor ?? "");
+        lock(tagged, tagged.dataset.cursor ?? "");
         return;
       }
-      const hit = target.closest(
-        "a, button, [role='button'], input, textarea, select",
+      lock(
+        target.closest<HTMLElement>(
+          "a, button, [role='button'], input, textarea, select",
+        ) ?? null,
       );
-      setState(hit ? "link" : "");
     };
 
     const onDown = () => {
@@ -147,18 +168,26 @@ export default function Cursor() {
       paintDot();
       start();
     };
-
     const onLeave = () => {
       live = false;
       el.dataset.live = "false";
+      lock(null);
     };
 
-    // the page can scroll under a still pointer, so re-check the surface
-    let scrollRaf = 0;
+    // keep a locked frame glued to its element while the page moves
+    let moveRaf = 0;
     const onScroll = () => {
-      if (scrollRaf || !live) return;
-      scrollRaf = requestAnimationFrame(() => {
-        scrollRaf = 0;
+      if (moveRaf) return;
+      moveRaf = requestAnimationFrame(() => {
+        moveRaf = 0;
+        if (locked) {
+          if (!document.contains(locked)) {
+            lock(null);
+            return;
+          }
+          paintLocked(locked);
+        }
+        if (!live) return;
         const under = document.elementFromPoint(x, y);
         if (!under) return;
         setTone(under.closest("[data-nav-theme='dark']") ? "dark" : "light");
@@ -170,25 +199,33 @@ export default function Cursor() {
     window.addEventListener("pointerdown", onDown, { passive: true });
     window.addEventListener("pointerup", onUp, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     document.addEventListener("pointerleave", onLeave);
 
-    return () => {
+    const cleanup = () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerover", onOver);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       document.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
-      cancelAnimationFrame(scrollRaf);
+      cancelAnimationFrame(moveRaf);
       rootEl.classList.remove("cx-on");
     };
+
+    teardown = cleanup;
+    return cleanup;
   }, []);
 
   return (
     <div ref={root} className="cx" aria-hidden="true">
-      <div ref={aura} className="cx-aura">
-        <span ref={disc} className="cx-disc" />
+      <div ref={frame} className="cx-frame">
+        <i />
+        <i />
+        <i />
+        <i />
         <span ref={label} className="cx-label" />
       </div>
       <div ref={dot} className="cx-dot" />
