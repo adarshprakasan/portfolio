@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./hero.css";
+import "./site.css";
 
 export const metadata: Metadata = {
   title: "Adarsh Prakasan — Designer & Developer",
