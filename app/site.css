@@ -2,7 +2,7 @@
    sections
    ============================================================ */
 
-/* ---------- custom cursor: a registration mark ---------- */
+/* ---------- custom cursor: an ink dot with weight ---------- */
 html.cx-on,
 html.cx-on * {
   cursor: none !important;
@@ -13,77 +13,105 @@ html.cx-on * {
   top: 0;
   z-index: 120;
   pointer-events: none;
-  mix-blend-mode: difference;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  will-change: transform;
+  transition: opacity 0.25s ease;
 }
 .cx[data-live="true"] {
   opacity: 1;
 }
-.cx-dot,
-.cx-ring {
+
+/* the dot sits exactly on the pointer and is deformed by its own speed */
+.cx-dot {
   position: absolute;
   left: 0;
   top: 0;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  background: var(--ink);
+  transition: background 0.3s ease;
+  will-change: transform;
 }
-.cx-dot {
-  width: 5px;
-  height: 5px;
-  background: #fff;
-  transition: transform 0.3s var(--ease);
+
+/* the aura trails behind and gives the dot a little gravity */
+.cx-aura {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
 }
-.cx-ring {
+.cx-disc {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  display: grid;
-  place-items: center;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(26, 26, 23, 0.16),
+    rgba(26, 26, 23, 0.07) 52%,
+    rgba(26, 26, 23, 0) 70%
+  );
   transition:
-    width 0.45s var(--ease),
-    height 0.45s var(--ease),
-    background 0.35s ease,
-    border-color 0.35s ease,
-    opacity 0.3s ease;
+    transform 0.55s var(--ease),
+    opacity 0.3s ease,
+    background 0.3s ease;
 }
 .cx-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, 24px) scale(0.92);
+  padding: 6px 9px 5px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
   font-family: var(--mono);
   font-size: 9px;
   line-height: 1;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #fff;
   opacity: 0;
-  transform: scale(0.7);
   transition:
-    opacity 0.3s ease,
-    transform 0.4s var(--ease);
+    opacity 0.2s ease,
+    transform 0.32s var(--ease);
   white-space: nowrap;
 }
-.cx[data-state="link"] .cx-ring {
-  width: 50px;
-  height: 50px;
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.9);
+
+.cx[data-state="link"] .cx-disc {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.9);
 }
-.cx[data-state="link"] .cx-dot {
-  transform: translate(-50%, -50%) scale(1);
-}
-.cx[data-state="label"] .cx-ring {
-  width: 82px;
-  height: 82px;
-  background: transparent;
-  border-color: rgba(255, 255, 255, 0.85);
-}
-.cx[data-state="label"] .cx-dot {
-  transform: translate(-50%, -50%) scale(0);
+.cx[data-state="label"] .cx-disc {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(2.4);
 }
 .cx[data-state="label"] .cx-label {
   opacity: 1;
-  transform: scale(1);
+  transform: translate(-50%, 24px) scale(1);
 }
+
+/* over the dark chapters it turns to paper */
+.cx[data-tone="dark"] .cx-dot {
+  background: var(--paper);
+}
+.cx[data-tone="dark"] .cx-disc {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(245, 242, 234, 0.2),
+    rgba(245, 242, 234, 0.08) 52%,
+    rgba(245, 242, 234, 0) 70%
+  );
+}
+.cx[data-tone="dark"] .cx-label {
+  background: var(--paper);
+  color: var(--ink);
+}
+
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   .cx {
     display: none;
