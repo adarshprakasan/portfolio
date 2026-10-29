@@ -9,7 +9,6 @@ import Hero from "@/components/Hero";
 import Interlude from "@/components/Interlude";
 import ProjectModal from "@/components/ProjectModal";
 import SiteNav from "@/components/SiteNav";
-import Ticker from "@/components/Ticker";
 import WorkRail from "@/components/WorkRail";
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import { type Project } from "@/data/projects";
@@ -45,13 +44,11 @@ export default function Home() {
       <main>
         <Hero mode={mode} onMode={setMode} onSelect={setSelected} />
 
-        <WorkRail mode={mode} onMode={setMode} onSelect={setSelected} />
+        <WorkRail mode={mode} onSelect={setSelected} />
 
         <AboutSection />
 
         <Interlude />
-
-        <Ticker />
 
         <ExperienceSection />
 

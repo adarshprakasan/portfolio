@@ -8,13 +8,13 @@ const experience = [
     text: "Intensive full-stack program that led to Hospiq and the attendance management system.",
   },
   {
-    when: "Jul 2023 — Jan 2024",
+    when: "Jul 2023 to Jan 2024",
     role: "UI/UX Developer Intern",
     place: "MPro Technologies",
     text: "Designed and built interfaces for a web consulting agency, and created its logo identity.",
   },
   {
-    when: "Jan 2019 — Jul 2023",
+    when: "Jan 2019 to Jul 2023",
     role: "Freelance Designer",
     place: "Independent",
     text: "Brand identities, posters, 3D visualisation and video for clients and student communities.",
@@ -26,7 +26,7 @@ const experience = [
     text: "Led the IEEE design team and served as Webmaster and Electronic Communication Coordinator.",
   },
   {
-    when: "2019 — 2023",
+    when: "2019 to 2023",
     role: "B.Tech, Computer Science & Engineering",
     place: "APJ Abdul Kalam Technological University",
     text: "Where design and code first met. Also took part in IEEE Xtreme 15.0.",
@@ -37,27 +37,9 @@ export default function ExperienceSection() {
   return (
     <section id="experience" className="exp">
       <div className="wrap">
-        <div className="sec-top">
-          <span className="label">
-            <span className="n">04</span>
-            <span className="dash" />
-            Experience &amp; education
-          </span>
-          <span className="label">2019 — now</span>
-        </div>
-
-        <div className="sec-head">
-          <div>
-            <h2 className="display">
-              Good work <em>leaves a trace.</em>
-            </h2>
-          </div>
-          <p className="exp-meta">
-            Five chapters
-            <br />
-            one through-line
-          </p>
-        </div>
+        <h2 className="display exp-h">
+          Good work <em>leaves a trace.</em>
+        </h2>
 
         <ol className="ledger">
           {experience.map((row, i) => (

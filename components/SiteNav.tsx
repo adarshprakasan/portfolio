@@ -5,10 +5,10 @@ import { ArrowUpRight, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const links = [
-  { id: "work", n: "01", label: "Work" },
-  { id: "about", n: "02", label: "About" },
-  { id: "experience", n: "03", label: "Experience" },
-  { id: "contact", n: "04", label: "Contact" },
+  { id: "work", label: "Work" },
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function SiteNav({
@@ -78,13 +78,8 @@ export default function SiteNav({
     <>
       <header className="nav" data-scrolled={scrolled} data-theme={theme}>
         <div className="wrap nav-in">
-          <a
-            href="#home"
-            className="brand"
-            aria-label="Adarsh Prakasan — back to top"
-          >
+          <a href="#home" className="brand" aria-label="Adarsh, back to top">
             Adarsh<i />
-            <small>Designer × Developer</small>
           </a>
 
           <nav className="nav-links" aria-label="Primary">
@@ -96,7 +91,6 @@ export default function SiteNav({
                 aria-current={active === l.id ? "true" : undefined}
               >
                 {l.label}
-                <sup>{l.n}</sup>
               </a>
             ))}
           </nav>
@@ -108,11 +102,11 @@ export default function SiteNav({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Résumé ↗
+              Résumé
             </a>
             <a className="nav-talk" href="#contact">
               <i aria-hidden />
-              <span>Let’s talk</span>
+              <span>Let&apos;s talk</span>
             </a>
             <button
               type="button"
@@ -145,7 +139,7 @@ export default function SiteNav({
             aria-label="Menu"
           >
             <div className="menu-top">
-              <span>Adarsh Prakasan — Index</span>
+              <span>Menu</span>
               <button
                 type="button"
                 className="menu-close"
@@ -171,7 +165,6 @@ export default function SiteNav({
                   }}
                 >
                   {l.label}
-                  <em>{l.n}</em>
                 </motion.a>
               ))}
             </nav>
@@ -180,8 +173,6 @@ export default function SiteNav({
               <a href="mailto:adarshp2911@gmail.com">
                 adarshp2911@gmail.com <ArrowUpRight size={12} />
               </a>
-              <span>Dubai, UAE · 25.2048°N</span>
-              <span>Available for work</span>
             </div>
           </motion.div>
         )}

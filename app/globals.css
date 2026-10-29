@@ -215,7 +215,6 @@ video {
 .nav[data-theme="dark"] .nav-burger {
   color: var(--paper);
 }
-.nav[data-theme="dark"] .brand small,
 .nav[data-theme="dark"] .nav-links a,
 .nav[data-theme="dark"] .nav-resume {
   color: rgba(245, 242, 234, 0.55);
@@ -238,10 +237,11 @@ video {
   display: inline-flex;
   align-items: baseline;
   gap: 7px;
-  font-family: var(--serif);
-  font-size: 23px;
+  font-family: "Space Grotesk", var(--sans);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
   line-height: 1;
-  letter-spacing: -0.01em;
   white-space: nowrap;
 }
 .brand i {
@@ -254,19 +254,6 @@ video {
 }
 .brand:hover i {
   transform: scale(1.9);
-}
-.brand small {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transform: translateY(-1px);
-}
-@media (max-width: 560px) {
-  .brand small {
-    display: none;
-  }
 }
 .nav-links {
   display: flex;
@@ -281,16 +268,9 @@ video {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   padding: 6px 0;
   color: var(--muted);
   transition: color 0.3s var(--ease);
-}
-.nav-links a sup {
-  font-size: 8px;
-  color: var(--accent);
-  letter-spacing: 0.06em;
-  opacity: 0.85;
 }
 .nav-links a::after {
   content: "";
@@ -397,7 +377,7 @@ video {
   }
 }
 @media (max-width: 560px) {
-  .nav-talk span {
+  .nav-talk {
     display: none;
   }
 }
@@ -448,13 +428,6 @@ video {
   letter-spacing: -0.02em;
   transition: color 0.3s;
 }
-.menu-nav a em {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-style: normal;
-  letter-spacing: 0.14em;
-  color: rgba(245, 242, 234, 0.45);
-}
 .menu-nav a:hover {
   color: var(--accent);
 }
@@ -466,10 +439,15 @@ video {
   gap: 14px 28px;
   justify-content: space-between;
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
   color: rgba(245, 242, 234, 0.55);
+}
+.menu-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 .menu-foot a:hover {
   color: var(--paper);

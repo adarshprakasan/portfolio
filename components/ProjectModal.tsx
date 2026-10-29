@@ -99,14 +99,14 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                   </span>
                   <span className="plate-t">{project.title}</span>
                   <span className="plate-k">
-                    {project.category} — {project.year}
+                    {project.category}, {project.year}
                   </span>
                 </div>
               )}
               {current?.type === "image" && (
                 <img
                   src={current.src}
-                  alt={`${project.title} — ${current.filename}`}
+                  alt={`${project.title}, ${current.filename}`}
                   style={{
                     width: "auto",
                     height: "100%",

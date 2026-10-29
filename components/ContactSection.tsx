@@ -1,6 +1,5 @@
 import { ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
 import Magnetic from "@/components/Magnetic";
-import Reveal from "@/components/Reveal";
 
 const socials = [
   {
@@ -27,23 +26,9 @@ export default function ContactSection() {
   return (
     <section id="contact" className="contact">
       <div className="wrap">
-        <div className="sec-top">
-          <span className="label">
-            <span className="n">05</span>
-            <span className="dash" />
-            Contact
-          </span>
-          <span className="label">
-            <i aria-hidden className="live-dot" />
-            Open for opportunities
-          </span>
-        </div>
-
-        <Reveal>
-          <h2 className="display contact-h">
-            Let’s make something <em>worth remembering.</em>
-          </h2>
-        </Reveal>
+        <h2 className="display contact-h">
+          Let&apos;s make something <em>worth remembering.</em>
+        </h2>
 
         <div className="contact-row">
           <Magnetic strength={0.16}>
@@ -83,16 +68,6 @@ export default function ContactSection() {
               <ArrowUpRight className="arr" size={14} />
             </a>
           </div>
-        </div>
-
-        <div className="contact-foot">
-          <span className="grp">
-            Dubai, UAE <i aria-hidden /> 25.2048°N 55.2708°E
-          </span>
-          <span className="grp">© 2026 Adarsh Prakasan</span>
-          <span className="grp">
-            Built with Next.js <i aria-hidden /> Set in Instrument Serif
-          </span>
         </div>
       </div>
     </section>

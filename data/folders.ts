@@ -80,7 +80,7 @@ export const designerFolders: FolderDef[] = [
       "Inside Out",
       "MakeATable",
       "MPro Technologies",
-      "Illford Digital — Brand Identity",
+      "Illford Digital, Brand Identity",
     ],
   },
   {
@@ -91,9 +91,9 @@ export const designerFolders: FolderDef[] = [
     tone: "dark",
     seed: 5,
     titles: [
-      "Villa Design — Project 01",
-      "Villa Design — Project 02",
-      "Villa Design — Project 03",
+      "Villa Design, Project 01",
+      "Villa Design, Project 02",
+      "Villa Design, Project 03",
     ],
   },
   {
@@ -102,7 +102,7 @@ export const designerFolders: FolderDef[] = [
     noun: "collections",
     accent: "coral",
     seed: 12,
-    titles: ["Poster Works", "GAZETTE — Glimpse of Glory"],
+    titles: ["Poster Works", "GAZETTE, Glimpse of Glory"],
   },
   {
     id: "motion",

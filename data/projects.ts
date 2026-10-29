@@ -201,7 +201,7 @@ export const designerProjects: Project[] = [
   {
     number: "07",
     category: "Logo Design",
-    title: "Illford Digital — Brand Identity",
+    title: "Illford Digital, Brand Identity",
     description:
       "A modern brand identity for a digital marketing agency, combining a bold visual mark with a clean and contemporary digital presence.",
     accent: "blue",
@@ -217,7 +217,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2024",
     role: "Logo Designer",
-    media: workMedia("Illford Digital — Brand Identity", ["logo.png"]),
+    media: workMedia("Illford Digital, Brand Identity", ["logo.png"]),
     highlights: [
       "Designed the primary logo and visual direction for the agency",
       "Developed a distinctive identity suited to a modern digital marketing brand",
@@ -228,7 +228,7 @@ export const designerProjects: Project[] = [
   {
     number: "08",
     category: "3D Works",
-    title: "Villa Design — Project 01",
+    title: "Villa Design, Project 01",
     description:
       "A residential villa visualization exploring architectural form, materials, lighting, and spatial composition through 3D design.",
     accent: "blue",
@@ -244,7 +244,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "3D Designer",
-    media: workMedia("Villa Design — Project 01", [
+    media: workMedia("Villa Design, Project 01", [
       "render-01.jpg",
       "render-02.jpg",
     ]),
@@ -258,7 +258,7 @@ export const designerProjects: Project[] = [
   {
     number: "09",
     category: "3D Works",
-    title: "Villa Design — Project 02",
+    title: "Villa Design, Project 02",
     description:
       "A second residential 3D visualization project focused on architectural modelling, material exploration, lighting, and realistic presentation.",
     accent: "lilac",
@@ -274,7 +274,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "3D Designer",
-    media: workMedia("Villa Design — Project 02", [
+    media: workMedia("Villa Design, Project 02", [
       "render-01.jpg",
       "render-02.jpg",
     ]),
@@ -287,7 +287,7 @@ export const designerProjects: Project[] = [
   {
     number: "10",
     category: "3D Works",
-    title: "Villa Design — Project 03",
+    title: "Villa Design, Project 03",
     description:
       "A residential 3D visualization exploring architectural form, materials, lighting, and spatial composition through Blender.",
     accent: "cyan",
@@ -303,7 +303,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "3D Designer",
-    media: workMedia("Villa Design — Project 03", [
+    media: workMedia("Villa Design, Project 03", [
       "render-01.jpg",
       "render-02.jpg",
     ]),
@@ -373,13 +373,13 @@ export const designerProjects: Project[] = [
   {
     number: "12",
     category: "Magazines",
-    title: "GAZETTE — Glimpse of Glory",
+    title: "GAZETTE, Glimpse of Glory",
     description:
       "A newsletter-style editorial publication created for an IEEE Student Branch, documenting events, achievements, and student activities.",
     accent: "lilac",
     designCategory: "Magazines",
     longDescription:
-      "GAZETTE — Glimpse of Glory is a newsletter-style publication created for an IEEE Student Branch. The project focused on presenting student activities, events, achievements, and organizational highlights through a structured editorial layout that combines typography, photography, and visual storytelling.",
+      "GAZETTE, Glimpse of Glory is a newsletter-style publication created for an IEEE Student Branch. The project focused on presenting student activities, events, achievements, and organizational highlights through a structured editorial layout that combines typography, photography, and visual storytelling.",
     tags: [
       "Editorial Design",
       "Newsletter",
@@ -389,7 +389,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Editorial Designer",
-    media: workMedia("GAZETTE — Glimpse of Glory", ["gazette.pdf"]),
+    media: workMedia("GAZETTE, Glimpse of Glory", ["gazette.pdf"]),
     highlights: [
       "Designed the visual layout and structure for the IEEE Student Branch newsletter",
       "Organized event highlights, achievements, and student activities into an editorial format",
