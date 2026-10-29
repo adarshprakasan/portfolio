@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Github, Instagram, Linkedin, Mail } from "lucide-react";
-import Character from "@/components/Character";
+import Hero from "@/components/Hero";
 import FolderShelf from "@/components/FolderShelf";
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import ProjectModal from "@/components/ProjectModal";
@@ -11,35 +10,6 @@ import Reveal from "@/components/Reveal";
 import { type Project } from "@/data/projects";
 
 type Mode = "designer" | "developer";
-
-const copy = {
-  designer: {
-    sub: (
-      <>
-        I craft <b>brand identities, interfaces and visual stories</b> —
-        thoughtful, minimal and made to be remembered.
-      </>
-    ),
-    headline: (
-      <>
-        A visual language <em>with purpose.</em>
-      </>
-    ),
-  },
-  developer: {
-    sub: (
-      <>
-        I build <b>fast, full-stack products</b> with React, Next.js and the
-        MERN stack — from the first component to the last endpoint.
-      </>
-    ),
-    headline: (
-      <>
-        Products built to <em>solve real problems.</em>
-      </>
-    ),
-  },
-} as const;
 
 const principles = [
   [
@@ -200,77 +170,7 @@ export default function Home() {
 
       <main>
         {/* ---------------- HERO ---------------- */}
-        <section id="home" className="hero">
-          <div className="wrap hero-grid">
-            <div>
-              <motion.span
-                className="status"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <span className="pulse" /> Available now · Dubai, UAE
-              </motion.span>
-
-              <h1 className="display">
-                {["Adarsh", "Prakasan"].map((w, i) => (
-                  <motion.span
-                    key={w}
-                    style={{
-                      display: "block",
-                      fontStyle: i ? "italic" : "normal",
-                    }}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.1 + i * 0.12,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    {w}
-                  </motion.span>
-                ))}
-              </h1>
-
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={mode}
-                  className="hero-sub"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  {copy[mode].sub}
-                </motion.p>
-              </AnimatePresence>
-
-              <div
-                className="toggle"
-                data-mode={mode}
-                role="tablist"
-                aria-label="Choose a view"
-              >
-                <span className="knob" aria-hidden="true" />
-                {(["designer", "developer"] as const).map((m) => (
-                  <button
-                    key={m}
-                    role="tab"
-                    aria-selected={mode === m}
-                    className={mode === m ? "on" : ""}
-                    onClick={() => switchMode(m)}
-                  >
-                    {m === "designer" ? "Designer" : "Developer"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="arch" data-mode={mode}>
-              <Character mode={mode} />
-            </div>
-          </div>
-        </section>
+        <Hero mode={mode} onModeChange={switchMode} />
 
         {/* ---------------- WORK ---------------- */}
         <section id="work" className="block">
