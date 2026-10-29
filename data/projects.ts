@@ -443,7 +443,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
-        highlights: [
+    highlights: [
       "Edited an event announcement designed to generate interest in the technical fest",
       "Combined typography, transitions, and motion to create an energetic presentation",
       "Structured the edit around clear event information and visual impact",

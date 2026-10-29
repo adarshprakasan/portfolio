@@ -17,7 +17,10 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 
-const byTitle: Record<string, ComponentType<{ size?: number; strokeWidth?: number }>> = {
+const byTitle: Record<
+  string,
+  ComponentType<{ size?: number; strokeWidth?: number }>
+> = {
   "Illford Digital": Layout,
   "Designer Hiring Platform": Layers,
   "Poster Works": Type,
@@ -36,7 +39,13 @@ const byTitle: Record<string, ComponentType<{ size?: number; strokeWidth?: numbe
 };
 
 /** A line-icon stand-in for projects that have no image media yet. */
-export default function ProjectGlyph({ title, size = 64 }: { title: string; size?: number }) {
+export default function ProjectGlyph({
+  title,
+  size = 64,
+}: {
+  title: string;
+  size?: number;
+}) {
   const Icon = byTitle[title] ?? Box;
   return <Icon size={size} strokeWidth={1.1} />;
 }

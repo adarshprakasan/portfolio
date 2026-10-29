@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
-import { ART, SHEET_BG, designerFolders, developerFolders, type FolderDef } from "@/data/folders";
+import GlassFolder, {
+  type FolderFile,
+} from "@/components/ui/glass-folder-cards";
+import {
+  ART,
+  SHEET_BG,
+  designerFolders,
+  developerFolders,
+  type FolderDef,
+} from "@/data/folders";
 import { allProjects, coverOf, type Project } from "@/data/projects";
 import { optimized } from "@/lib/img";
 
@@ -14,8 +22,19 @@ function toFile(p: Project, def: FolderDef): FolderFile {
   const isLogo = p.designCategory === "Logo";
   if (!cover) return { name: p.title, meta: p.year, art: ART[p.accent] };
   return isLogo
-    ? { name: p.title, meta: p.year, image: optimized(cover, 640), fit: "contain", bg: SHEET_BG[p.accent] }
-    : { name: p.title, meta: p.year, image: optimized(cover, 640), fit: "cover" };
+    ? {
+        name: p.title,
+        meta: p.year,
+        image: optimized(cover, 640),
+        fit: "contain",
+        bg: SHEET_BG[p.accent],
+      }
+    : {
+        name: p.title,
+        meta: p.year,
+        image: optimized(cover, 640),
+        fit: "cover",
+      };
 }
 
 export default function FolderShelf({
@@ -75,7 +94,9 @@ export default function FolderShelf({
           width={width}
           appearDelay={i * 110}
           open={openId === def.id}
-          onOpenChange={(o) => setOpenId((cur) => (o ? def.id : cur === def.id ? null : cur))}
+          onOpenChange={(o) =>
+            setOpenId((cur) => (o ? def.id : cur === def.id ? null : cur))
+          }
           onFileSelect={(_, idx) => onSelect(projects[idx])}
           labelPlacement={i % 2 ? "top-left" : "bottom-left"}
           style={
@@ -90,7 +111,10 @@ export default function FolderShelf({
               "--gf-glass-b": "rgba(250, 244, 235, .55)",
               "--gf-glass-c": "rgba(245, 242, 234, .94)",
               "--gf-ink": def.tone === "dark" ? "#f5f2ea" : "#1a1a17",
-              "--gf-ink-soft": def.tone === "dark" ? "rgba(245,242,234,.62)" : "rgba(26,26,23,.55)",
+              "--gf-ink-soft":
+                def.tone === "dark"
+                  ? "rgba(245,242,234,.62)"
+                  : "rgba(26,26,23,.55)",
             } as React.CSSProperties
           }
         />
