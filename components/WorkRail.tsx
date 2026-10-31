@@ -173,14 +173,14 @@ export default function WorkRail({
           <div className="rail-index">
             <h3>Index</h3>
             <ol>
-              {projects.map((p, i) => (
+              {projects.map((p) => (
                 <li key={p.title}>
                   <button
                     type="button"
                     onClick={() => onSelect(p)}
                     data-cursor="View"
                   >
-                    <span className="ix">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="ix">{p.number}</span>
                     <span className="tt">{p.title}</span>
                     <span className="yr">{p.year}</span>
                   </button>

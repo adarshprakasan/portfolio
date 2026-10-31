@@ -2,7 +2,7 @@ import Reveal from "@/components/Reveal";
 
 const experience = [
   {
-    when: "2025",
+    when: "Jul 2024 to Jul 2025",
     role: "MERN Full Stack Training",
     place: "JSpiders",
     text: "Intensive full-stack program that led to Hospiq and the attendance management system.",
@@ -14,7 +14,7 @@ const experience = [
     text: "Designed and built interfaces for a web consulting agency, and created its logo identity.",
   },
   {
-    when: "Jan 2019 to Jul 2023",
+    when: "2020 to Present",
     role: "Freelance Designer",
     place: "Independent",
     text: "Brand identities, posters, 3D visualisation and video for clients and student communities.",

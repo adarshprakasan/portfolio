@@ -10,6 +10,7 @@ import {
   FileText,
   Github,
   Play,
+  Youtube,
   X,
 } from "lucide-react";
 import { type Project } from "@/data/projects";
@@ -37,6 +38,7 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
   const hasLive = project.liveUrl && project.liveUrl !== "#";
   const hasFigma = hasLive && project.liveUrl!.includes("figma.com");
   const hasGit = project.githubUrl && project.githubUrl !== "#";
+  const isVideoProject = project.designCategory === "Video Editing";
   const thumbnailStart = Math.max(0, Math.min(index - 1, media.length - 3));
   const visibleThumbnails = media.slice(thumbnailStart, thumbnailStart + 3);
 
@@ -214,16 +216,49 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                 ))}
               </div>
             </div>
-            {hasFigma && (
+            {(hasFigma || isVideoProject || hasGit) && (
               <div className="actions stage-actions">
-                <a
-                  className="btn btn-solid"
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View in Figma <ArrowUpRight size={15} />
-                </a>
+                {hasFigma && (
+                  <a
+                    className="project-action"
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View in Figma <ArrowUpRight size={15} />
+                  </a>
+                )}
+                {isVideoProject &&
+                  (project.youtubeUrl ? (
+                    <a
+                      className="project-action"
+                      href={project.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Youtube size={15} /> View on YouTube{" "}
+                      <ArrowUpRight size={15} />
+                    </a>
+                  ) : (
+                    <button
+                      className="project-action"
+                      type="button"
+                      disabled
+                    >
+                      <Youtube size={15} /> View on YouTube
+                    </button>
+                  ))}
+                {hasGit && (
+                  <a
+                    className="project-action"
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Github size={15} /> View in GitHub{" "}
+                    <ArrowUpRight size={15} />
+                  </a>
+                )}
               </div>
             )}
           </div>
@@ -253,28 +288,16 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
               ))}
             </ul>
 
-            {((hasLive && !hasFigma) || hasGit) && (
+            {hasLive && !hasFigma && (
               <div className="actions">
-                {hasLive && !hasFigma && (
-                  <a
-                    className="btn btn-solid"
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Live site <ArrowUpRight size={15} />
-                  </a>
-                )}
-                {hasGit && (
-                  <a
-                    className="btn btn-ghost"
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github size={15} /> Source
-                  </a>
-                )}
+                <a
+                  className="btn btn-solid"
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Live site <ArrowUpRight size={15} />
+                </a>
               </div>
             )}
           </div>

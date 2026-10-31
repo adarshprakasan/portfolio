@@ -27,6 +27,7 @@ export type Project = {
   role: string;
   githubUrl?: string;
   liveUrl?: string;
+  youtubeUrl?: string;
   media?: ProjectMedia[];
   highlights: string[];
 };
@@ -47,9 +48,9 @@ function workMedia(title: string, filenames: string[]): ProjectMedia[] {
   }));
 }
 
-export const designerProjects: Project[] = [
+export const designerProjects: Project[] = ([
   {
-    number: "01",
+    number: "07",
     category: "UI/UX",
     title: "Illford Digital",
     description:
@@ -77,7 +78,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "02",
+    number: "08",
     category: "UI/UX",
     title: "Designer Hiring Platform",
     description:
@@ -99,7 +100,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "03",
+    number: "02",
     category: "Logo Design",
     title: "Hikari",
     description:
@@ -126,7 +127,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "04",
+    number: "03",
     category: "Logo Design",
     title: "Inside Out",
     description:
@@ -147,7 +148,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "05",
+    number: "04",
     category: "Logo Design",
     title: "MakeATable",
     description:
@@ -173,7 +174,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "06",
+    number: "05",
     category: "Logo Design",
     title: "MPro Technologies",
     description:
@@ -199,7 +200,7 @@ export const designerProjects: Project[] = [
     ],
   },
   {
-    number: "07",
+    number: "06",
     category: "Logo Design",
     title: "Illford Digital, Brand Identity",
     description:
@@ -226,7 +227,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "08",
+    number: "13",
     category: "3D Works",
     title: "Villa Design, Project 01",
     description:
@@ -256,7 +257,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "09",
+    number: "14",
     category: "3D Works",
     title: "Villa Design, Project 02",
     description:
@@ -285,7 +286,7 @@ export const designerProjects: Project[] = [
     ],
   },
   {
-    number: "10",
+    number: "15",
     category: "3D Works",
     title: "Villa Design, Project 03",
     description:
@@ -315,7 +316,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "11",
+    number: "01",
     category: "Graphic Design",
     title: "Poster Works",
     description:
@@ -371,7 +372,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "12",
+    number: "09",
     category: "Magazines",
     title: "GAZETTE, Glimpse of Glory",
     description:
@@ -398,7 +399,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "13",
+    number: "10",
     category: "Video Editing",
     title: "IEEE Newsletter Announcement",
     description:
@@ -416,6 +417,7 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
+    youtubeUrl: "https://youtu.be/XHqmVCd396I",
     media: workMedia("IEEE Newsletter Announcement", ["announcement.mp4"]),
     highlights: [
       "Created a short promotional video for the newsletter launch",
@@ -425,7 +427,7 @@ export const designerProjects: Project[] = [
   },
 
   {
-    number: "14",
+    number: "11",
     category: "Video Editing",
     title: "Technical Fest Announcement",
     description:
@@ -443,17 +445,46 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
+    youtubeUrl: "https://youtu.be/W_gvdMynlpk",
+    media: workMedia("Technical Fest Announcement", ["announcement.mp4"]),
     highlights: [
       "Edited an event announcement designed to generate interest in the technical fest",
       "Combined typography, transitions, and motion to create an energetic presentation",
       "Structured the edit around clear event information and visual impact",
     ],
   },
-];
-
-export const developerProjects: Project[] = [
   {
-    number: "01",
+    number: "12",
+    category: "Video Editing",
+    title: "Podcast Platform Announcement",
+    description:
+      "A promotional video introducing a podcast platform and building interest in its conversations and upcoming content.",
+    accent: "lilac",
+    designCategory: "Video Editing",
+    longDescription:
+      "An announcement video created to introduce a podcast platform and draw attention to the conversations it brings to listeners. The edit uses engaging pacing, typography, and motion to present the platform and create anticipation for its podcast content.",
+    tags: [
+      "Video Editing",
+      "Motion Graphics",
+      "Podcast Promotion",
+      "Digital Media",
+      "Typography",
+    ],
+    year: "2021",
+    role: "Video Editor",
+    youtubeUrl: "https://youtu.be/Dr-sgPLEdMU",
+    media: workMedia("Podcast Platform Announcement", ["announcement.mp4"]),
+    highlights: [
+      "Created an announcement video introducing a podcast platform",
+      "Used typography, transitions, and motion to give the promotion an engaging pace",
+      "Built interest in the platform and its podcast conversations",
+    ],
+  },
+] satisfies Project[]).sort((a, b) => Number(a.number) - Number(b.number));
+
+export const developerProjects: Project[] = ([
+  {
+    number: "02",
     category: "Full Stack / MERN",
     title: "Hospiq",
 
@@ -491,7 +522,7 @@ export const developerProjects: Project[] = [
   },
 
   {
-    number: "02",
+    number: "03",
     category: "Frontend / TypeScript",
     title: "Globe Explorer",
 
@@ -527,7 +558,7 @@ export const developerProjects: Project[] = [
   },
 
   {
-    number: "03",
+    number: "01",
     category: "Full Stack / Web App",
     title: "Attendance Management System",
 
@@ -677,7 +708,7 @@ export const developerProjects: Project[] = [
   },
 
   {
-    number: "08",
+    number: "09",
     category: "Python / Computer Vision",
     title: "Prisoner Face Identification",
 
@@ -707,7 +738,7 @@ export const developerProjects: Project[] = [
   },
 
   {
-    number: "09",
+    number: "10",
     category: "Next.js / TypeScript",
     title: "Developer Portfolio",
 
@@ -742,7 +773,43 @@ export const developerProjects: Project[] = [
       "Implemented responsive layouts, project showcases, navigation, and custom UI interactions",
     ],
   },
-];
+  {
+    number: "08",
+    category: "Python / Assistive Technology",
+    title: "Eyemate-Assistance for Blind",
+
+    description:
+      "A camera-based assistive project that helps blind and visually impaired people understand and navigate the spaces around them.",
+
+    accent: "lilac",
+
+    longDescription:
+      "Eyemate is an assistive technology project that uses a mobile camera to help blind and visually impaired people move through their surroundings. Built with Python and Flask, it uses image-processing algorithms and Pytesseract OCR to interpret visual information and provide guidance through spaces.",
+
+    tags: [
+      "Python",
+      "Flask",
+      "Pytesseract",
+      "OCR",
+      "Computer Vision",
+      "Accessibility",
+    ],
+
+    year: "2023",
+
+    role: "Developer",
+
+    githubUrl: "#",
+
+    liveUrl: "#",
+
+    highlights: [
+      "Built a Python and Flask application for camera-based visual assistance",
+      "Used Pytesseract OCR to extract text from camera imagery",
+      "Applied algorithms to help users interpret surroundings and navigate spaces",
+    ],
+  },
+] satisfies Project[]).sort((a, b) => Number(a.number) - Number(b.number));
 
 export const allProjects = [...designerProjects, ...developerProjects];
 export const projectIndex = Object.fromEntries(
