@@ -13,7 +13,6 @@ import {
   X,
 } from "lucide-react";
 import { type Project } from "@/data/projects";
-import ProjectGlyph from "./ProjectGlyph";
 
 export default function ProjectModal({
   project,
@@ -89,19 +88,25 @@ function Body({ project, onClose }: { project: Project; onClose: () => void }) {
                 aspectRatio:
                   project.designCategory === "Graphic Design" ? "3/4" : "16/10",
                 maxHeight: "min(75vh, 800px)",
-                width: "fit-content",
+                width: current ? "fit-content" : "100%",
                 margin: "0 auto",
               }}
             >
               {!current && (
-                <div style={{ opacity: 0.8 }}>
-                  <ProjectGlyph title={project.title} size={96} />
+                <div className="plate">
+                  <span className="plate-n" aria-hidden>
+                    {project.number}
+                  </span>
+                  <span className="plate-t">{project.title}</span>
+                  <span className="plate-k">
+                    {project.category}, {project.year}
+                  </span>
                 </div>
               )}
               {current?.type === "image" && (
                 <img
                   src={current.src}
-                  alt={`${project.title} — ${current.filename}`}
+                  alt={`${project.title}, ${current.filename}`}
                   style={{
                     width: "auto",
                     height: "100%",
