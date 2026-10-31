@@ -443,10 +443,37 @@ export const designerProjects: Project[] = [
     ],
     year: "2021",
     role: "Video Editor",
+    media: workMedia("Technical Fest Announcement", ["announcement.mp4"]),
     highlights: [
       "Edited an event announcement designed to generate interest in the technical fest",
       "Combined typography, transitions, and motion to create an energetic presentation",
       "Structured the edit around clear event information and visual impact",
+    ],
+  },
+  {
+    number: "15",
+    category: "Video Editing",
+    title: "Podcast Platform Announcement",
+    description:
+      "A promotional video introducing a podcast platform and building interest in its conversations and upcoming content.",
+    accent: "lilac",
+    designCategory: "Video Editing",
+    longDescription:
+      "An announcement video created to introduce a podcast platform and draw attention to the conversations it brings to listeners. The edit uses engaging pacing, typography, and motion to present the platform and create anticipation for its podcast content.",
+    tags: [
+      "Video Editing",
+      "Motion Graphics",
+      "Podcast Promotion",
+      "Digital Media",
+      "Typography",
+    ],
+    year: "2021",
+    role: "Video Editor",
+    media: workMedia("Podcast Platform Announcement", ["announcement.mp4"]),
+    highlights: [
+      "Created an announcement video introducing a podcast platform",
+      "Used typography, transitions, and motion to give the promotion an engaging pace",
+      "Built interest in the platform and its podcast conversations",
     ],
   },
 ];

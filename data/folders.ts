@@ -110,7 +110,11 @@ export const designerFolders: FolderDef[] = [
     noun: "videos",
     accent: "cyan",
     seed: 7,
-    titles: ["IEEE Newsletter Announcement", "Technical Fest Announcement"],
+    titles: [
+      "IEEE Newsletter Announcement",
+      "Technical Fest Announcement",
+      "Podcast Platform Announcement",
+    ],
   },
 ];
 
