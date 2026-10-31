@@ -1,0 +1,180 @@
+/* ============================================================
+   skills
+   ============================================================ */
+.skills {
+  position: relative;
+  padding: var(--sec) 0;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.skills-head {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}
+.skills-h {
+  font-size: var(--t-mega);
+  max-width: 12ch;
+}
+.skills-lead {
+  max-width: 40ch;
+  font-size: clamp(16px, 1.15vw, 18px);
+  line-height: 1.62;
+  color: var(--muted);
+}
+
+/* ---------- marquee stage ---------- */
+.skills-stage {
+  width: 100%;
+  max-width: var(--max);
+  margin: clamp(24px, 4vw, 56px) auto 0;
+  aspect-ratio: 1094 / 402;
+}
+.skills-stage[data-shape="tall"] {
+  max-width: 440px;
+  aspect-ratio: 402 / 710;
+}
+.skills-marquee {
+  width: 100%;
+  height: 100%;
+  /* vertical page scroll still works when the finger lands on the marquee */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* ---------- logo tiles ---------- */
+.skills-stage {
+  --chip: 58px;
+  --radius: 18px;
+}
+.skills-stage[data-shape="tall"] {
+  --chip: 50px;
+  --radius: 15px;
+}
+.skill-chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--chip);
+  height: var(--chip);
+  border-radius: var(--radius);
+  color: var(--logo, var(--ink));
+  background-color: var(--tile, #fff);
+  /* soft top light + faint bottom shade gives the tile some body */
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(26, 26, 23, 0.04)
+  );
+  box-shadow:
+    0 0 0 1px rgba(26, 26, 23, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(26, 26, 23, 0.08),
+    0 12px 22px -10px rgba(26, 26, 23, 0.32);
+  transition:
+    transform 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+  cursor: inherit;
+}
+.skill-chip svg {
+  display: block;
+  width: 52%;
+  height: 52%;
+  fill: currentColor;
+  pointer-events: none;
+}
+.skill-chip::after {
+  content: attr(data-name);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .skill-chip:hover {
+    transform: translateY(-4px) scale(1.18);
+    box-shadow:
+      0 0 0 1px rgba(26, 26, 23, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 2px 4px rgba(26, 26, 23, 0.1),
+      0 22px 32px -12px rgba(26, 26, 23, 0.42);
+  }
+  .skill-chip:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+/* ---------- text list ---------- */
+.skills-lists {
+  display: grid;
+  grid-template-columns: 1fr 1.618fr;
+  gap: clamp(28px, 4vw, 64px);
+  margin-top: clamp(32px, 5vw, 72px);
+  padding-top: clamp(24px, 3vw, 40px);
+  border-top: 1px solid var(--line);
+}
+.skills-group {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+}
+.skills-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skills-group li {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: var(--t-small);
+  color: var(--ink);
+  transition:
+    background 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+.skills-group li:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(26, 26, 23, 0.3);
+}
+.skills-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  color: var(--logo, var(--ink));
+  background: var(--tile, #fff);
+  box-shadow: 0 0 0 1px rgba(26, 26, 23, 0.09);
+}
+.skills-mark svg {
+  width: 56%;
+  height: 56%;
+  fill: currentColor;
+}
+
+@media (max-width: 720px) {
+  .skills-lists {
+    grid-template-columns: 1fr;
+  }
+}

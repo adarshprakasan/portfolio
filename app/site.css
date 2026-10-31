@@ -651,3 +651,51 @@ html.cx-on * {
   flex-wrap: wrap;
   gap: 8px;
 }
+
+/* ---------- Skills marquee ---------- */
+.skills {
+  padding-block: var(--sec) var(--s-6);
+}
+.skills-h {
+  margin-bottom: var(--s-4);
+}
+.skills-stage {
+  width: 100%;
+  height: clamp(220px, 34vw, 480px);
+  overflow: hidden;
+}
+.skills-marquee {
+  width: 100%;
+  height: 100%;
+  color: var(--line);
+}
+.skill-chip {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(26, 26, 23, 0.18);
+  transition: transform 0.3s var(--ease);
+}
+.skill-chip:hover {
+  transform: scale(1.4);
+}
+.skill-chip img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.skills-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin: var(--s-4) auto 0;
+  padding: 0 var(--pad);
+  max-width: var(--max);
+  list-style: none;
+  font-family: var(--mono);
+  font-size: var(--t-small);
+  color: var(--muted);
+}
